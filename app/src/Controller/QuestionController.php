@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Question;
 use App\Form\AnswerType;
-use App\Form\DeleteType;
+use App\Form\QuestionDeleteType;
 use App\Form\QuestionType;
 use App\Service\QuestionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,6 +13,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+
+
+#[Route(
+    '/question'
+)]
 
 final class QuestionController extends AbstractController {
 
@@ -34,12 +40,13 @@ final class QuestionController extends AbstractController {
      */
 
     #[Route(
-        '/question',
+        '/question_list',
         name: 'question_list',
         methods: ['GET']
     )]
 
-    public function index(#[MapQueryParameter] int $page = 1): Response {
+    public function index(#[MapQueryParameter] int $page = 1): Response
+    {
         $pagination = $this->questionService->getPaginatedList($page);
         return $this->render('question/index.html.twig', [
             'pagination' => $pagination,
@@ -57,7 +64,7 @@ final class QuestionController extends AbstractController {
      */
 
     #[Route(
-        '/question/{id}',
+        '/{id}/show',
         name: 'question_view',
         requirements: ['id' => '[1-9]\d*'],
         methods: ['GET']
@@ -85,7 +92,7 @@ final class QuestionController extends AbstractController {
      */
 
     #[Route(
-        '/create',
+        '/{id}/create',
         name: 'question_create',
         methods: ['GET', 'POST']
     )]
@@ -178,14 +185,14 @@ final class QuestionController extends AbstractController {
      */
 
     #[Route(
-        'question/{id}/delete',
+        '/{id}/delete',
         name: 'question_delete',
         requirements: ['id' => '[1-9]\d*'],
         methods: ['GET', 'POST', 'DELETE']
     )]
     public function delete(Request $request, Question $question): Response
     {
-        $form = $this->createForm(DeleteType::class, null, [
+        $form = $this->createForm(QuestionDeleteType::class, null, [
             'action' => $this->generateUrl('question_delete', [
                 'id' => $question->getId()
             ]),

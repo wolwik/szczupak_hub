@@ -5,38 +5,73 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ question.title }}</h1>
-    {% if question is defined and question|length %}
-        <div>
-            <p>{{ question.category.name }}</p>
+
+    <!-- QUESTION -->
+    <div class="card mb-4">
+        <div class="card-body">
+
+            <h1 class="mb-3">{{ question.title }}</h1>
+
+            <p class="text-muted small mb-2">{{ question.category ? question.category.name : "Brak kategorii" }}</p>
             <p>{{ question.content }}</p>
-            <a href="{{ url('question_list') }}">Back</a>
-        </div>
+            <a href="{{ url('question_list') }}" class="btn btn-outline-secondary btn-sm">Back</a>
 
-        <div>
-        <h3>Odpowiedzi</h3>
-
-        {% if question.answers is empty %}
-            <p>Brak odpowiedzi</p>
-        {% else %}
-            {% for answer in question.answers %}
-                <div>
-                    <p>{{ answer.guestEmail }}</p>
-                    <p>{{ answer.createdAt|date('Y-m-d H:i') }}</p>
-                    {%  if answer.updatedAt !== null %}
-                        <p>Ostatnia edycja: {{ answer.updatedAt|date('Y-m-d H:i') }}</p>
-                    {% endif %}
-                    <p>{{ answer.content }}</p>
-                    <a href="{{ path('answer_edit', {id: answer.id}) }}">
-                        Edytuj
-                    </a>
-                    <a href="{{ path('answer_delete', {id: answer.id}) }}">
-                        Usuń
-                    </a>
-                </div>
-            {% endfor %}
-        {% endif %}
         </div>
+    </div>
+
+
+    <!-- ANSWERS -->
+    <div class="card mb-4">
+
+        <div class="card-body">
+
+            <h4 class="mb-3">Odpowiedzi</h4>
+
+            {% if question.answers is empty %}
+                <p class="text-muted">Brak odpowiedzi</p>
+            {% else %}
+                {% for answer in question.answers %}
+                    <div class="border-bottom pb-3 mb-3">
+
+                        <div class="d-flex justify-content-between text-muted small mb-2">
+                            <div>
+                                <p>{{ answer.guestEmail }}</p>
+                                <p>{{ answer.createdAt|date('Y-m-d H:i') }}</p>
+                            </div>
+                            {%  if answer.updatedAt %}
+                                <div class="text-muted small mb-2">
+                                    <p>Ostatnia edycja: {{ answer.updatedAt|date('Y-m-d H:i') }}</p>
+                                </div>
+                            {% endif %}
+
+                            <p class="mb-2">{{ answer.content }}</p>
+
+                        </div>
+
+
+                        <!-- buttons -->
+                        <div>
+                            <a href="{{ path('answer_edit', {id: answer.id}) }}"
+                            class="btn btn-sm btn-primary">
+                                Edytuj
+                            </a>
+                            <a href="{{ path('answer_delete', {id: answer.id}) }}"
+                            class="btn btn-sm btn-danger">
+                                Usuń
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+
+
+
+
+
+
 
         <!--FORMULARZ DODAWANIA ODPOWIEDZI-->
         <div>
@@ -54,12 +89,5 @@
             {{ form_end(answerForm) }}
         </div>
 
-
-
-    {% else %}
-        <p>
-            {{ 'message.record_not_found'|trans }}
-        </p>
-    {% endif %}
 {% endblock %}
 

@@ -1,0 +1,187 @@
+/* =========================
+   DESIGN TOKENS
+========================= */
+:root {
+    --background: #F9E4B4;
+    --card: #ffffff;
+
+    --primary: #0F4861;
+    --primary-dark: #001E2E;
+
+    --text: #2f2f2f;
+    --text-muted: #6c757d;
+
+    --border: rgba(15, 72, 97, 0.20);
+
+    --radius: 0px;
+
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    --font-display: Georgia, "Times New Roman", serif;
+}
+
+/* =========================
+   GLOBAL LAYOUT
+========================= */
+
+body {
+    background: var(--background);
+    color: var(--text);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+}
+
+.page-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+/* =========================
+   HEADINGS
+========================= */
+
+h1, h2, h3, h4, h5 {
+    color: var(--primary);
+    font-family: var(--font-display);
+}
+
+/* =========================
+   NAVBAR (gradient + white text)
+========================= */
+
+.navbar {
+    background: linear-gradient(
+        to bottom,
+        var(--primary),
+        var(--primary-dark)
+    ) !important;
+}
+
+.navbar,
+.navbar a,
+.navbar .nav-link,
+.navbar-brand {
+    color: #ffffff !important;
+}
+
+.navbar .nav-link:hover {
+    opacity: 0.85;
+}
+
+/* =========================
+   CARDS (forum style)
+========================= */
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.05),
+        0 3px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* =========================
+   TEXT HELPERS
+========================= */
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* =========================
+   BUTTONS (Bootstrap override light)
+========================= */
+
+.btn-primary {
+    background: var(--primary);
+    border-color: var(--primary-dark);
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+/* =========================
+   LINKS
+========================= */
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+/* =========================
+   ANSWER THREAD SEPARATOR (forum feel)
+========================= */
+
+.border-bottom {
+    border-color: var(--border) !important;
+}
+
+/* =========================
+   FLASH MESSAGES (optional nicer look)
+========================= */
+
+.alert {
+    border-radius: var(--radius);
+}
+
+/* =========================
+   FORMS
+========================= */
+
+input,
+textarea,
+select {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem;
+    font-family: var(--font-sans);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 1px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 0;
+    overflow: hidden;
+}
+
+thead {
+    background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+    color: white;
+}
+
+thead th {
+    padding: 12px;
+    font-weight: 600;
+    color: white;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+}
+
+tbody tr:hover {
+    background: rgba(15, 72, 97, 0.06);
+}

@@ -42,7 +42,7 @@ class Question {
     #[ORM\OrderBy(['createdAt' => 'DESC'])]
     private Collection $answers;
 
-    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'questions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
@@ -127,4 +127,5 @@ class Question {
     {
         return $this->answers;
     }
+
 }

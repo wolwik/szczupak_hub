@@ -4,6 +4,7 @@
 
 {% block body %}
 
+    <!-- LISTA PYTAŃ -->
     <h1>{{ 'label.question_list'|trans }}</h1>
 
     {% if pagination is defined and pagination.items|length %}
@@ -27,7 +28,12 @@
             {% for question in pagination.items %}
                 <tr>
                     <td>{{ question.title }}</td>
-                    <td>{{ question.createdAt|date('Y-m-d H:i') }}</td>
+                    <td>
+                        <p>{{ question.createdAt|date('Y-m-d H:i') }}</p>
+                        {%  if question.updatedAt %}
+                            <p>Ostatnia edycja: {{ question.updatedAt|date('Y-m-d H:i') }}</p>
+                        {% endif %}
+                    </td>
                     <td>{{ question.category.name }}</td>
                     <td>{{ question.content }}</td>
                     <td><a href="{{ url('question_view', {id: question.id}) }}">Link</a></td>

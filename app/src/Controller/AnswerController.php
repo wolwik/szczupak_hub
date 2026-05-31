@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Answer;
 use App\Entity\Question;
+use App\Form\AnswerDeleteType;
 use App\Form\AnswerType;
-use App\Form\DeleteType;
 use App\Service\AnswerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,6 +13,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+
+
+#[Route(
+    '/answer'
+)]
 
 final class AnswerController extends AbstractController
 {
@@ -33,8 +39,9 @@ final class AnswerController extends AbstractController
      */
 
     #[Route(
-        '/answer',
-        name: 'app_answer'
+        '/app_answer_index',
+        name: 'app_answer',
+        methods: ['GET']
     )]
 
     public function index(): Response
@@ -51,7 +58,7 @@ final class AnswerController extends AbstractController
      */
 
     #[Route(
-        '/question/{id}/answer',
+        '/question/{id}/answer', // tworzone do pytania!!!
         name: 'answer_create',
         methods: ['POST']
     )]
@@ -135,7 +142,7 @@ final class AnswerController extends AbstractController
 
     public function delete(Request $request, Answer $answer): Response
     {
-        $form = $this->createForm(DeleteType::class, null, [
+        $form = $this->createForm(AnswerDeleteType::class, null, [
             'action' => $this->generateUrl('answer_delete', [
                 'id' => $answer->getId()
             ]),

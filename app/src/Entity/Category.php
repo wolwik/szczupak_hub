@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Category entity.
@@ -22,6 +24,9 @@ class Category {
 
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
+
+    #[ORM\OneToMany(targetEntity: Question::class, mappedBy: "category")]
+    private Collection $questions;
 
     public function getId(): ?int
     {
