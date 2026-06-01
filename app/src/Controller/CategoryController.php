@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Form\Category1Type;
 use App\Form\CategoryDeleteType;
+use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
 use App\Service\CategoryService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,7 +44,7 @@ final class CategoryController extends AbstractController
 
     #[Route(
         '/category_list',
-        name: 'app_category',
+        name: 'category_list',
         methods: ['GET']
     )]
 
@@ -61,14 +62,14 @@ final class CategoryController extends AbstractController
 
     #[Route(
         '/create',
-        name: 'app_category_new',
+        name: 'category_new',
         methods: ['GET', 'POST']
     )]
 
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $category = new Category();
-        $form = $this->createForm(Category1Type::class, $category);
+        $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -80,7 +81,7 @@ final class CategoryController extends AbstractController
                 $this->translator->trans('message.success.new_category')
             );
 
-            return $this->redirectToRoute('app_category', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('category_list', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('category/new.html.twig', [
@@ -93,7 +94,7 @@ final class CategoryController extends AbstractController
 
     #[Route(
         '/{id}/show',
-        name: 'app_category_show',
+        name: 'category_show',
         methods: ['GET']
     )]
 
@@ -108,18 +109,18 @@ final class CategoryController extends AbstractController
 
     #[Route(
         '/{id}/edit',
-        name: 'app_category_edit',
+        name: 'category_edit',
         methods: ['GET', 'PUT']
     )]
 
     public function edit(Request $request, Category $category): Response
     {
         $form = $this->createForm(
-            Category1Type::class,
+            CategoryType::class,
             $category,
             [
                 'method' => 'PUT',
-                'action' => $this->generateUrl('app_category_edit', ['id' => $category->getId()]),
+                'action' => $this->generateUrl('category_edit', ['id' => $category->getId()]),
             ]
         );
         $form->handleRequest($request);
@@ -132,12 +133,12 @@ final class CategoryController extends AbstractController
                 $this->translator->trans('message.edited_successfully')
             );
 
-            return $this->redirectToRoute('app_category', ['id' => $category->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('category_show', ['id' => $category->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('category/edit.html.twig', [
-            'category' => $category,
-            'form' => $form,
+            'form' => $form->createView(),
+            'category' => $category
         ]);
     }
 
@@ -149,7 +150,7 @@ final class CategoryController extends AbstractController
 
     #[Route(
         '/{id}/delete',
-        name: 'app_category_delete',
+        name: 'category_delete',
         requirements: ['id' => '[1-9]\d*'],
         methods: ['GET', 'POST', 'DELETE']
     )]
@@ -160,17 +161,23 @@ final class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-            return $this->redirectToRoute('app_category');
+
+            $deleted = $this->categoryService->delete($category);
+
+            if ($deleted) {
+                $this->addFlash('success', 'Kategoria została usunięta.');
+            } else {
+                $this->addFlash('error', 'Nie można usunąć kategorii, ponieważ ma przypisane pytania.');
+            }
+
+            return $this->redirectToRoute('category_list');
         }
 
-        $deleted = $this->categoryService->delete($category);
-
-        if ($deleted) {
-            $this->addFlash('success', 'Kategoria została usunięta.');
-        } else {
-            $this->addFlash('error', 'Nie można usunąć kategorii, ponieważ ma przypisane pytania.');
-        }
-
-        return $this->redirectToRoute('app_category');
+        return $this->render('category/delete.html.twig', [
+            'form' => $form->createView(),
+            'category' => $category,
+        ]);
     }
+
+
 }

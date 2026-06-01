@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title.category_delete'|trans }}
+{% endblock %}
+
+{% block body %}
+    <h1>
+        {{ 'title.category_delete'|trans }}
+    </h1>
+
+    <p>
+        {{ 'message.delete_confirm'|trans }}
+    </p>
+
+    {{ form_start(form) }}
+
+    <div class="form-group">
+        {{ form_widget(form.delete) }}
+    </div>
+
+    {{ form_end(form) }}
+
+    <a href="{{ path('category_list') }}" class="btn btn-link">
+        {{ 'action.back_to_list'|trans }}
+    </a>
+{% endblock %}

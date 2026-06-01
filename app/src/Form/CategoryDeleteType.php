@@ -2,6 +2,7 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -11,15 +12,12 @@ class CategoryDeleteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('confirm', SubmitType::class, [
+            ->setMethod('POST')
+            ->add('_method', HiddenType::class, [
+                'data' => 'DELETE',
+            ])
+            ->add('delete', SubmitType::class, [
                 'label' => 'action.delete',
             ]);
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'method' => 'POST',
-        ]);
     }
 }
