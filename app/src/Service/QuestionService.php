@@ -22,13 +22,13 @@ class QuestionService {
         private readonly PaginatorInterface $paginator
     ) {}
 
-    public function getPaginatedList(int $page): PaginationInterface {
+    public function getPaginatedList(int $page, ?int $categoryId = null): PaginationInterface {
         return $this->paginator->paginate(
-            $this->questionRepository->queryAll(),
+            $this->questionRepository->queryAll($categoryId),
             $page,
             self::PAGINATOR_ITEMS_PER_PAGE,
             [
-                'sortFieldAllowList' => ['question.createdAt', 'question.title', 'question.category'], // lista rzeczy,
+                'sortFieldAllowList' => ['question.createdAt', 'question.title'], // lista rzeczy,
                 // po ktorych bedzie mozna sortowac
                 'defaultSortFieldName' => 'question.createdAt', // domyslne sortowanie
                 'defaultSortDirection' => 'desc', // kierunek sortowania, descending

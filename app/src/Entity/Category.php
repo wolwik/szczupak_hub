@@ -6,12 +6,18 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Category entity.
  */
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\Table(name: 'categories')]
+
+#[UniqueEntity(
+    fields: ['name'],
+    message: 'Taka kategoria już istnieje.'
+)]
 
 class Category {
     #[ORM\Id]

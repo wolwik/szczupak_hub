@@ -30,8 +30,18 @@ class QuestionRepository extends ServiceEntityRepository
      *
      * @return QueryBuilder Query builder
      */
-    public function queryAll(): QueryBuilder {
-        return $this->createQueryBuilder('question');
+    public function queryAll(?int $categoryId = null)
+    {
+        $qb = $this->createQueryBuilder('question')
+            ->leftJoin('question.category', 'category')
+            ->addSelect('category');
+
+        if ($categoryId) {
+            $qb->andWhere('category.id = :categoryId')
+                ->setParameter('categoryId', $categoryId);
+        }
+
+        return $qb;
     }
 
     /**

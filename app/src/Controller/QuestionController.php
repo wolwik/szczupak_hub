@@ -6,6 +6,7 @@ use App\Entity\Question;
 use App\Form\AnswerType;
 use App\Form\QuestionDeleteType;
 use App\Form\QuestionType;
+use App\Repository\CategoryRepository;
 use App\Service\QuestionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +31,8 @@ final class QuestionController extends AbstractController {
      */
     public function __construct(
         private readonly QuestionService $questionService,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
+        private readonly CategoryRepository $categoryRepository
     ) {}
 
 
@@ -45,11 +47,18 @@ final class QuestionController extends AbstractController {
         methods: ['GET']
     )]
 
-    public function index(#[MapQueryParameter] int $page = 1): Response
+    public function index(
+        #[MapQueryParameter] int $page = 1,
+        #[MapQueryParameter] int $categoryId = null): Response
     {
-        $pagination = $this->questionService->getPaginatedList($page);
+        $pagination = $this->questionService->getPaginatedList($page, $categoryId);
+
+        $categories = $this->categoryRepository->findAll();
+
         return $this->render('question/index.html.twig', [
             'pagination' => $pagination,
+            'categories' => $categories,
+            'categoryId' => $categoryId,
         ]);
     }
 
