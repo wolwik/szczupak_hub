@@ -7,7 +7,6 @@
 namespace App\Service;
 
 use App\Entity\Category;
-use App\Entity\Question;
 use App\Repository\CategoryRepository;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -30,9 +29,15 @@ class CategoryService {
 
     }
 
-    public function delete(Category $category): void
+    public function delete(Category $category): bool
     {
+        if ($category->getQuestions()->isEmpty()) {
+            return false;
+        }
+
         $this->categoryRepository->delete($category);
+
+        return true;
     }
 
 }

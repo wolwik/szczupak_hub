@@ -34,6 +34,11 @@ class Category {
     #[ORM\OneToMany(targetEntity: Question::class, mappedBy: "category")]
     private Collection $questions;
 
+    public function __construct()
+    {
+        $this->questions = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,5 +73,10 @@ class Category {
         $this->slug = $slug;
 
         return $this;
+    }
+
+    public function getQuestions(): Collection
+    {
+        return $this->questions;
     }
 }

@@ -5,6 +5,12 @@
 {% block body %}
     <h1>Edit Category</h1>
 
+    {% if category.questions|length > 0 %}
+        <div class="alert alert-warning">
+            Nie można usunąć tej kategorii — ma przypisane pytania ({{ category.questions|length }}).
+        </div>
+    {% endif %}
+
     {{ include('category/_form.html.twig', {'button_label': 'Update'}) }}
 
     <a href="{{ path('app_category') }}">back to list</a>

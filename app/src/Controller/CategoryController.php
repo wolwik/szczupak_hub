@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Form\Category1Type;
+use App\Form\CategoryDeleteType;
 use App\Repository\CategoryRepository;
 use App\Service\CategoryService;
 use Doctrine\ORM\EntityManagerInterface;
+use DomainException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -149,34 +151,26 @@ final class CategoryController extends AbstractController
         '/{id}/delete',
         name: 'app_category_delete',
         requirements: ['id' => '[1-9]\d*'],
-        methods: ['POST', 'DELETE']
+        methods: ['GET', 'POST', 'DELETE']
     )]
 
-    public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Category $category): Response
     {
-        $form = $this->createForm(CategoryDeleteType::class, null, [
-            'action' => $this->generateUrl('app_category_delete', [
-                'id' => $category->getId()
-            ]),
-        ]);
-
+        $form = $this->createForm(CategoryDeleteType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->categoryService->delete($category);
-
-            $this->addFlash(
-                'success',
-                $this->translator->trans('message.success.delete_category')
-            );
-
-            return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+        if (!$form->isSubmitted() || !$form->isValid()) {
+            return $this->redirectToRoute('app_category');
         }
 
-        return $this->render('category/_delete_form.html.twig', [
-            'form' => $form->createView(),
-            'category' => $category,
-        ]);
+        $deleted = $this->categoryService->delete($category);
 
+        if ($deleted) {
+            $this->addFlash('success', 'Kategoria została usunięta.');
+        } else {
+            $this->addFlash('error', 'Nie można usunąć kategorii, ponieważ ma przypisane pytania.');
+        }
+
+        return $this->redirectToRoute('app_category');
     }
 }
