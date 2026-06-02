@@ -101,7 +101,7 @@ final class QuestionController extends AbstractController {
      */
 
     #[Route(
-        '/{id}/create',
+        '/create',
         name: 'question_create',
         methods: ['GET', 'POST']
     )]
