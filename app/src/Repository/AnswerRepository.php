@@ -43,13 +43,10 @@ class AnswerRepository extends ServiceEntityRepository
      * @param Answer $answer Answer entity
      */
 
-    public function delete(Answer $answer, bool $flush = true): void
+    public function delete(Answer $answer): void
     {
         $this->getEntityManager()->remove($answer);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        $this->getEntityManager()->flush();
     }
 
     //    /**

@@ -30,7 +30,6 @@ final class CategoryController extends AbstractController
      */
 
     public function __construct(
-        //private readonly CategoryService $categoryService,
         private readonly CategoryRepository $categoryRepository,
         private readonly CategoryService $categoryService,
         private readonly TranslatorInterface $translator
@@ -66,7 +65,7 @@ final class CategoryController extends AbstractController
         methods: ['GET', 'POST']
     )]
 
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request): Response
     {
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);

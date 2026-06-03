@@ -7,6 +7,7 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Question;
+use App\Entity\Tag;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -63,7 +64,18 @@ class QuestionType extends AbstractType
                 'label' => 'label.category',
                 'required' => true,
                 'placeholder' => "Wybierz kategorię",
-            ]);
+            ])
+
+            // TAGS (relation)
+            ->add(
+                'tags',
+                EntityType::class,
+                [
+                    'class' => Tag::class,
+                    'choice_label' => 'name',
+                    'multiple' => true,
+                    'expanded' => true,
+                ]);
     }
 
     /**

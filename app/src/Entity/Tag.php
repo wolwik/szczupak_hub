@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TagRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,6 +24,17 @@ class Tag {
 
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
+
+    /**
+     * @var Collection<int, Question>
+     */
+    #[ORM\ManyToMany(targetEntity: Question::class, mappedBy: 'tags')]
+    private Collection $questions;
+
+    public function __construct()
+    {
+        $this->questions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -55,6 +68,30 @@ class Tag {
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Question>
+     */
+    public function getQuestions(): Collection
+    {
+        return $this->questions;
+    }
+
+    public function addQuestion(Question $question): static
+    {
+        if (!$this->questions->contains($question)) {
+            $this->questions->add($question);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestion(Question $question): static
+    {
+        $this->questions->removeElement($question);
 
         return $this;
     }

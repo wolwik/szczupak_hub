@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Question;
 use App\Entity\Category;
+use App\Entity\Tag;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
@@ -12,7 +13,6 @@ use Doctrine\Persistence\ObjectManager;
  */
 
 class QuestionFixtures extends AbstractBaseFixtures implements DependentFixtureInterface {
-
 
 
     public function loadData(): void {
@@ -44,6 +44,12 @@ class QuestionFixtures extends AbstractBaseFixtures implements DependentFixtureI
             // losowa kategoria z referencji
             $category = $this->getRandomReference('category', Category::class);
             $question->setCategory($category);
+
+            // tagi (losowo 1-4)
+            for ($i = 0; $i < random_int(1,7); $i++) {
+                $tag = $this->getRandomReference('tag', Tag::class);
+                $question->addTag($tag);
+            }
 
             return $question;
         });

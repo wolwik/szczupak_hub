@@ -24,8 +24,12 @@
                     <th>{{ knp_pagination_sortable(pagination, 'label.title'|trans, 'question.createdAt') }}</th>
                     <th>{{ knp_pagination_sortable(pagination, 'label.created_at'|trans, 'question.createdAt') }}</th>
                     <th>{{ 'label.category'|trans }}</th>
+                    <th>Tagi</th>
                     <th>{{ 'label.content'|trans }}</th>
-                    <th>Akcje</th>
+                    <th>Link</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+
                 </tr>
             </thead>
 
@@ -40,6 +44,17 @@
                             {% endif %}
                         </td>
                         <td>{{ question.category.name }}</td>
+                        <!--tagi-->
+                        <td>
+                            {% for tag in question.tags %}
+                                <span class="badge bg-secondary">
+                                {{ tag.name }}
+                            </span>
+                            {% else %}
+                                <span class="text-muted">brak tagów</span>
+                            {% endfor %}
+                        </td>
+
                         <td>{{ question.content }}</td>
                         <td><a href="{{ url('question_view', {id: question.id}) }}">Link</a></td>
                         <td><a href="{{ url('question_edit', {id: question.id}) }}">Edit</a></td>

@@ -3,34 +3,21 @@
 namespace App\DataFixtures;
 
 use App\Entity\Tag;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
-use Faker\Factory;
-use Faker\Generator;
 
-class TagFixtures extends Fixture
+class TagFixtures extends AbstractBaseFixtures
 {
-    public function load(ObjectManager $manager): void
+    protected function loadData(): void
     {
-        $this->faker = Factory::create();
-
-        for ($i = 0; $i < 10; ++$i) {
+        $this->createMany(10, 'tag', function (int $i) {
 
             $tag = new Tag();
 
-            $tag->setName(
-                dump($this->faker->word())
+            $name = $this->faker->word();
 
-            );
+            $tag->setName($name);
+            $tag->setSlug(strtolower(str_replace(' ', '-', $name)));
 
-            $tag->setSlug(
-                $this->faker->word()
-            );
-
-
-            $manager->persist($tag);
-        }
-
-        $manager->flush();
+            return $tag;
+        });
     }
 }
