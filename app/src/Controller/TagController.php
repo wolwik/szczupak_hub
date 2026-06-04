@@ -68,7 +68,7 @@ final class TagController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->tagRepository->save($tag);
+            $this->tagService->save($tag);
 
             $this->addFlash(
                 'success',

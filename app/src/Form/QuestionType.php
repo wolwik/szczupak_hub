@@ -69,12 +69,12 @@ class QuestionType extends AbstractType
             // TAGS (relation)
             ->add(
                 'tags',
-                EntityType::class,
+                TextType::class,
                 [
-                    'class' => Tag::class,
-                    'choice_label' => 'name',
-                    'multiple' => true,
-                    'expanded' => true,
+                    'mapped' => false,
+                    'required' => true,
+                    'label' => 'label.tags',
+                    'attr' => ['placeholder' => 'karp, spinning, jezioro...'],
                 ]);
     }
 

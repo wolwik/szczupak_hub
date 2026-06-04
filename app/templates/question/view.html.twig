@@ -10,11 +10,21 @@
     <div class="card mb-4">
         <div class="card-body">
 
-            <h1 class="mb-3">{{ question.title }}</h1>
-
             <p class="text-muted small mb-2">{{ question.category ? question.category.name : "Brak kategorii" }}</p>
+
+            <h1 class="mb-3">{{ question.title }}</h1>
+            {% for tag in question.tags %}
+                <span class="badge bg-secondary">
+                    {{ tag.slug }}
+                </span>
+            {% else %}
+                <span class="text-muted">brak tagów</span>
+            {% endfor %}
+
             <p>{{ question.content }}</p>
             <a href="{{ url('question_list') }}" class="btn btn-outline-secondary btn-sm">Back</a>
+            <a href="{{ url('question_edit', {id: question.id}) }}" class="btn btn-outline-secondary btn-sm">Edit</a>
+            <a href="{{ url('question_delete', {id: question.id}) }}" class="btn btn-outline-secondary btn-sm">Delete</a>
 
         </div>
     </div>

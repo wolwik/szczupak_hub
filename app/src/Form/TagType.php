@@ -23,6 +23,7 @@ class TagType extends AbstractType
                     'required' => true,
                     'attr' => ['max_length' => 64, 'placeholder' => 'Nowa kategorie'],
                 ])
+            /*
             ->add(
                 'slug',
                 TextType::class,
@@ -31,6 +32,7 @@ class TagType extends AbstractType
                     'required' => true,
                     'attr' => ['max_length' => 64, 'placeholder' => 'Nowy slug'],
                 ])
+            */
         ;
     }
 

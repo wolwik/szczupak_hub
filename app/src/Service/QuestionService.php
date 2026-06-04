@@ -22,9 +22,9 @@ class QuestionService {
         private readonly PaginatorInterface $paginator
     ) {}
 
-    public function getPaginatedList(int $page, ?int $categoryId = null): PaginationInterface {
+    public function getPaginatedList(int $page, ?int $categoryId = null, ?int $tagId = null): PaginationInterface {
         return $this->paginator->paginate(
-            $this->questionRepository->queryAll($categoryId),
+            $this->questionRepository->queryAll($categoryId, $tagId),
             $page,
             self::PAGINATOR_ITEMS_PER_PAGE,
             [

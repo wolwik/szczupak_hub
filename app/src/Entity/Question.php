@@ -163,4 +163,10 @@ class Question {
         return $this;
     }
 
+    public function clearTags(): self
+    {
+        $this->tags->clear();
+        return $this;
+    }
+
 }

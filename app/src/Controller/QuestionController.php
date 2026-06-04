@@ -7,7 +7,9 @@ use App\Form\AnswerType;
 use App\Form\QuestionDeleteType;
 use App\Form\QuestionType;
 use App\Repository\CategoryRepository;
+use App\Repository\QuestionRepository;
 use App\Service\QuestionService;
+use App\Service\TagService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +34,8 @@ final class QuestionController extends AbstractController {
     public function __construct(
         private readonly QuestionService $questionService,
         private readonly TranslatorInterface $translator,
-        private readonly CategoryRepository $categoryRepository
+        private readonly CategoryRepository $categoryRepository,
+        private readonly TagService $tagService,
     ) {}
 
 
@@ -49,9 +52,10 @@ final class QuestionController extends AbstractController {
 
     public function index(
         #[MapQueryParameter] int $page = 1,
-        #[MapQueryParameter] int $categoryId = null): Response
+        #[MapQueryParameter] ?int $categoryId = null,
+        #[MapQueryParameter] ?int $tag = null): Response
     {
-        $pagination = $this->questionService->getPaginatedList($page, $categoryId);
+        $pagination = $this->questionService->getPaginatedList($page, $categoryId, $tag);
 
         $categories = $this->categoryRepository->findAll();
 
@@ -114,6 +118,15 @@ final class QuestionController extends AbstractController {
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // creating tags
+
+            $tagsString = $form->get('tags')->getData();
+            $tags = $this->tagService->createFromString($tagsString);
+
+            foreach ($tags as $tag) {
+                $question->addTag($tag);
+            }
+
             $this->questionService->save($question);
 
             $this->addFlash(
@@ -150,6 +163,12 @@ final class QuestionController extends AbstractController {
 
     public function edit(Request $request, Question $question): Response
     {
+        // dodajemy obecne tagi do formularza
+        $existingTags = implode(', ', array_map(
+            fn($tag) => $tag->getName(),
+            $question->getTags()->toArray()
+        ));
+
         $form = $this->createForm(
             QuestionType::class,
             $question,
@@ -158,9 +177,27 @@ final class QuestionController extends AbstractController {
                 'action' => $this->generateUrl('question_edit', ['id' => $question->getId()]),
             ]
         );
+        // dodajemy obecne tagi do formularza
+        $form->get('tags')->setData($existingTags);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // 1. USUŃ stare tagi (ważne!)
+            $question->clearTags();
+
+            // 2. Pobierz wpis użytkownika
+            $tagsString = $form->get('tags')->getData();
+
+            // 3. Stwórz / pobierz tagi
+            $tags = $this->tagService->createFromString($tagsString);
+
+            // 4. Dodaj nowe tagi
+            foreach ($tags as $tag) {
+                $question->addTag($tag);
+            }
+
             $this->questionService->save($question);
 
             $this->addFlash(

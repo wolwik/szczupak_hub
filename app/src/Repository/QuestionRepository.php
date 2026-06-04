@@ -30,7 +30,7 @@ class QuestionRepository extends ServiceEntityRepository
      *
      * @return QueryBuilder Query builder
      */
-    public function queryAll(?int $categoryId = null)
+    public function queryAll(?int $categoryId = null, ?int $tagId = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('question')
             ->leftJoin('question.category', 'category')
@@ -39,6 +39,12 @@ class QuestionRepository extends ServiceEntityRepository
         if ($categoryId) {
             $qb->andWhere('category.id = :categoryId')
                 ->setParameter('categoryId', $categoryId);
+        }
+
+        if ($tagId) {
+            $qb->join('question.tags', 'tag')
+                ->andWhere('tag.id = :tagId')
+                ->setParameter('tagId', $tagId);
         }
 
         return $qb;
@@ -69,6 +75,8 @@ class QuestionRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+
 
 
 
