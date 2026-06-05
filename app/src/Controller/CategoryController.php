@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Category;
-use App\Form\Category1Type;
 use App\Form\CategoryDeleteType;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
