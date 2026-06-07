@@ -16,7 +16,14 @@
             {{ knp_pagination_render(pagination) }}
         </div>
 
-        <a href="{{ url('question_create') }}">Zadaj pytanie</a>
+        {% if app.user %}
+            <a href="{{ url('question_create') }}">Zadaj pytanie</a>
+        {% else %}
+            <p>
+                <a href="{{ url('app_login') }}">Zaloguj się</a>, aby zadań pytanie.
+            </p>
+        {% endif %}
+
 
         <table>
             <thead>

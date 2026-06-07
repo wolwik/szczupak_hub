@@ -45,7 +45,12 @@ final class QuestionVoter extends Voter
 
     private function canEdit(Question $question, UserInterface $user): bool
     {
-        // tylko owner ma dostęp
+        // admin ma zawsze dostęp
+        if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+            return true;
+        }
+
+        // owner ma dostęp
         return $question->getAuthor() === $user;
     }
 
