@@ -8,6 +8,7 @@ use App\Form\QuestionDeleteType;
 use App\Form\QuestionType;
 use App\Repository\CategoryRepository;
 use App\Repository\QuestionRepository;
+use App\Security\Voter\QuestionVoter;
 use App\Service\QuestionService;
 use App\Service\TagService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 
@@ -109,6 +111,8 @@ final class QuestionController extends AbstractController {
         name: 'question_create',
         methods: ['GET', 'POST']
     )]
+    #[IsGranted('ROLE_USER')] // kazdy z rola "user" LUB WYZSZAs
+
     public function create(Request $request): Response
     {
         $question = new Question();
@@ -118,8 +122,9 @@ final class QuestionController extends AbstractController {
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // creating tags
+            $question->setAuthor($this->getUser());
 
+            // creating tags
             $tagsString = $form->get('tags')->getData();
             $tags = $this->tagService->createFromString($tagsString);
 
@@ -160,6 +165,7 @@ final class QuestionController extends AbstractController {
         requirements: ['id' => '[1-9]\d*'],
         methods: ['GET', 'PUT']
     )]
+    #[IsGranted(QuestionVoter::EDIT, subject: 'question')]
 
     public function edit(Request $request, Question $question): Response
     {
@@ -184,16 +190,16 @@ final class QuestionController extends AbstractController {
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // 1. USUŃ stare tagi (ważne!)
+            // USUŃ stare tagi (ważne!)
             $question->clearTags();
 
-            // 2. Pobierz wpis użytkownika
+            // Pobierz wpis użytkownika
             $tagsString = $form->get('tags')->getData();
 
-            // 3. Stwórz / pobierz tagi
+            // Stwórz / pobierz tagi
             $tags = $this->tagService->createFromString($tagsString);
 
-            // 4. Dodaj nowe tagi
+            // Dodaj nowe tagi
             foreach ($tags as $tag) {
                 $question->addTag($tag);
             }
@@ -236,6 +242,8 @@ final class QuestionController extends AbstractController {
         requirements: ['id' => '[1-9]\d*'],
         methods: ['GET', 'POST', 'DELETE']
     )]
+    #[IsGranted(QuestionVoter::DELETE, subject: 'question')]
+
     public function delete(Request $request, Question $question): Response
     {
         $form = $this->createForm(QuestionDeleteType::class, null, [

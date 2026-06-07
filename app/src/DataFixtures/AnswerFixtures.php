@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Answer;
 use App\Entity\Question;
+use App\Entity\User;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 
@@ -23,14 +24,6 @@ class AnswerFixtures extends AbstractBaseFixtures implements DependentFixtureInt
                 $this->faker->realText(200)
             );
 
-            $answer->setGuestEmail(
-                $this->faker->email()
-            );
-
-            $answer->setGuestNickname(
-                $this->faker->userName()
-            );
-
             $answer->setCreatedAt(
                 $this->faker->dateTimeBetween('-100 days', '-1 days')
             );
@@ -38,6 +31,9 @@ class AnswerFixtures extends AbstractBaseFixtures implements DependentFixtureInt
             // przypisanie Question (NOT NULL FK)
             $question = $this->getRandomReference('question', Question::class);
             $answer->setQuestion($question);
+
+            $user = $this->getRandomReference('user', User::class);
+            $answer->setAuthor($user);
 
             return $answer;
         });

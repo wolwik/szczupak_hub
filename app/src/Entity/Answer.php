@@ -21,12 +21,6 @@ class Answer {
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $guestEmail = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $guestNickname = null;
-
     #[ORM\Column]
     private ?\DateTime $createdAt = null;
 
@@ -36,6 +30,9 @@ class Answer {
     #[ORM\ManyToOne(targetEntity: Question::class, inversedBy: "answers")]
     #[ORM\JoinColumn(nullable: false)]
     private ?Question $question = null;
+
+    #[ORM\ManyToOne(inversedBy: 'answers')]
+    private ?User $author = null;
 
 
     public function getId(): ?int
@@ -58,30 +55,6 @@ class Answer {
     public function setContent(string $content): static
     {
         $this->content = $content;
-
-        return $this;
-    }
-
-    public function getGuestEmail(): ?string
-    {
-        return $this->guestEmail;
-    }
-
-    public function setGuestEmail(string $guestEmail): static
-    {
-        $this->guestEmail = $guestEmail;
-
-        return $this;
-    }
-
-    public function getGuestNickname(): ?string
-    {
-        return $this->guestNickname;
-    }
-
-    public function setGuestNickname(string $guestNickname): static
-    {
-        $this->guestNickname = $guestNickname;
 
         return $this;
     }
@@ -117,6 +90,18 @@ class Answer {
     public function setUpdatedAt(?\DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
 
         return $this;
     }

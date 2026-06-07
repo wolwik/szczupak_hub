@@ -6,12 +6,14 @@ use App\Entity\Answer;
 use App\Entity\Question;
 use App\Form\AnswerDeleteType;
 use App\Form\AnswerType;
+use App\Security\Voter\AnswerVoter;
+use App\Security\Voter\QuestionVoter;
 use App\Service\AnswerService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 
@@ -62,6 +64,7 @@ final class AnswerController extends AbstractController
         name: 'answer_create',
         methods: ['POST']
     )]
+    #[IsGranted('ROLE_USER')]
 
     public function create(Question $question, Request $request): Response
     {
@@ -71,6 +74,8 @@ final class AnswerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $answer->setAuthor($this->getUser());
 
             $this->answerService->save($answer, $question);
 
@@ -99,6 +104,7 @@ final class AnswerController extends AbstractController
         requirements: ['id' => '[1-9]\d*'],
         methods: ['GET', 'PUT']
     )]
+    #[IsGranted(AnswerVoter::EDIT, subject: 'answer')]
 
     public function edit(Request $request, Answer $answer): Response
     {
@@ -139,6 +145,7 @@ final class AnswerController extends AbstractController
         requirements: ['id' => '[1-9]\d*'],
         methods: ['GET', 'POST', 'DELETE']
     )]
+    #[IsGranted(AnswerVoter::DELETE, subject: 'answer')]
 
     public function delete(Request $request, Answer $answer): Response
     {

@@ -22,7 +22,7 @@
     <!-- Header -->
     <header class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand">
+            <a href="{{ url('question_list') }}" class="navbar-brand">
                 SzczupakHub
             </a>
         </div>
@@ -31,6 +31,9 @@
             <div>{{ app.user.email }}</div>
             <div>
                 <a href="{{ url('app_logout') }}">{{ 'action.logout'|trans }}</a>
+            </div>
+            <div>
+                <a href="{{ url('change_password') }}">Zmień hasło</a>
             </div>
         {% else %}
             <div>

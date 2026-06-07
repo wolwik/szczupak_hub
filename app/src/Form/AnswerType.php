@@ -22,15 +22,6 @@ class AnswerType extends AbstractType
                 'content',
                 TextareaType::class, [
                     'label' => 'Twoja odpowiedź',
-            ])
-            ->add(
-                'guestEmail',
-                EmailType::class, [
-                    'label' => 'Email',
-            ])
-            ->add(
-                'guestNickname',
-                TextType::class, [
             ]);
     }
 

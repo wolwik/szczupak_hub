@@ -53,6 +53,10 @@ class Question {
     #[ORM\JoinTable(name: 'questions_tags')]
     private Collection $tags;
 
+    #[ORM\ManyToOne(inversedBy: 'questions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $author = null;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -166,6 +170,18 @@ class Question {
     public function clearTags(): self
     {
         $this->tags->clear();
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
+
         return $this;
     }
 

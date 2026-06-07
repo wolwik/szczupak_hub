@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Question;
 use App\Entity\Category;
+use App\Entity\User;
 use App\Entity\Tag;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -50,6 +51,9 @@ class QuestionFixtures extends AbstractBaseFixtures implements DependentFixtureI
                 $tag = $this->getRandomReference('tag', Tag::class);
                 $question->addTag($tag);
             }
+
+            $user = $this->getRandomReference('user', User::class);
+            $question->setAuthor($user);
 
             return $question;
         });

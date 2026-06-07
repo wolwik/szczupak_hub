@@ -23,6 +23,7 @@
                 <tr>
                     <th>{{ knp_pagination_sortable(pagination, 'label.title'|trans, 'question.createdAt') }}</th>
                     <th>{{ knp_pagination_sortable(pagination, 'label.created_at'|trans, 'question.createdAt') }}</th>
+                    <th>Autor</th>
                     <th>{{ 'label.category'|trans }}</th>
                     <th>Tagi</th>
                     <th>{{ 'label.content'|trans }}</th>
@@ -42,6 +43,7 @@
                                 <p>Ostatnia edycja: {{ question.updatedAt|date('Y-m-d H:i') }}</p>
                             {% endif %}
                         </td>
+                        <td>{{ question.author.email }}</td>
                         <td>{{ question.category.name }}</td>
                         <!--tagi-->
                         <td>
