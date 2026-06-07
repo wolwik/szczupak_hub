@@ -7,6 +7,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,6 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'users')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[UniqueEntity(fields: ['nickname'])]
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -68,6 +70,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'author')]
     private Collection $answers;
+
+    #[ORM\Column(length: 50, nullable: true, unique: true)] // tymczasowo zeby mysql sie nie wywalil na ryj
+    private ?string $nickname = null;
 
     public function __construct()
     {
@@ -237,6 +242,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $answer->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNickname(): ?string
+    {
+        return $this->nickname;
+    }
+
+    public function setNickname(string $nickname): static
+    {
+        $this->nickname = $nickname;
 
         return $this;
     }

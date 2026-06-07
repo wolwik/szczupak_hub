@@ -41,8 +41,8 @@ final class AnswerController extends AbstractController
      */
 
     #[Route(
-        '/app_answer_index',
-        name: 'app_answer',
+        '/answer_list',
+        name: 'answer_list',
         methods: ['GET']
     )]
 

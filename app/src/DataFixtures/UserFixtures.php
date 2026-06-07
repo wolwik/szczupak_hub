@@ -51,6 +51,9 @@ class UserFixtures extends AbstractBaseFixtures
                     'user1234'
                 )
             );
+            $user->setNickname(
+                $this->faker->userName()
+            );
 
             return $user;
         });
@@ -64,6 +67,9 @@ class UserFixtures extends AbstractBaseFixtures
                     $user,
                     'admin1234'
                 )
+            );
+            $user->setNickname(
+                $this->faker->userName()
             );
 
             return $user;

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panel użytkownika{% endblock %}
+
+{% block body %}
+
+    <h1>Panel użytkownika</h1>
+
+    <h2>Dane</h2>
+
+    <p>Email: {{ app.user.email }}</p>
+    <p>Nickname: {{ app.user.nickname }}</p>
+
+    <p>Hasło:<a href="{{ path('change_password') }}">Zmień hasło</a></p>
+
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <h2>Administracja</h2>
+
+        <a href="{{ path('question_list') }}">
+            Zarządzaj pytaniami
+        </a>
+
+        <a href="{{ path('category_list') }}">
+            Zarządzaj kategoriami
+        </a>
+
+        <a href="{{ path('tag_list') }}">
+            Zarządzaj tagami
+        </a>
+    {% endif %}
+{% endblock %}
+
+
+
+
