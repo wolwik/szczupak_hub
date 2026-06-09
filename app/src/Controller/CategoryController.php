@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 
@@ -20,7 +21,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route(
     '/category'
 )]
-
+#[IsGranted('ROLE_ADMIN')]
 final class CategoryController extends AbstractController
 {
 

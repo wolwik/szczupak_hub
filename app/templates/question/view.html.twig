@@ -14,6 +14,9 @@
 
             <h1 class="mb-3">{{ question.title }}</h1>
             <p>{{ question.author.nickname }}</p>
+            {% if 'ROLE_ADMIN' in question.author.roles %}
+                <span class="badge bg-danger">admin</span>
+            {% endif %}
             {% for tag in question.tags %}
                 <span class="badge bg-secondary">
                     {{ tag.slug }}
@@ -53,6 +56,9 @@
                         <div class="d-flex justify-content-between text-muted small mb-2">
                             <div>
                                 <p>{{ answer.author.nickname }}</p>
+                                {% if 'ROLE_ADMIN' in answer.author.roles %}
+                                    <span class="badge bg-danger">admin</span>
+                                {% endif %}
                                 <p>{{ answer.createdAt|date('Y-m-d H:i') }}</p>
                             </div>
                             {%  if answer.updatedAt %}

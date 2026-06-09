@@ -28,7 +28,10 @@
         </div>
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <div>
-            <div>{{ app.user.email }}</div>
+            <div>{{ app.user.nickname }}</div>
+            {% if 'ROLE_ADMIN' in app.user.roles %}
+                <span class="badge bg-danger">admin</span>
+            {% endif %}
             <div>
                 <a href="{{ url('app_logout') }}">{{ 'action.logout'|trans }}</a>
             </div>
