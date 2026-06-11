@@ -18,10 +18,12 @@ class AnswerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add(
-                'content',
-                TextareaType::class, [
-                    'label' => 'Twoja odpowiedź',
+            ->add('content', TextareaType::class, [
+                'label' => 'Twoja odpowiedź',
+                'label_attr' => ['class' => 'visually-hidden'],
+                'attr' => [
+                    'placeholder' => 'Napisz odpowiedź...'
+                ]
             ]);
     }
 
