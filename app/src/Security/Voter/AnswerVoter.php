@@ -15,17 +15,20 @@ final class AnswerVoter extends Voter
 
     public const DELETE = 'ANSWER_DELETE';
 
+    public const MARK_AS_BEST = "ANSWER_MARK_AS_BEST";
+
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::EDIT, self::DELETE])
+        return in_array($attribute, [self::EDIT, self::DELETE, self::MARK_AS_BEST])
             && $subject instanceof \App\Entity\Answer;
     }
 
     protected function voteOnAttribute(
-        string $attribute,
-        mixed $subject,
+        string         $attribute,
+        mixed          $subject,
         TokenInterface $token
-    ): bool {
+    ): bool
+    {
         $user = $token->getUser();
 
         if (!$user instanceof UserInterface) {
@@ -39,6 +42,7 @@ final class AnswerVoter extends Voter
         return match ($attribute) {
             self::EDIT => $this->canEdit($subject, $user),
             self::DELETE => $this->canDelete($subject, $user),
+            self::MARK_AS_BEST => $this->canMarkAsBest($subject, $user),
             default => false,
         };
     }
@@ -65,4 +69,10 @@ final class AnswerVoter extends Voter
         return $answer->getAuthor() === $user;
     }
 
+    private function canMarkAsBest(Answer $answer, UserInterface $user): bool
+    {
+        return $answer
+                ->getQuestion()
+                ->getAuthor() === $user;
+    }
 }

@@ -57,6 +57,13 @@ class Question {
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
+    #[ORM\OneToOne(targetEntity: Answer::class)]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    private ?Answer $bestAnswer = null;
+
+
+
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -181,6 +188,18 @@ class Question {
     public function setAuthor(?User $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getBestAnswer(): ?Answer
+    {
+        return $this->bestAnswer;
+    }
+
+    public function setBestAnswer(?Answer $bestAnswer): self
+    {
+        $this->bestAnswer = $bestAnswer;
 
         return $this;
     }

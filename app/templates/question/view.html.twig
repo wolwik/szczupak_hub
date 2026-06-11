@@ -7,7 +7,7 @@
 {% block body %}
 
     <!-- QUESTION -->
-    <div class="card mb-4">
+    <div class="card mb-4 shadow-sm">
         <div class="card-body">
 
             <p class="text-muted small mb-2">{{ question.category ? question.category.name : "Brak kategorii" }}</p>
@@ -51,9 +51,24 @@
                 <p class="text-muted">Brak odpowiedzi</p>
             {% else %}
                 {% for answer in question.answers %}
-                    <div class="border-bottom pb-3 mb-3">
 
-                        <div class="d-flex justify-content-between text-muted small mb-2">
+                    {% set isBest = question.bestAnswer == answer %}
+
+                    {% if isBest %}
+                        <div class="mb-2">
+                            <span class="badge bg-success">
+                                ✓ Najlepsza odpowiedź
+                            </span>
+                        </div>
+                    {% endif %}
+
+
+
+                    <div class="border-bottom pb-3 mb-3">
+                        <div class="rounded-3 p-3 mb-3 {% if isBest %}border border-success bg-success-subtle{% else %}border{% endif %}">
+
+                        <div class="d-flex justify-content-between text-muted small mb-2 ">
+
                             <div>
                                 <p>{{ answer.author.nickname }}</p>
                                 {% if 'ROLE_ADMIN' in answer.author.roles %}
@@ -75,17 +90,25 @@
                         <!-- buttons -->
                         <div>
                             {% if is_granted('ANSWER_EDIT', answer) %}
-                                <a href="{{ path('answer_edit', {id: answer.id}) }}"
+                                <a href="{{ url('answer_edit', {id: answer.id}) }}"
                                 class="btn btn-sm btn-primary">
                                     Edytuj
                                 </a>
                             {% endif %}
                             {% if is_granted('ANSWER_DELETE', answer) %}
-                                <a href="{{ path('answer_delete', {id: answer.id}) }}"
+                                <a href="{{ url('answer_delete', {id: answer.id}) }}"
                                 class="btn btn-sm btn-danger">
                                     Usuń
                                 </a>
                             {% endif %}
+
+                            {% if is_granted('ANSWER_MARK_AS_BEST', answer) %}
+                                <a href="{{ url('answer_best', {id: answer.id}) }}">
+                                    Oznacz jako najlepsza
+                                </a>
+                            {% endif %}
+
+                        </div>
                         </div>
                     </div>
                 {% endfor %}

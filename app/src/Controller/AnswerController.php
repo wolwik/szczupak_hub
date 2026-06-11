@@ -6,6 +6,7 @@ use App\Entity\Answer;
 use App\Entity\Question;
 use App\Form\AnswerDeleteType;
 use App\Form\AnswerType;
+use App\Repository\QuestionRepository;
 use App\Security\Voter\AnswerVoter;
 use App\Security\Voter\QuestionVoter;
 use App\Service\AnswerService;
@@ -172,6 +173,33 @@ final class AnswerController extends AbstractController
             'form' => $form->createView(),
             'question' => $answer,
         ]);
+    }
+
+
+    /**
+     * Mark as best action.
+     */
+
+    #[Route(
+    '/{id}/best',
+    name: 'answer_best',
+    requirements: ['id' => '[1-9]\d*'],
+    methods: ['GET', 'POST']
+    )]
+    #[IsGranted(AnswerVoter::MARK_AS_BEST, subject: 'answer')]
+
+    public function markAsBest(Answer $answer, QuestionRepository $questionRepository): Response
+    {
+        $this->answerService->markAsBest($answer, $questionRepository);
+
+        $this->addFlash(
+            'success',
+            'Najlepsza odpowiedź została wybrana.'
+        );
+
+        return $this->redirectToRoute('question_view', ['id'=>$answer->getQuestion()->getId()]);
+
+
     }
 
 }

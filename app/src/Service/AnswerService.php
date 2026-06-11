@@ -9,6 +9,7 @@ namespace App\Service;
 use App\Entity\Answer;
 use App\Repository\AnswerRepository;
 use App\Entity\Question;
+use App\Repository\QuestionRepository;
 
 class AnswerService {
     public function __construct(
@@ -32,6 +33,15 @@ class AnswerService {
     {
         $this->answerRepository->delete($answer);
     }
+
+
+    public function markAsBest(Answer $answer, QuestionRepository $questionRepository): void
+    {
+        $question = $answer->getQuestion();
+        $question->setBestAnswer($answer);
+        $questionRepository->save($question);
+    }
+
 }
 
 
