@@ -19,8 +19,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'users')]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['nickname'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])] // to jest dla DB
+// to do ładnych komunikatów w formularzu:
+#[UniqueEntity(
+    fields: ['email'],
+    message: 'Email is already taken'
+)]
+#[UniqueEntity(
+    fields: ['nickname'],
+    message: 'Nickname is already taken'
+)]
+
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -58,6 +67,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     #[Assert\NotBlank]
     private ?string $password = null;
+
+    /**
+     * Plain password
+     *
+     * @var string|null
+     */
+
+    private ?string $plainPassword;
 
     /**
      * @var Collection<int, Question>
@@ -254,6 +271,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNickname(string $nickname): static
     {
         $this->nickname = $nickname;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+
+    public function setPlainPassword(string $password): self
+    {
+        $this->plainPassword = $password;
 
         return $this;
     }
