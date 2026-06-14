@@ -8,12 +8,14 @@ use App\Form\AccountDeleteType;
 use App\Form\CategoryDeleteType;
 use App\Form\EditAccountType;
 use App\Form\RegistrationType;
+use App\Form\UserDeleteType;
 use App\Repository\UserRepository;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -145,7 +147,7 @@ final class UserController extends AbstractController
 
 
     /**
-     * Manage users action (only for admin)
+     * Edit as admin
      *
      */
 
@@ -217,6 +219,50 @@ final class UserController extends AbstractController
             'user' => $user,
         ]);
     }
+
+
+    /**
+     * Delete as admin
+     *
+     */
+
+    #[Route(
+        '/user/{id}/delete',
+        name: 'user_delete',
+        requirements: ['id' => '[1-9]\d*'],
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted('ROLE_ADMIN')]
+
+    public function deleteAsAdmin(Request $request, User $user): Response
+    {
+        // admin nie może usunąć samego siebie
+        if ($this->getUser() === $user) {
+            throw new AccessDeniedException();
+        }
+
+        $form = $this->createForm(UserDeleteType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->userService->delete($user);
+
+            $this->addFlash(
+                'success',
+                $this->translator->trans('message.deleted_successfully')
+            );
+
+            return $this->redirectToRoute('user_list');
+
+        }
+
+        return $this->render('user/delete.html.twig', [
+            'form' => $form->createView(),
+        ]);
+
+    }
+
 
 
 
