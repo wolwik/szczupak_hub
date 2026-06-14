@@ -4,114 +4,162 @@
 
 {% block body %}
 
-    <!-- LEWA STRONA -->
-    <div>
+    <div class="container py-4">
+        <div class="row g-4">
 
-        <!-- LISTA PYTAŃ -->
-        <h1>{{ 'label.question_list'|trans }}</h1>
+            <!-- LEFT: FEED -->
+            <div class="col-lg-9">
 
-        {% if pagination is defined and pagination.items|length %}
+                <h1 class="mb-4">{{ 'label.question_list'|trans }}</h1>
 
-        <div class="navigation text-center">
-            {{ knp_pagination_render(pagination) }}
-        </div>
+                {% if pagination is defined and pagination.items|length %}
 
-        {% if app.user %}
-            <a href="{{ url('question_create') }}">Zadaj pytanie</a>
-        {% else %}
-            <p>
-                <a href="{{ url('app_login') }}">Zaloguj </a> lub <a href="{{ url('register') }}">zarejestruj</a> się, aby zadań pytanie.
-            </p>
-        {% endif %}
+                    <!-- ACTION BAR -->
+                    <div class="d-flex">
 
+                        {% if app.user %}
+                            <a href="{{ url('question_create') }}" class="btn btn-primary btn-sm">
+                                Zadaj pytanie
+                            </a>
+                        {% else %}
 
-        <table>
-            <thead>
-                <tr>
-                    <th>{{ knp_pagination_sortable(pagination, 'label.title'|trans, 'question.createdAt') }}</th>
-                    <th>{{ knp_pagination_sortable(pagination, 'label.created_at'|trans, 'question.createdAt') }}</th>
-                    <th>Autor</th>
-                    <th>{{ 'label.category'|trans }}</th>
-                    <th>Tagi</th>
-                    <th>{{ 'label.content'|trans }}</th>
-                    <th>Link</th>
-                    <!--<th>Delete</th>-->
+                            <div class="card shadow-sm">
+                                <div class="card-body">
 
-                </tr>
-            </thead>
+                                    <a href="{{ url('app_login') }}" class="text-decoration-underline">Zaloguj</a>
+                                    lub
+                                    <a href="{{ url('register') }}" class="text-decoration-underline">zarejestruj</a>
+                                    aby zadać pytanie!
 
-            <tbody>
-                {% for question in pagination.items %}
-                    <tr>
-                        <td>{{ question.title }}</td>
-                        <td>
-                            <p>{{ question.createdAt|date('Y-m-d H:i') }}</p>
-                            {%  if question.updatedAt %}
-                                <p>Ostatnia edycja: {{ question.updatedAt|date('Y-m-d H:i') }}</p>
-                            {% endif %}
-                        </td>
+                                </div>
+                            </div>
 
-                        {% if question.author %}
-                            <td>{{ question.author.nickname}}</td>
-                            {% else %}
-                            <td class="text-muted">[ deleted user ]</td>
                         {% endif %}
+                    </div>
 
-                        <td>{{ question.category.name }}</td>
-                        <!--tagi-->
-                        <td>
-                            {% for tag in question.tags %}
-                                <span class="badge bg-secondary">
-                                    <a href="{{ path('question_list', {tag: tag.id}) }}">
-                                        {{ tag.slug }}
+                    <!-- PAGINATION -->
+                    <div class="text-center mb-3">
+                        {{ knp_pagination_render(pagination) }}
+                    </div>
+
+                    <!-- FORUM POSTS -->
+                    <div class="d-flex flex-column gap-3">
+
+                        {% for question in pagination.items %}
+
+                            <div class="card shadow-sm">
+
+                                <div class="card-body">
+
+                                    <!-- TITLE -->
+                                    <h5 class="mb-1">
+                                        <a href="{{ url('question_view', {id: question.id}) }}"
+                                           class="text-decoration-none">
+                                            {{ question.title }}
+                                        </a>
+                                    </h5>
+
+                                    <!-- META -->
+                                    <div class="text-muted small mb-2 d-flex flex-wrap gap-2">
+
+                                    <span>
+                                        {% if question.author %}
+                                            {{ question.author.nickname }}
+                                        {% else %}
+                                            <span class="text-muted">[ deleted user ]</span>
+                                        {% endif %}
+                                    </span>
+
+                                        <span>•</span>
+
+                                        <span>{{ question.createdAt|date('Y-m-d H:i') }}</span>
+
+                                        {% if question.updatedAt %}
+                                            <span class="text-warning">
+                                            (edytowane {{ question.updatedAt|date('Y-m-d H:i') }})
+                                        </span>
+                                        {% endif %}
+
+                                        <span>•</span>
+
+                                        <span>
+                                        {{ question.category.name }}
+                                    </span>
+
+                                    </div>
+
+                                    <!-- CONTENT PREVIEW -->
+                                    <p class="mb-2 text-muted">
+                                        {{ question.content }}
+                                    </p>
+
+                                    <!-- TAGS -->
+                                    <div class="d-flex flex-wrap gap-1">
+
+                                        {% for tag in question.tags %}
+                                            <a href="{{ path('question_list', {tag: tag.id}) }}"
+                                               class="badge bg-primary text-decoration-none">
+                                                {{ tag.slug }}
+                                            </a>
+                                        {% else %}
+                                            <span class="text-muted small">brak tagów</span>
+                                        {% endfor %}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                    <!-- PAGINATION BOTTOM -->
+                    <div class="text-center mt-4">
+                        {{ knp_pagination_render(pagination) }}
+                    </div>
+
+                {% else %}
+                    <p class="text-muted">
+                        {{ 'message.empty_list'|trans }}
+                    </p>
+                {% endif %}
+
+            </div>
+
+            <!-- RIGHT: SIDEBAR -->
+            <div class="col-lg-3">
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+
+                        <h5 class="mb-3">Kategorie</h5>
+
+                        <ul class="list-unstyled gap-2 d-flex flex-wrap">
+
+                            <li class="mb-2">
+                                <a href="{{ path('question_list') }}" class="btn btn-sm btn-outline-info text-decoration-none">
+                                    wszystkie
+                                </a>
+                            </li>
+
+                            {% for category in categories %}
+                                <li class="mb-2">
+                                    <a href="{{ path('question_list', {categoryId: category.id}) }}" class="btn btn-sm btn-info text-decoration-none">
+                                        {{ category.name }}
                                     </a>
-                                </span>
-                            {% else %}
-                                <span class="text-muted">brak tagów</span>
+                                </li>
                             {% endfor %}
-                        </td>
 
-                        <td>{{ question.content }}</td>
-                        <td><a href="{{ url('question_view', {id: question.id}) }}">Link</a></td>
-                        <!--<td><a href="{{ url('question_delete', {id: question.id}) }}">Delete</a></td>-->
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                        </ul>
 
-        <div class="navigation text-center">
-            {{ knp_pagination_render(pagination) }}
+                    </div>
+                </div>
+
+            </div>
+
         </div>
-
-        {% else %}
-            <p>
-                {{ 'message.empty_list'|trans }}
-            </p>
-        {% endif %}
-
     </div>
-
-
-    <!-- PRAWA STRONA [filtry] -->
-    <div>
-        <h2>Kategorie</h2>
-
-        <ul>
-            <li><a href="{{ path('question_list') }}">
-                    Wszystkie
-                </a>
-            </li>
-            {% for category in categories %}
-                <li>
-                    <a href="{{ path('question_list', {categoryId: category.id}) }}">
-                        {{ category.name }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-
-    </div>
-
 
 {% endblock %}
-
