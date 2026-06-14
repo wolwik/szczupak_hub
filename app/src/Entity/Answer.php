@@ -32,6 +32,7 @@ class Answer {
     private ?Question $question = null;
 
     #[ORM\ManyToOne(inversedBy: 'answers')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?User $author = null;
 
 

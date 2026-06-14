@@ -6,6 +6,7 @@
 
 namespace App\Service;
 
+use App\Entity\Category;
 use App\Entity\User;
 use App\Repository\QuestionRepository;
 use App\Repository\UserRepository;
@@ -49,6 +50,11 @@ class UserService {
 
         $this->userRepository->save($user);
 
+    }
+
+    public function delete(User $user): void
+    {
+        $this->userRepository->delete($user);
     }
 
 }

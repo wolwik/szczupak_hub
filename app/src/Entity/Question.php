@@ -54,7 +54,7 @@ class Question {
     private Collection $tags;
 
     #[ORM\ManyToOne(inversedBy: 'questions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?User $author = null;
 
     #[ORM\OneToOne(targetEntity: Answer::class)]

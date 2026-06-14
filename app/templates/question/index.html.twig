@@ -50,7 +50,13 @@
                                 <p>Ostatnia edycja: {{ question.updatedAt|date('Y-m-d H:i') }}</p>
                             {% endif %}
                         </td>
-                        <td>{{ question.author.nickname }}</td>
+
+                        {% if question.author %}
+                            <td>{{ question.author.nickname}}</td>
+                            {% else %}
+                            <td class="text-muted">[ deleted user ]</td>
+                        {% endif %}
+
                         <td>{{ question.category.name }}</td>
                         <!--tagi-->
                         <td>

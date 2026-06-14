@@ -19,10 +19,17 @@
                 <h1 class="mb-3">{{ question.title }}</h1>
 
                 <div class="d-flex align-items-center gap-2 mb-2 text-muted small">
-                    <span>{{ question.author.nickname }}</span>
 
-                    {% if 'ROLE_ADMIN' in question.author.roles %}
-                        <span class="badge bg-danger">admin</span>
+                    {% if question.author %}
+                        <span>Autor: {{ question.author.nickname}}</span>
+                    {% else %}
+                        <span class="text-muted">[ deleted user ]</span>
+                    {% endif %}
+
+                    {% if question.author %}
+                        {% if 'ROLE_ADMIN' in question.author.roles %}
+                            <span class="badge bg-danger">admin</span>
+                        {% endif %}
                     {% endif %}
                 </div>
 
@@ -84,10 +91,17 @@
 
                                 <div class="text-muted small">
                                     <div class="d-flex align-items-center gap-2">
-                                        <span>{{ answer.author.nickname }}</span>
 
-                                        {% if 'ROLE_ADMIN' in answer.author.roles %}
-                                            <span class="badge bg-danger">admin</span>
+                                        {% if answer.author %}
+                                            <span>{{ answer.author.nickname}}</span>
+                                        {% else %}
+                                            <span class="text-muted">[ deleted user ]</span>
+                                        {% endif %}
+
+                                        {% if answer.author %}
+                                            {% if 'ROLE_ADMIN' in answer.author.roles %}
+                                                <span class="badge bg-danger">admin</span>
+                                            {% endif %}
                                         {% endif %}
                                     </div>
 
