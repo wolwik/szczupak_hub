@@ -98,7 +98,7 @@ final class UserController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.created_successfully')
+                $this->translator->trans('message.user_registered_successfully')
             );
 
             return $this->redirectToRoute('app_login');
