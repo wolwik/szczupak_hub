@@ -44,7 +44,7 @@
                 </div>
 
                 <p class="mb-4">
-                    {{ question.content }}
+                    {{ question.content|markdown_to_html|replace({'<h1>':'<h3>', '</h1>':'</h3>', '<h2>':'<h3>', '</h2>':'</h3>'})|raw }}
                 </p>
 
                 <div class="d-flex gap-2">
@@ -96,7 +96,7 @@
                                                         <div class="d-flex align-items-center gap-2">
 
                                                             {% if answer.author %}
-                                                                <span>{{ answer.author.nickname}}</span>
+                                                                <span class="text-primary fw-bold">{{ answer.author.nickname}}</span>
                                                             {% else %}
                                                                 <span class="text-muted">[ deleted user ]</span>
                                                             {% endif %}
@@ -124,13 +124,13 @@
                                                 <!-- BEST BADGE -->
                                                 {% if isBest %}
                                                     <span class="badge bg-success mb-2">
-                                                    ✓ Najlepsza odpowiedź
+                                                    Najlepsza odpowiedź
                                                 </span>
                                                 {% endif %}
 
                                                 <!-- CONTENT -->
                                                 <p class="mb-3">
-                                                    {{ answer.content }}
+                                                    {{ answer.content|markdown_to_html|replace({'<h1>':'<h3>', '</h1>':'</h3>', '<h2>':'<h3>', '</h2>':'</h3>'})|raw }}
                                                 </p>
 
                                                 <!-- ACTIONS -->

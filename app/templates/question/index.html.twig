@@ -55,7 +55,7 @@
                                     <h5 class="mb-1">
                                         <a href="{{ url('question_view', {id: question.id}) }}"
                                            class="text-decoration-none">
-                                            {{ question.title }}
+                                            {{ question.title|markdown_to_html }}
                                         </a>
                                     </h5>
 
@@ -64,7 +64,7 @@
 
                                     <span>
                                         {% if question.author %}
-                                            {{ question.author.nickname }}
+                                            <span class="text-primary fw-bold">{{ question.author.nickname }}</span>
                                         {% else %}
                                             <span class="text-muted">[ deleted user ]</span>
                                         {% endif %}
@@ -90,7 +90,7 @@
 
                                     <!-- CONTENT PREVIEW -->
                                     <p class="mb-2 text-muted">
-                                        {{ question.content }}
+                                        {{ question.content|markdown_to_html|replace({'<h1>':'<h3>', '</h1>':'</h3>', '<h2>':'<h3>', '</h2>':'</h3>'})|raw }}
                                     </p>
 
                                     <!-- TAGS -->
