@@ -23,6 +23,11 @@ class UserService {
         private UserPasswordHasherInterface $passwordHasher
     ) {}
 
+    public function save(User $user): void
+    {
+        $this->userRepository->save($user);
+    }
+
 
     public function register(
         User $user,

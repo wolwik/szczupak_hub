@@ -43,6 +43,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getOneOrNullResult();
     }
 
+    public function findAdmins(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.roles LIKE :roles')
+            ->setParameter('roles', '%"ROLE_ADMIN"%')
+            ->getQuery()
+            ->getResult();
+    }
+
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
@@ -68,7 +77,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
 
-
+    /** Used to display users in admin panel, so the logged admin cannot use this endpoint to edit himself */
+    public function findAllExceptCurrentUser(int $userId): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.id != :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult();
+    }
 
 
 

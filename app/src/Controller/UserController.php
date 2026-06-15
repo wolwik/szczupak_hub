@@ -38,16 +38,25 @@ final class UserController extends AbstractController
      * Index.
      */
 
-    // TU DODAJ LISTE USEROW DLA ADMINA
     #[Route(
         '/user_list',
         name: 'user_list'
     )]
+    #[IsGranted('ROLE_ADMIN')]
 
     public function index(): Response
     {
+        // show everyone but no currently logged admin
+
+        $currentUser = $this->getUser();
+
+        // sprawdzenie obiektu i zawężenie typu, bo symfony się denerwuje
+        if (!$currentUser instanceof \App\Entity\User) {
+            throw new \LogicException();
+        }
+
         return $this->render('user/index.html.twig', [
-            'users' => $this->userRepository->findAll(),
+            'users' => $this->userRepository->findAllExceptCurrentUser($currentUser->getId()),
         ]);
     }
 
@@ -56,7 +65,6 @@ final class UserController extends AbstractController
       * Account action
       *
       */
-
 
      #[Route(
          '/account',
@@ -75,7 +83,6 @@ final class UserController extends AbstractController
      * Registration
      *
      */
-
 
     #[Route(
         '/register',
@@ -109,6 +116,7 @@ final class UserController extends AbstractController
         ]);
     }
 
+
     /**
      * Edit action
      *
@@ -124,6 +132,11 @@ final class UserController extends AbstractController
     public function edit(Request $request): Response
     {
         $user = $this->getUser(); // biore usera z sesji
+
+        // rzutowanie typu, bo serwis chce usera z encji, a daje mu zalogowanego (z userinterface)
+        if (!$user instanceof \App\Entity\User) {
+            throw new \LogicException();
+        }
 
         $form = $this->createForm(EditAccountType::class, $user);
         $form->handleRequest($request);
@@ -195,6 +208,11 @@ final class UserController extends AbstractController
     {
         $user = $this->getUser();
 
+        // Expected parameter of type '\App\Entity\User', 'null|\Symfony\Component\Security\Core\User\UserInterface' provided
+        if (!$user instanceof \App\Entity\User) {
+            throw new \LogicException();
+        }
+
         $form = $this->createForm(AccountDeleteType::class);
         $form->handleRequest($request);
 
@@ -262,6 +280,72 @@ final class UserController extends AbstractController
         ]);
 
     }
+
+
+    /**
+     * Make admin action
+     *
+     */
+
+    #[Route(
+        '/user/{id}/make-admin',
+        name:'user_make_admin',
+        requirements: ['id' => '[1-9]\d*'],
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted('ROLE_ADMIN')]
+
+    public function makeAdmin(Request $request, User $user): Response
+    {
+        $user->promoteToAdmin();
+
+        $this->userService->save($user);
+
+        $this->addFlash(
+            'success',
+            $this->translator->trans('message.edited_successfully')
+        );
+
+        return $this->redirectToRoute('user_list');
+    }
+
+
+    /**
+     * Remove admin action
+     *
+     */
+
+    #[Route(
+        '/user/{id}/remove-admin',
+        name:'user_remove_admin',
+        requirements: ['id' => '[1-9]\d*'],
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted('ROLE_ADMIN')]
+
+    public function removeAdmin(Request $request, User $user): Response
+    {
+        $admins = $this->userRepository->findAdmins();
+
+        if(count($admins) <= 1) {
+            throw new AccessDeniedException('Cannot remove last admin');
+        };
+
+        $user->removeAdminRole();
+
+        $this->userService->save($user);
+
+        $this->addFlash(
+            'success',
+            $this->translator->trans('message.removed_successfully')
+        );
+
+        return $this->redirectToRoute('user_list');
+
+    }
+
+
+
 
 
 

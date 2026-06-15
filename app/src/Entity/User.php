@@ -288,4 +288,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function isAdmin(): bool
+    {
+        return in_array(UserRole::ROLE_ADMIN->value, $this->getRoles(), true);
+    }
+
+    public function promoteToAdmin(): void
+    {
+        if (!in_array(UserRole::ROLE_ADMIN->value, $this->roles, true)) {
+            $this->roles[] = UserRole::ROLE_ADMIN->value;
+        }
+    }
+
+    public function removeAdminRole(): void
+    {
+        if (in_array(UserRole::ROLE_ADMIN->value, $this->roles)) {
+            $this->roles = array_values(array_diff($this->roles, [UserRole::ROLE_ADMIN->value]));
+        }
+    }
+
 }
