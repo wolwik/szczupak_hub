@@ -149,7 +149,7 @@ final class TagController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if (!$form->isSubmitted() || !$form->isValid()) {
             $this->tagService->delete($tag);
 
             $this->addFlash(

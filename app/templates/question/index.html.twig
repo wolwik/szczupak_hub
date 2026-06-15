@@ -18,13 +18,13 @@
                     <div class="d-flex">
 
                         {% if app.user %}
-                            <a href="{{ url('question_create') }}" class="btn btn-primary btn-sm">
+                            <a href="{{ url('question_create') }}" class="btn btn-success btn mb-4">
                                 Zadaj pytanie
                             </a>
                         {% else %}
 
-                            <div class="card shadow-sm">
-                                <div class="card-body">
+                            <div class="card shadow-sm mb-4">
+                                <div class="card-body bg-warning p-3">
 
                                     <a href="{{ url('app_login') }}" class="text-decoration-underline">Zaloguj</a>
                                     lub
@@ -75,7 +75,7 @@
                                         <span>{{ question.createdAt|date('Y-m-d H:i') }}</span>
 
                                         {% if question.updatedAt %}
-                                            <span class="text-warning">
+                                            <span class="text-primary">
                                             (edytowane {{ question.updatedAt|date('Y-m-d H:i') }})
                                         </span>
                                         {% endif %}
@@ -154,6 +154,21 @@
 
                         </ul>
 
+                    </div>
+                </div>
+
+                <div class="card shadow-sm mt-4">
+                    <div class="card-body">
+
+                        <h5>Cytat dnia</h5>
+                        <figure>
+                            <blockquote class="blockquote">
+                                <p>"Cierpliwość to nie cnota, to jest podstawowy sprzęt wędkarski."</p>
+                            </blockquote>
+                            <figcaption class="blockquote-footer">
+                                SandaczHunter3000 <cite title="Source Title">SPŁAWIK i GRUNT - Postępowy Portal Wędkarski</cite>
+                            </figcaption>
+                        </figure>
                     </div>
                 </div>
 

@@ -29,19 +29,19 @@
                 </td>
 
                 <td>
-                    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
-                    <a href="{{ path('user_delete', {'id': user.id}) }}">delete</a>
+                    <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-sm btn-primary">edit</a>
+                    <a href="{{ path('user_delete', {'id': user.id}) }}" class="btn btn-sm btn-danger">delete</a>
                     {% if user.isAdmin %}
-                        <a href="{{ path('user_remove_admin', {'id': user.id}) }}">remove admin</a>
+                        <a href="{{ path('user_remove_admin', {'id': user.id}) }}" class="btn btn-sm btn-warning">remove admin</a>
                     {% else %}
-                        <a href="{{ path('user_make_admin', {'id': user.id}) }}">make admin</a>
+                        <a href="{{ path('user_make_admin', {'id': user.id}) }}" class="btn btn-sm btn-info">make admin</a>
                     {% endif %}
 
 
                     {% if user.isBlocked %}
-                        <a href="{{ path('user_unblock_admin', {'id': user.id}) }}">unblock</a>
+                        <a href="{{ path('user_unblock_admin', {'id': user.id}) }}" class="btn btn-sm btn-success">unblock</a>
                     {% else %}
-                        <a href="{{ path('user_block_admin', {'id': user.id}) }}">block</a>
+                        <a href="{{ path('user_block_admin', {'id': user.id}) }}" class="btn btn-sm btn-dark">block</a>
                     {% endif %}
 
                 </td>
@@ -54,5 +54,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('register') }}">Create new</a>
 {% endblock %}

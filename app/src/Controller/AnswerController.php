@@ -169,7 +169,7 @@ final class AnswerController extends AbstractController
             return $this->redirectToRoute('question_view', ['id' => $answer->getQuestion()->getId()]);
         }
 
-        return $this->render('question/delete.html.twig', [
+        return $this->render('answer/delete.html.twig', [
             'form' => $form->createView(),
             'question' => $answer,
         ]);

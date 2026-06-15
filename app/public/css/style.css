@@ -2,7 +2,7 @@
    DESIGN TOKENS
 ========================= */
 :root {
-    --background: #F9E4B4;
+    --background: #FFF4DB;
     --card: #ffffff;
 
     --primary: #0F4861;
@@ -19,12 +19,17 @@
     --font-display: Georgia, "Times New Roman", serif;
 }
 
+
 /* =========================
    GLOBAL LAYOUT
 ========================= */
 
 body {
-    background: var(--background);
+    background-image: url("../images/wallpaper.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
     color: var(--text);
     font-family: var(--font-sans);
     line-height: 1.5;
@@ -36,14 +41,22 @@ body {
     padding: 1.5rem;
 }
 
+
 /* =========================
    HEADINGS
 ========================= */
 
-h1, h2, h3, h4, h5 {
+h1 {
+    color: var(--background);
+    font-family: var(--font-display);
+}
+
+
+h2, h3, h4, h5 {
     color: var(--primary);
     font-family: var(--font-display);
 }
+
 
 /* =========================
    NAVBAR (gradient + white text)
@@ -68,12 +81,13 @@ h1, h2, h3, h4, h5 {
     opacity: 0.85;
 }
 
+
 /* =========================
    CARDS (forum style)
 ========================= */
 
 .card {
-    background: var(--card);
+    background: var(--background);
     border: 1px solid var(--border);
     border-radius: var(--radius);
 
@@ -82,6 +96,7 @@ h1, h2, h3, h4, h5 {
         0 3px 8px rgba(0, 0, 0, 0.06);
 }
 
+
 /* =========================
    TEXT HELPERS
 ========================= */
@@ -89,6 +104,7 @@ h1, h2, h3, h4, h5 {
 .text-muted {
     color: var(--text-muted) !important;
 }
+
 
 /* =========================
    BUTTONS (Bootstrap override light)
@@ -104,6 +120,7 @@ h1, h2, h3, h4, h5 {
     border-color: var(--primary-dark);
 }
 
+
 /* =========================
    LINKS
 ========================= */
@@ -118,13 +135,15 @@ a:hover {
     text-decoration: underline;
 }
 
+
 /* =========================
-   ANSWER THREAD SEPARATOR (forum feel)
+   ANSWER THREAD SEPARATOR
 ========================= */
 
 .border-bottom {
     border-color: var(--border) !important;
 }
+
 
 /* =========================
    FLASH MESSAGES (optional nicer look)
@@ -133,6 +152,7 @@ a:hover {
 .alert {
     border-radius: var(--radius);
 }
+
 
 /* =========================
    FORMS
@@ -187,7 +207,9 @@ tbody tr:hover {
 }
 
 
-
+/* =========================
+   BEST ANSWER
+========================= */
 
 .answer-card {
     padding: 1rem;
@@ -199,4 +221,18 @@ tbody tr:hover {
 .best-answer {
     background-color: #f4fff4;
     border-left: 5px solid #198754;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    background: linear-gradient(
+        to bottom,
+        var(--primary),
+        var(--primary-dark)
+    );
+    color: #ffffff !important;
 }

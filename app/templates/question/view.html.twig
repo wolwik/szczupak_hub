@@ -16,7 +16,7 @@
                     {{ question.category ? question.category.name : "Brak kategorii" }}
                 </p>
 
-                <h1 class="mb-3">{{ question.title }}</h1>
+                <h2 class="mb-3">{{ question.title }}</h2>
 
                 <div class="d-flex align-items-center gap-2 mb-2 text-muted small">
 
@@ -204,8 +204,7 @@
 
         {% else %}
 
-
-            <a href="{{ path('question_publish', {id: question.id}) }}">Opublikuj</a>
+            <a href="{{ path('question_publish', {id: question.id}) }}" class="btn btn-success btn mb-4">Opublikuj</a>
 
         {% endif %}
 

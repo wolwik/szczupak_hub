@@ -132,7 +132,7 @@ final class CategoryController extends AbstractController
                 $this->translator->trans('message.edited_successfully')
             );
 
-            return $this->redirectToRoute('category_show', ['id' => $category->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('category_list');
         }
 
         return $this->render('category/edit.html.twig', [
@@ -166,7 +166,7 @@ final class CategoryController extends AbstractController
             if ($deleted) {
                 $this->addFlash('success', 'Kategoria została usunięta.');
             } else {
-                $this->addFlash('error', 'Nie można usunąć kategorii, ponieważ ma przypisane pytania.');
+                $this->addFlash('warning', 'Nie można usunąć kategorii, ponieważ ma przypisane pytania.');
             }
 
             return $this->redirectToRoute('category_list');

@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ 'title.question_delete'|trans }}
+    {{ 'title.answer_delete'|trans }}
 {% endblock %}
 
 {% block body %}
@@ -17,16 +17,16 @@
                     <div class="card-body p-4">
 
                         <h3 class="text-danger mb-3">
-                            {{ 'title.question_delete'|trans }}
+                            Usuń odpowiedź
                         </h3>
 
                         <p class="mb-4 text-muted">
-                            {{ 'message.delete_confirm'|trans }}
+                            Ta operacja jest nieodwracalna. Odpowiedź zostanie trwale usunięta.
                         </p>
 
 
-                        {{ form_start(form) }}
 
+                        {{ form_start(form) }}
 
                         <div class="d-flex justify-content-between align-items-center mt-4">
 

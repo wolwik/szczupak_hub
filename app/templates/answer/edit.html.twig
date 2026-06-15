@@ -6,17 +6,45 @@
 
 {% block body %}
 
-    <h1>Edycja odpowiedzi</h1>
+    <div class="container py-4">
 
-    {{ form_start(form) }}
+        <div class="row justify-content-center">
 
-    {{ form_widget(form) }}
+            <div class="col-lg-8">
 
-    <button type="submit">
-        Zapisz
-    </button>
+                <div class="card shadow-sm border-0">
 
-    {{ form_end(form) }}
+                    <div class="card-body p-4">
+
+                        <h3 class="mb-4">Edycja odpowiedzi</h3>
+
+                        {{ form_start(form) }}
+                        {{ form_widget(form) }}
+
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+
+                            <a href="{{ url('question_view', {id: answer.question.id}) }}" class="btn btn-outline-secondary btn-sm">
+                                {{ 'action.back_to_list'|trans }}
+                            </a>
+
+                            <button type="submit" class="btn btn-primary">
+                                {{ 'action.save'|trans }}
+                            </button>
+
+                        </div>
+
+                        {{ form_end(form) }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 
 {% endblock %}
 
