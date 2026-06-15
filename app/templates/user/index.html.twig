@@ -31,12 +31,13 @@
                 <td>
                     <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-sm btn-primary">edit</a>
                     <a href="{{ path('user_delete', {'id': user.id}) }}" class="btn btn-sm btn-danger">delete</a>
-                    {% if user.isAdmin %}
-                        <a href="{{ path('user_remove_admin', {'id': user.id}) }}" class="btn btn-sm btn-warning">remove admin</a>
-                    {% else %}
-                        <a href="{{ path('user_make_admin', {'id': user.id}) }}" class="btn btn-sm btn-info">make admin</a>
-                    {% endif %}
+                    <a href="{{ path('user_change_password', {'id': user.id}) }}" class="btn btn-sm btn-warning">change password</a>
 
+                    {% if user.isAdmin %}
+                        <a href="{{ path('user_remove_admin', {'id': user.id}) }}" class="btn btn-sm btn-info">remove admin</a>
+                    {% else %}
+                        <a href="{{ path('user_make_admin', {'id': user.id}) }}" class="btn btn-sm btn-success">make admin</a>
+                    {% endif %}
 
                     {% if user.isBlocked %}
                         <a href="{{ path('user_unblock_admin', {'id': user.id}) }}" class="btn btn-sm btn-success">unblock</a>

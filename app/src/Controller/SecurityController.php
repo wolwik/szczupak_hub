@@ -6,6 +6,8 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Form\AdminChangePasswordFormType;
 use App\Form\ChangePasswordFormType;
 use App\Repository\UserRepository;
 use App\Service\UserService;
@@ -16,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -64,7 +67,10 @@ class SecurityController extends AbstractController
     }
 
 
-    #[Route('/change-password', name: 'change_password')]
+    #[Route(
+        '/change-password',
+        name: 'change_password'
+    )]
     public function changePassword(
         Request $request,
         UserPasswordHasherInterface $hasher,
@@ -72,11 +78,6 @@ class SecurityController extends AbstractController
     ): Response {
 
         $user = $this->getUser();
-
-        /*
-        dump($user);
-        die;
-        */
 
         if (!$user instanceof PasswordAuthenticatedUserInterface) {
             throw new \LogicException('Brak zalogowanego użytkownika');
@@ -113,7 +114,46 @@ class SecurityController extends AbstractController
     }
 
 
+    #[Route(
+        '/user/{id}/change-password',
+        name: 'user_change_password',
+    )]
+    #[IsGranted('ROLE_ADMIN')]
 
+    public function adminChangePassword(
+        User $user,
+        Request $request,
+        UserPasswordHasherInterface $hasher,
+        EntityManagerInterface $em
+    ): Response
+    {
+        $form = $this->createForm(AdminChangePasswordFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $newPassword = $form->get('newPassword')->getData();
+
+            $user->setPassword(
+                $hasher->hashPassword($user, $newPassword)
+            );
+
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Hasło zostało zmienione'
+            );
+
+            return $this->redirectToRoute('user_list');
+        }
+
+        return $this->render('security/admin_change_password.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+        ]);
+
+    }
 
 
 }
