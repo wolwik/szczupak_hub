@@ -37,6 +37,13 @@
                         <a href="{{ path('user_make_admin', {'id': user.id}) }}">make admin</a>
                     {% endif %}
 
+
+                    {% if user.isBlocked %}
+                        <a href="{{ path('user_unblock_admin', {'id': user.id}) }}">unblock</a>
+                    {% else %}
+                        <a href="{{ path('user_block_admin', {'id': user.id}) }}">block</a>
+                    {% endif %}
+
                 </td>
             </tr>
         {% else %}

@@ -91,6 +91,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50, nullable: true, unique: true)] // tymczasowo zeby mysql sie nie wywalil na ryj
     private ?string $nickname = null;
 
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $isBlocked = false;
+
+
+
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
@@ -305,6 +312,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (in_array(UserRole::ROLE_ADMIN->value, $this->roles)) {
             $this->roles = array_values(array_diff($this->roles, [UserRole::ROLE_ADMIN->value]));
         }
+    }
+
+
+    public function getIsBlocked(): bool
+    {
+        return $this->isBlocked;
+    }
+
+    public function setIsBlocked(bool $isBlocked): self
+    {
+        $this->isBlocked = $isBlocked;
+        return $this;
     }
 
 }

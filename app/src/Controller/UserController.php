@@ -345,6 +345,64 @@ final class UserController extends AbstractController
     }
 
 
+    /**
+     * Block user
+     *
+     */
+
+    #[Route(
+        '/user/{id}/block',
+        name:'user_block_admin',
+        requirements: ['id' => '[1-9]\d*'],
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted('ROLE_ADMIN')]
+
+    public function block(Request $request, User $user): Response
+    {
+        $user->setIsBlocked(true);
+        $this->userService->save($user);
+
+        $this->addFlash(
+            'success',
+            $this->translator->trans('message.blocked_successfully')
+        );
+
+        return $this->redirectToRoute('user_list');
+    }
+
+
+    /**
+     * Unblock user
+     *
+     */
+
+    #[Route(
+        '/user/{id}/unblock',
+        name:'user_unblock_admin',
+        requirements: ['id' => '[1-9]\d*'],
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted('ROLE_ADMIN')]
+
+    public function unblock(Request $request, User $user): Response
+    {
+        $user->setIsBlocked(false);
+        $this->userService->save($user);
+
+        $this->addFlash(
+            'success',
+            $this->translator->trans('message.unblocked_successfully')
+        );
+
+        return $this->redirectToRoute('user_list');
+
+    }
+
+
+
+
+
 
 
 
