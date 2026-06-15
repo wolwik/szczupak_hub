@@ -37,6 +37,45 @@
             </div>
         </div>
 
+
+        <!-- DRAFTS -->
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+
+                <h5 class="card-title mb-3">Nieopublikowane artykuły</h5>
+
+                {% if drafts is empty %}
+                    <div class="text-muted">Brak szkiców</div>
+                {% else %}
+
+                    <ul class="list-group list-group-flush">
+
+                        {% for question in drafts %}
+                            <li class="list-group-item">
+                                <a href="{{ path('question_view', {id: question.id}) }}">
+                                    {{ question.title }}
+                                </a>
+
+                                <span class="badge bg-secondary float-end">
+                            DRAFT
+                        </span>
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+
+
+
+
+
+
         <!-- ADMIN -->
         {% if is_granted('ROLE_ADMIN') %}
             <div class="card shadow-sm mb-4 border-warning">

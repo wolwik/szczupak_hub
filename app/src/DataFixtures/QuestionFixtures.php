@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Enum\QuestionStatus;
 use App\Entity\Question;
 use App\Entity\Category;
 use App\Entity\User;
@@ -22,7 +23,7 @@ class QuestionFixtures extends AbstractBaseFixtures implements DependentFixtureI
             return;
         }
 
-        $this->createMany(10, 'question', function (int $i) {
+        $this->createMany(17, 'question', function (int $i) {
 
             $question = new Question();
 
@@ -34,6 +35,14 @@ class QuestionFixtures extends AbstractBaseFixtures implements DependentFixtureI
                 $this->faker->realText(500)
             );
 
+            // random status from enum
+            $status = $this->faker->randomElement([
+                QuestionStatus::DRAFT,
+                QuestionStatus::PUBLISHED,
+            ]);
+            $question->setStatus($status);
+
+
             $question->setCreatedAt(
                 $this->faker->dateTimeBetween('-100 days', '-1 days')
             );
@@ -42,12 +51,12 @@ class QuestionFixtures extends AbstractBaseFixtures implements DependentFixtureI
                 $this->faker->dateTimeBetween('-100 days', '-1 days')
             );
 
-            // losowa kategoria z referencji
+            // random category from reference
             $category = $this->getRandomReference('category', Category::class);
             $question->setCategory($category);
 
-            // tagi (losowo 1-4)
-            for ($i = 0; $i < random_int(1,7); $i++) {
+            // tags (random 1-4)
+            for ($j = 0; $j < random_int(1,7); $j++) {
                 $tag = $this->getRandomReference('tag', Tag::class);
                 $question->addTag($tag);
             }
@@ -57,6 +66,8 @@ class QuestionFixtures extends AbstractBaseFixtures implements DependentFixtureI
 
             return $question;
         });
+
+
     }
 
     /**

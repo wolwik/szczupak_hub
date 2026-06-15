@@ -9,8 +9,10 @@ use App\Form\CategoryDeleteType;
 use App\Form\EditAccountType;
 use App\Form\RegistrationType;
 use App\Form\UserDeleteType;
+use App\Repository\QuestionRepository;
 use App\Repository\UserRepository;
 use App\Service\UserService;
+use App\Service\QuestionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +33,7 @@ final class UserController extends AbstractController
         private readonly UserService $userService,
         private readonly TranslatorInterface $translator,
         private readonly UserRepository $userRepository,
+        private readonly QuestionService $questionService,
     ) {}
 
 
@@ -62,7 +65,7 @@ final class UserController extends AbstractController
 
 
      /**
-      * Account action
+      * Account panel (with article drafts)
       *
       */
 
@@ -75,7 +78,18 @@ final class UserController extends AbstractController
 
     public function showAccount(): Response
     {
-        return $this->render('account/index.html.twig');
+        $user = $this->getUser();
+
+        // Expected parameter of type '\App\Entity\User', 'null|\Symfony\Component\Security\Core\User\UserInterface' provided
+        if (!$user instanceof \App\Entity\User) {
+            throw new \LogicException();
+        }
+
+        $drafts = $this->questionService->getUserDrafts($user);
+
+        return $this->render('account/index.html.twig', [
+            'drafts' => $drafts,
+        ]);
     }
 
 

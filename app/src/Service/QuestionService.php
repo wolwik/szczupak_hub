@@ -7,6 +7,7 @@
 namespace App\Service;
 
 use App\Entity\Question;
+use App\Entity\User;
 use App\Repository\QuestionRepository;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -35,6 +36,16 @@ class QuestionService {
             ]
         );
     }
+
+    public function getUserDrafts(User $user): array
+    {
+        return $this->questionRepository
+            ->queryUserDrafts($user)
+            ->getQuery()
+            ->getResult();
+    }
+
+
     public function save(Question $question): void
     {
         $question->setUpdatedAt(new \DateTime);

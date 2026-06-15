@@ -6,6 +6,7 @@ use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use App\Entity\Enum\QuestionStatus;
 
 /**
  * Question entity.
@@ -25,6 +26,9 @@ class Question {
 
     #[ORM\Column(type: 'text')]
     private string $content;
+
+    #[ORM\Column(enumType: QuestionStatus::class)]
+    private QuestionStatus $status = QuestionStatus::DRAFT;
 
     #[ORM\Column]
     private ?\DateTime $createdAt = null;
@@ -103,6 +107,17 @@ class Question {
     {
         $this->content = $content;
 
+        return $this;
+    }
+
+    public function getStatus(): QuestionStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(QuestionStatus $status): self
+    {
+        $this->status = $status;
         return $this;
     }
 

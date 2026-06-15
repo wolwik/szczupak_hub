@@ -69,134 +69,146 @@
         </div>
 
 
-        <!-- ANSWERS -->
-        <div class="card mb-4 shadow-sm">
-            <div class="card-body">
+        {% if question.status.value == 'published' %}
 
-                <h4 class="mb-4">Odpowiedzi</h4>
 
-                {% if question.answers is empty %}
-                    <p class="text-muted">Brak odpowiedzi</p>
-                {% else %}
+                            <!-- ANSWERS -->
+                            <div class="card mb-4 shadow-sm">
+                                <div class="card-body">
 
-                    {% for answer in question.answers %}
+                                    <h4 class="mb-4">Odpowiedzi</h4>
 
-                        {% set isBest = question.bestAnswer == answer %}
+                                    {% if question.answers is empty %}
+                                        <p class="text-muted">Brak odpowiedzi</p>
+                                    {% else %}
 
-                        <div class="border rounded p-3 mb-3
-                        {% if isBest %}border-success bg-success-subtle{% endif %}">
+                                        {% for answer in question.answers %}
 
-                            <!-- HEADER -->
-                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                            {% set isBest = question.bestAnswer == answer %}
 
-                                <div class="text-muted small">
-                                    <div class="d-flex align-items-center gap-2">
+                                            <div class="border rounded p-3 mb-3
+                                            {% if isBest %}border-success bg-success-subtle{% endif %}">
 
-                                        {% if answer.author %}
-                                            <span>{{ answer.author.nickname}}</span>
-                                        {% else %}
-                                            <span class="text-muted">[ deleted user ]</span>
-                                        {% endif %}
+                                                <!-- HEADER -->
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
 
-                                        {% if answer.author %}
-                                            {% if 'ROLE_ADMIN' in answer.author.roles %}
-                                                <span class="badge bg-danger">admin</span>
-                                            {% endif %}
-                                        {% endif %}
-                                    </div>
+                                                    <div class="text-muted small">
+                                                        <div class="d-flex align-items-center gap-2">
 
-                                    <div>
-                                        {{ answer.createdAt|date('Y-m-d H:i') }}
-                                    </div>
+                                                            {% if answer.author %}
+                                                                <span>{{ answer.author.nickname}}</span>
+                                                            {% else %}
+                                                                <span class="text-muted">[ deleted user ]</span>
+                                                            {% endif %}
+
+                                                            {% if answer.author %}
+                                                                {% if 'ROLE_ADMIN' in answer.author.roles %}
+                                                                    <span class="badge bg-danger">admin</span>
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        </div>
+
+                                                        <div>
+                                                            {{ answer.createdAt|date('Y-m-d H:i') }}
+                                                        </div>
+                                                    </div>
+
+                                                    {% if answer.updatedAt %}
+                                                        <div class="text-muted small">
+                                                            Edytowano: {{ answer.updatedAt|date('Y-m-d H:i') }}
+                                                        </div>
+                                                    {% endif %}
+
+                                                </div>
+
+                                                <!-- BEST BADGE -->
+                                                {% if isBest %}
+                                                    <span class="badge bg-success mb-2">
+                                                    ✓ Najlepsza odpowiedź
+                                                </span>
+                                                {% endif %}
+
+                                                <!-- CONTENT -->
+                                                <p class="mb-3">
+                                                    {{ answer.content }}
+                                                </p>
+
+                                                <!-- ACTIONS -->
+                                                <div class="d-flex gap-2 flex-wrap">
+
+                                                    {% if is_granted('ANSWER_EDIT', answer) %}
+                                                        <a href="{{ url('answer_edit', {id: answer.id}) }}"
+                                                           class="btn btn-sm btn-outline-primary">
+                                                            Edytuj
+                                                        </a>
+                                                    {% endif %}
+
+                                                    {% if is_granted('ANSWER_DELETE', answer) %}
+                                                        <a href="{{ url('answer_delete', {id: answer.id}) }}"
+                                                           class="btn btn-sm btn-outline-danger">
+                                                            Usuń
+                                                        </a>
+                                                    {% endif %}
+
+                                                    {% if is_granted('ANSWER_MARK_AS_BEST', answer) %}
+                                                        <a href="{{ url('answer_best', {id: answer.id}) }}"
+                                                           class="btn btn-sm btn-outline-success">
+                                                            Oznacz jako najlepsza
+                                                        </a>
+                                                    {% endif %}
+
+                                                </div>
+
+                                            </div>
+
+                                        {% endfor %}
+
+                                    {% endif %}
+
                                 </div>
-
-                                {% if answer.updatedAt %}
-                                    <div class="text-muted small">
-                                        Edytowano: {{ answer.updatedAt|date('Y-m-d H:i') }}
-                                    </div>
-                                {% endif %}
-
                             </div>
 
-                            <!-- BEST BADGE -->
-                            {% if isBest %}
-                                <span class="badge bg-success mb-2">
-                                ✓ Najlepsza odpowiedź
-                            </span>
-                            {% endif %}
 
-                            <!-- CONTENT -->
-                            <p class="mb-3">
-                                {{ answer.content }}
-                            </p>
+                            <!-- FORM -->
+                            <div class="card shadow-sm">
+                                <div class="card-body">
 
-                            <!-- ACTIONS -->
-                            <div class="d-flex gap-2 flex-wrap">
+                                    {% if app.user %}
 
-                                {% if is_granted('ANSWER_EDIT', answer) %}
-                                    <a href="{{ url('answer_edit', {id: answer.id}) }}"
-                                       class="btn btn-sm btn-outline-primary">
-                                        Edytuj
-                                    </a>
-                                {% endif %}
+                                        <h5 class="mb-3">Dodaj odpowiedź</h5>
 
-                                {% if is_granted('ANSWER_DELETE', answer) %}
-                                    <a href="{{ url('answer_delete', {id: answer.id}) }}"
-                                       class="btn btn-sm btn-outline-danger">
-                                        Usuń
-                                    </a>
-                                {% endif %}
+                                        {{ form_start(answerForm, {
+                                            action: path('answer_create', {id: question.id}),
+                                            method: 'POST'
+                                        }) }}
 
-                                {% if is_granted('ANSWER_MARK_AS_BEST', answer) %}
-                                    <a href="{{ url('answer_best', {id: answer.id}) }}"
-                                       class="btn btn-sm btn-outline-success">
-                                        Oznacz jako najlepsza
-                                    </a>
-                                {% endif %}
+                                        {{ form_widget(answerForm) }}
 
+                                        <button type="submit" class="btn btn-primary mt-3">
+                                            Dodaj odpowiedź
+                                        </button>
+
+                                        {{ form_end(answerForm) }}
+
+                                    {% else %}
+
+                                        <p class="text-muted mb-0">
+                                            <a href="{{ url('app_login') }}">Zaloguj </a> lub <a href="{{ url('register') }}">zarejestruj</a> się, aby dodać odpowiedź.
+                                        </p>
+
+                                    {% endif %}
+
+                                </div>
                             </div>
 
-                        </div>
 
-                    {% endfor %}
-
-                {% endif %}
-
-            </div>
-        </div>
+        {% else %}
 
 
-        <!-- FORM -->
-        <div class="card shadow-sm">
-            <div class="card-body">
+            <a href="{{ path('question_publish', {id: question.id}) }}">Opublikuj</a>
 
-                {% if app.user %}
+        {% endif %}
 
-                    <h5 class="mb-3">Dodaj odpowiedź</h5>
-
-                    {{ form_start(answerForm, {
-                        action: path('answer_create', {id: question.id}),
-                        method: 'POST'
-                    }) }}
-
-                    {{ form_widget(answerForm) }}
-
-                    <button type="submit" class="btn btn-primary mt-3">
-                        Dodaj odpowiedź
-                    </button>
-
-                    {{ form_end(answerForm) }}
-
-                {% else %}
-
-                    <p class="text-muted mb-0">
-                        <a href="{{ url('app_login') }}">Zaloguj </a> lub <a href="{{ url('register') }}">zarejestruj</a> się, aby dodać odpowiedź.
-                    </p>
-
-                {% endif %}
-
-            </div>
-        </div>
 
     </div>
 

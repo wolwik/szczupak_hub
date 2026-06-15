@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Enum\QuestionStatus;
 use App\Entity\Question;
 use App\Form\AnswerType;
 use App\Form\QuestionDeleteType;
@@ -139,13 +140,37 @@ final class QuestionController extends AbstractController {
                 $this->translator->trans('message.created_successfully')
             );
 
-            return $this->redirectToRoute('question_list');
+            // pytanie najpierw tworzone jest jako szkic. Odsyłamy na konto, gdzie można je opublikować:
+            return $this->redirectToRoute('question_view', ['id' => $question->getId()]);
 
         }
 
         return $this->render('question/create.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+
+    #[Route(
+        '/{id}/publish',
+        name: 'question_publish',
+        requirements: ['id' => '[1-9]\d*'],
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted('ROLE_USER')]
+
+    public function publish(Question $question): Response
+    {
+        $question->setStatus(QuestionStatus::PUBLISHED);
+
+        $this->questionService->save($question);
+
+        $this->addFlash(
+            'success',
+            $this->translator->trans('message.published_successfully')
+        );
+
+        return $this->redirectToRoute('question_view', ['id' => $question->getId()]);
     }
 
 

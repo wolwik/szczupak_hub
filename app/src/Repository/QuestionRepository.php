@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Enum\QuestionStatus;
 use App\Entity\Question;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -30,11 +32,16 @@ class QuestionRepository extends ServiceEntityRepository
      *
      * @return QueryBuilder Query builder
      */
-    public function queryAll(?int $categoryId = null, ?int $tagId = null): QueryBuilder
+    public function queryAll(
+        ?int $categoryId = null,
+        ?int $tagId = null,
+    ): QueryBuilder
     {
         $qb = $this->createQueryBuilder('question')
             ->leftJoin('question.category', 'category')
-            ->addSelect('category');
+            ->addSelect('category')
+            ->where('question.status = :status')
+            ->setParameter('status', QuestionStatus::PUBLISHED);
 
         if ($categoryId) {
             $qb->andWhere('category.id = :categoryId')
@@ -49,6 +56,37 @@ class QuestionRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
+
+    /**
+     * Query user drafts.
+     *
+     */
+
+    public function queryUserDrafts(User $user): QueryBuilder
+    {
+        return $this->createQueryBuilder('question')
+            ->where('question.author = :user')
+            ->andWhere('question.status = :status')
+            ->setParameter('user', $user)
+            ->setParameter('status', QuestionStatus::DRAFT)
+            ->orderBy('question.createdAt', 'DESC');
+
+    }
+
+
+    /**
+     * All user's questions
+     *
+     */
+
+    public function findByUser(User $user): QueryBuilder
+    {
+        return $this->createQueryBuilder('question')
+            ->where('question.author = :user')
+            ->setParameter('user', $user);
+    }
+
 
     /**
      * Save entity.
@@ -76,32 +114,4 @@ class QuestionRepository extends ServiceEntityRepository
         }
     }
 
-
-
-
-
-    //    /**
-    //     * @return Question[] Returns an array of Question objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('q')
-    //            ->andWhere('q.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('q.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Question
-    //    {
-    //        return $this->createQueryBuilder('q')
-    //            ->andWhere('q.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }
