@@ -10,27 +10,55 @@ use App\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: TagRepository::class)]
 #[ORM\Table(name: 'tags')]
+#[UniqueEntity(
+    fields: ['name'],
+    message: 'Taki tag już istnieje.'
+)]
 
-class Tag {
+class Tag
+{
+    /**
+     * Primary key.
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * Tag name.
+     */
     #[ORM\Column(length: 255)]
+    #[Assert\Type('string')]
+    #[Assert\NotBlank(message: 'Nazwa tagu nie może być pusta.')]
+    #[Assert\Length(
+        min: 1,
+        max: 255,
+        minMessage: 'Nazwa tagu jest za krótka.',
+        maxMessage: 'Nazwa tagu nie może być dłuższa niż {{ limit }} znaków.'
+    )]
     private ?string $name = null;
 
+    /**
+     * Tag slug.
+     */
     #[ORM\Column(length: 255)]
+    #[Assert\Type('string')]
     private ?string $slug = null;
 
     /**
+     * Questions associated with this tag.
+     *
      * @var Collection<int, Question>
      */
     #[ORM\ManyToMany(targetEntity: Question::class, mappedBy: 'tags')]
+    #[Assert\Valid]
     private Collection $questions;
 
     public function __construct()

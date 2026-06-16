@@ -224,6 +224,11 @@ final class QuestionController extends AbstractController
             $question->getTags()->toArray()
         ));
 
+        // usuwamy stare tagi ZANIM formularz odpali walidację!
+        if ($request->isMethod('POST') || $request->isMethod('PUT')) {
+            $question->clearTags();
+        }
+
         $form = $this->createForm(
             QuestionType::class,
             $question,
@@ -238,9 +243,6 @@ final class QuestionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            // USUŃ stare tagi (ważne!)
-            $question->clearTags();
 
             // Pobierz wpis użytkownika
             $tagsString = $form->get('tags')->getData();
