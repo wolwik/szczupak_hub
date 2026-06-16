@@ -100,6 +100,9 @@ final class QuestionController extends AbstractController
 
     public function view(Question $question): Response {
 
+        // zabezpieczenie przed podglądaniem szkiców
+        $this->denyAccessUnlessGranted(QuestionVoter::VIEW, $question);
+
         // tworzymy zmienną z formularza dla Answer
         $form = $this->createForm(AnswerType::class);
 

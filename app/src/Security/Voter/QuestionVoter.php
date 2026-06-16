@@ -26,6 +26,13 @@ final class QuestionVoter extends Voter
      */
     public const DELETE = 'QUESTION_DELETE';
 
+    /**
+     * View draft permission.
+     *
+     * @var string
+     */
+    public const VIEW = 'QUESTION_VIEW';
+
 
     /**
      * Determines if this voter supports the attribute and subject.
@@ -37,7 +44,7 @@ final class QuestionVoter extends Voter
      */
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::EDIT, self::DELETE])
+        return in_array($attribute, [self::EDIT, self::DELETE, self::VIEW])
             && $subject instanceof \App\Entity\Question;
     }
 
@@ -70,6 +77,7 @@ final class QuestionVoter extends Voter
         return match ($attribute) {
             self::EDIT => $this->canEdit($subject, $user),
             self::DELETE => $this->canDelete($subject, $user),
+            self::VIEW => $this->canView($subject, $user),
             default => false,
         };
     }
@@ -111,6 +119,21 @@ final class QuestionVoter extends Voter
         }
 
         // owner ma dostęp
+        return $question->getAuthor() === $user;
+    }
+
+
+    /**
+     * Checks if user can view question draft.
+     *
+     * @param Question      $question Question entity
+     * @param UserInterface $user     User
+     *
+     * @return bool Result
+     */
+    private function canView(Question $question, UserInterface $user): bool
+    {
+        // tylko owner ma dostęp
         return $question->getAuthor() === $user;
     }
 }
