@@ -42,7 +42,7 @@
                         {{ knp_pagination_render(pagination) }}
                     </div>
 
-                    <!-- FORUM POSTS -->
+                    <!-- QUESTIONS -->
                     <div class="d-flex flex-column gap-3">
 
                         {% for question in pagination.items %}
@@ -50,6 +50,11 @@
                             <div class="card shadow-sm">
 
                                 <div class="card-body">
+
+                                    <!-- CATEGORY -->
+                                    <p class="mb-1 small text-muted">
+                                        {{ question.category.name }}
+                                    </p>
 
                                     <!-- TITLE -->
                                     <h5 class="mb-1">
@@ -62,29 +67,44 @@
                                     <!-- META -->
                                     <div class="text-muted small mb-2 d-flex flex-wrap gap-2">
 
-                                    <span>
-                                        {% if question.author %}
-                                            <span class="text-primary fw-bold">{{ question.author.nickname }}</span>
-                                        {% else %}
-                                            <span class="text-muted">[ deleted user ]</span>
-                                        {% endif %}
-                                    </span>
+                                        <div class="d-flex align-items-center gap-3 ">
 
-                                        <span>•</span>
+                                            <div class="avatar-wrapper avatar-md">
+                                                {% if question.author and question.author.avatar and question.author.avatar.filename %}
+                                                    <img
+                                                        src="{{ asset('uploads/avatars/' ~ question.author.avatar.filename) }}"
+                                                        class="avatar-img"
+                                                        alt="avatar"
+                                                    >
+                                                {% else %}
+                                                    <img
+                                                        src="{{ asset('images/default-user.jpg') }}"
+                                                        class="avatar-img"
+                                                        alt="default avatar"
+                                                    >
+                                                {% endif %}
+                                            </div>
 
-                                        <span>{{ question.createdAt|date('Y-m-d H:i') }}</span>
+                                            <div>
+                                            <p class="mb-1">
+                                                {% if question.author %}
+                                                    <span class="text-primary fw-bold">{{ question.author.nickname }}</span>
+                                                {% else %}
+                                                    <span class="text-muted">[ deleted user ]</span>
+                                                {% endif %}
+                                            </p>
 
-                                        {% if question.updatedAt %}
-                                            <span class="text-primary">
-                                            (edytowane {{ question.updatedAt|date('Y-m-d H:i') }})
-                                        </span>
-                                        {% endif %}
+                                            <p class="mb-1">{{ question.createdAt|date('Y-m-d H:i') }}</p>
 
-                                        <span>•</span>
+                                            {% if question.updatedAt %}
+                                                <p class="text-muted small">
+                                                (edytowane {{ question.updatedAt|date('Y-m-d H:i') }})
+                                            </p>
+                                            {% endif %}
 
-                                        <span>
-                                        {{ question.category.name }}
-                                    </span>
+                                            </div>
+                                        </div>
+
 
                                     </div>
 

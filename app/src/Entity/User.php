@@ -90,10 +90,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50, nullable: true, unique: true)] // tymczasowo zeby mysql sie nie wywalil na ryj
     private ?string $nickname = null;
 
-
     #[ORM\Column(type: 'boolean')]
     private bool $isBlocked = false;
 
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Avatar::class)]
+    private ?Avatar $avatar = null;
 
 
 
@@ -324,5 +325,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isBlocked = $isBlocked;
         return $this;
     }
+
+    public function getAvatar(): ?Avatar
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?Avatar $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+
+
 
 }

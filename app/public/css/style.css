@@ -225,6 +225,42 @@ tbody tr:hover {
 
 
 /* =========================
+   AVATAR
+========================= */
+
+.avatar-wrapper {
+    flex-shrink: 0;
+}
+
+.avatar-img {
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+}
+
+/*   SMALL   */
+.avatar-sm .avatar-wrapper,
+.avatar-sm .avatar-img {
+    width: 50px;
+    height: 50px;
+}
+
+/*   MEDIUM   */
+.avatar-md .avatar-wrapper,
+.avatar-md .avatar-img {
+    width: 70px;
+    height: 70px;
+}
+
+/*   LARGE   */
+.avatar-lg .avatar-wrapper,
+.avatar-lg .avatar-img {
+    width: 110px;
+    height: 110px;
+}
+
+
+/* =========================
    FOOTER
 ========================= */
 
