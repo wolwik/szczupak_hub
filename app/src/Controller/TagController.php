@@ -15,28 +15,35 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 
+/**
+ * Class TagController.
+ */
 #[Route(
     '/tag'
 )]
 #[IsGranted('ROLE_ADMIN')]
+
 final class TagController extends AbstractController
 {
 
     /**
      * Constructor.
+     *
+     * @param TagService           $tagService     Tag service
+     * @param TranslatorInterface  $translator     Translator
      */
 
-
     public function __construct(
-        //private readonly CategoryService $categoryService,
-        private readonly TagRepository $tagRepository,
         private readonly TagService $tagService,
         private readonly TranslatorInterface $translator
     ) {}
 
 
+
     /**
-     * Index.
+     * Displays list of tags.
+     *
+     * @return Response HTTP response
      */
 
     #[Route(
@@ -52,8 +59,13 @@ final class TagController extends AbstractController
     }
 
 
+
     /**
-     * Create action.
+     * Creates a new tag.
+     *
+     * @param Request $request HTTP request
+     *
+     * @return Response Redirect response to question view
      */
 
     #[Route(
@@ -86,10 +98,10 @@ final class TagController extends AbstractController
 
 
     /**
-     * Edit action.
+     * Edits a tag.
      *
      * @param Request $request HTTP request
-     * @param Tag $tag Tag entity
+     * @param Tag     $tag     Tag entity
      *
      * @return Response HTTP response
      */
@@ -133,6 +145,17 @@ final class TagController extends AbstractController
         );
     }
 
+
+
+    /**
+     * Deletes a category.
+     *
+     * @param Request  $request  HTTP request
+     * @param Tag      $tag      Tag entity
+     *
+     * @return Response Redirect or rendered confirmation page
+     */
+
     #[Route(
         '/{id}/delete',
         name: 'tag_delete',
@@ -165,7 +188,5 @@ final class TagController extends AbstractController
             'tag' => $tag,
         ]);
     }
-
-
 
 }

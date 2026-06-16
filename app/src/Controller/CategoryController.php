@@ -7,8 +7,6 @@ use App\Form\CategoryDeleteType;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
 use App\Service\CategoryService;
-use Doctrine\ORM\EntityManagerInterface;
-use DomainException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +15,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 
+/**
+ * Class CategoryController.
+ */
 
 #[Route(
     '/category'
@@ -27,6 +28,10 @@ final class CategoryController extends AbstractController
 
     /**
      * Constructor.
+     *
+     * @param CategoryRepository   $categoryRepository  Category repository
+     * @param CategoryService      $categoryService     Category service
+     * @param TranslatorInterface  $translator          Translator
      */
 
     public function __construct(
@@ -38,7 +43,9 @@ final class CategoryController extends AbstractController
 
 
     /**
-     * Index.
+     * Displays list of categories.
+     *
+     * @return Response HTTP response
      */
 
     #[Route(
@@ -56,7 +63,11 @@ final class CategoryController extends AbstractController
 
 
     /**
-     * Create action.
+     * Creates a new category.
+     *
+     * @param Request $request HTTP request
+     *
+     * @return Response Redirect response to question view
      */
 
     #[Route(
@@ -91,6 +102,14 @@ final class CategoryController extends AbstractController
 
 
 
+    /**
+     * Shows chosen category.
+     *
+     * @param Category $category HTTP request
+     *
+     * @return Response Rendered page or redirect response
+     */
+
     #[Route(
         '/{id}/show',
         name: 'category_show',
@@ -105,6 +124,15 @@ final class CategoryController extends AbstractController
     }
 
 
+
+    /**
+     * Edits a category.
+     *
+     * @param Request  $request  HTTP request
+     * @param Category $category HTTP request
+     *
+     * @return Response Rendered page or redirect response
+     */
 
     #[Route(
         '/{id}/edit',
@@ -143,9 +171,14 @@ final class CategoryController extends AbstractController
 
 
 
-     /**
-      * Delete action.
-      */
+    /**
+     * Deletes a category.
+     *
+     * @param Request   $request HTTP request
+     * @param Category  $category  Answer entity to delete
+     *
+     * @return Response Redirect or rendered confirmation page
+     */
 
     #[Route(
         '/{id}/delete',

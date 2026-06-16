@@ -1,13 +1,9 @@
 <?php
-/**
- * Question type.
- */
 
 namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Question;
-use App\Entity\Tag;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -18,6 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Class QuestionType.
  */
+
 class QuestionType extends AbstractType
 {
     /**
@@ -31,6 +28,7 @@ class QuestionType extends AbstractType
      *
      * @see FormTypeExtensionInterface::buildForm()
      */
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -78,15 +76,18 @@ class QuestionType extends AbstractType
                 ]);
     }
 
+
     /**
      * Configures the options for this type.
      *
      * @param OptionsResolver $resolver The resolver for the options
      */
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => Question::class]);
     }
+
 
     /**
      * Returns the prefix of the template block name for this type.
@@ -96,6 +97,7 @@ class QuestionType extends AbstractType
      *
      * @return string The prefix of the template block name
      */
+
     public function getBlockPrefix(): string
     {
         return 'question';

@@ -10,12 +10,19 @@ use App\Entity\Tag;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
+
 /**
- * Class QuestionFixtures
+ * Class QuestionFixtures.
+ *
  */
 
-class QuestionFixtures extends AbstractBaseFixtures implements DependentFixtureInterface {
+class QuestionFixtures extends AbstractBaseFixtures implements DependentFixtureInterface
+{
 
+    /**
+     * Loads data.
+     *
+     */
 
     public function loadData(): void {
 
@@ -78,6 +85,7 @@ class QuestionFixtures extends AbstractBaseFixtures implements DependentFixtureI
      *
      * @psalm-return array{0: CategoryFixtures::class}
      */
+
     public function getDependencies(): array
     {
         return [

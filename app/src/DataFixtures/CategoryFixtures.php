@@ -11,10 +11,14 @@ use Doctrine\Persistence\ObjectManager;
  *
  * @psalm-suppress MissingConstructor
  */
-class CategoryFixtures extends AbstractBaseFixtures {
+class CategoryFixtures extends AbstractBaseFixtures
+{
+
     /**
      * Load data.
+     *
      */
+
     protected function loadData(): void {
 
         if (!$this->manager instanceof ObjectManager || !$this->faker) {

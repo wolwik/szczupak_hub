@@ -2,17 +2,16 @@
 
 namespace App\Controller;
 
-use App\Entity\Category;
 use App\Entity\User;
 use App\Form\AccountDeleteType;
-use App\Form\CategoryDeleteType;
 use App\Form\EditAccountType;
 use App\Form\RegistrationType;
 use App\Form\UserDeleteType;
-use App\Repository\QuestionRepository;
 use App\Repository\UserRepository;
 use App\Service\UserService;
 use App\Service\QuestionService;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,12 +21,25 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 
+/**
+ * Class UserController.
+ */
+
 #[Route(
     '/user'
 )]
 
 final class UserController extends AbstractController
 {
+
+    /**
+     * Constructor.
+     *
+     * @param UserService          $userService      User service
+     * @param TranslatorInterface  $translator       Translator
+     * @param UserRepository       $userRepository   User repository
+     * @param QuestionService      $questionService  Question service
+     */
 
     public function __construct(
         private readonly UserService $userService,
@@ -37,8 +49,11 @@ final class UserController extends AbstractController
     ) {}
 
 
+
     /**
-     * Index.
+     * Displays list of users.
+     *
+     * @return Response Rendered questions list page
      */
 
     #[Route(
@@ -49,8 +64,7 @@ final class UserController extends AbstractController
 
     public function index(): Response
     {
-        // show everyone but no currently logged admin
-
+        // show everyone but NOT currently logged admin
         $currentUser = $this->getUser();
 
         // sprawdzenie obiektu i zawężenie typu, bo symfony się denerwuje
@@ -65,8 +79,9 @@ final class UserController extends AbstractController
 
 
      /**
-      * Account panel (with article drafts)
+      * Account panel with user's info and article drafts.
       *
+      * @return Response HTTP response
       */
 
      #[Route(
@@ -94,8 +109,12 @@ final class UserController extends AbstractController
 
 
     /**
-     * Registration
+     * Account registration.
      *
+     * @param Request $request HTTP request
+     *
+     * @return Response HTTP response
+     * @throws \Exception
      */
 
     #[Route(
@@ -131,9 +150,13 @@ final class UserController extends AbstractController
     }
 
 
+
     /**
-     * Edit action
+     * Edits currently logged-in user's data.
      *
+     * @param Request $request HTTP request
+     *
+     * @return Response HTTP response
      */
 
     #[Route(
@@ -145,9 +168,8 @@ final class UserController extends AbstractController
 
     public function edit(Request $request): Response
     {
-        $user = $this->getUser(); // biore usera z sesji
+        $user = $this->getUser();
 
-        // rzutowanie typu, bo serwis chce usera z encji, a daje mu zalogowanego (z userinterface)
         if (!$user instanceof \App\Entity\User) {
             throw new \LogicException();
         }
@@ -173,9 +195,14 @@ final class UserController extends AbstractController
     }
 
 
+
     /**
-     * Edit as admin
+     * Edits anyone's data as administrator.
      *
+     * @param Request $request HTTP request
+     * @param User    $user    HTTP request
+     *
+     * @return Response HTTP response
      */
 
     #[Route(
@@ -208,8 +235,16 @@ final class UserController extends AbstractController
     }
 
 
+
     /**
-     * Delete action.
+     * Deletes currently logged-in user.
+     *
+     * @param Request $request HTTP request
+     *
+     * @return Response HTTP response
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
 
     #[Route(
@@ -253,9 +288,16 @@ final class UserController extends AbstractController
     }
 
 
+
     /**
-     * Delete as admin
+     * Deletes a user account as administrator.
      *
+     * @param Request $request HTTP request
+     * @param User    $user    User entity
+     *
+     * @return Response HTTP response
+     *
+     * @throws AccessDeniedException When admin tries to delete their own account
      */
 
     #[Route(
@@ -296,9 +338,13 @@ final class UserController extends AbstractController
     }
 
 
+
     /**
-     * Make admin action
+     * Grants administrator role to a user.
      *
+     * @param User  $user  User entity
+     *
+     * @return Response HTTP response
      */
 
     #[Route(
@@ -309,7 +355,7 @@ final class UserController extends AbstractController
     )]
     #[IsGranted('ROLE_ADMIN')]
 
-    public function makeAdmin(Request $request, User $user): Response
+    public function makeAdmin(User $user): Response
     {
         $user->promoteToAdmin();
 
@@ -324,9 +370,13 @@ final class UserController extends AbstractController
     }
 
 
+
     /**
-     * Remove admin action
+     * Removes administrator role from a user.
      *
+     * @param User  $user  User entity
+     *
+     * @return Response HTTP response
      */
 
     #[Route(
@@ -337,7 +387,7 @@ final class UserController extends AbstractController
     )]
     #[IsGranted('ROLE_ADMIN')]
 
-    public function removeAdmin(Request $request, User $user): Response
+    public function removeAdmin(User $user): Response
     {
         $admins = $this->userRepository->findAdmins();
 
@@ -360,8 +410,11 @@ final class UserController extends AbstractController
 
 
     /**
-     * Block user
+     * Blocks user.
      *
+     * @param User  $user  User entity
+     *
+     * @return Response HTTP response
      */
 
     #[Route(
@@ -387,8 +440,11 @@ final class UserController extends AbstractController
 
 
     /**
-     * Unblock user
+     * Unblocks user.
      *
+     * @param User  $user  User entity
+     *
+     * @return Response HTTP response
      */
 
     #[Route(
@@ -399,7 +455,7 @@ final class UserController extends AbstractController
     )]
     #[IsGranted('ROLE_ADMIN')]
 
-    public function unblock(Request $request, User $user): Response
+    public function unblock(User $user): Response
     {
         $user->setIsBlocked(false);
         $this->userService->save($user);
@@ -412,14 +468,5 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('user_list');
 
     }
-
-
-
-
-
-
-
-
-
 
 }

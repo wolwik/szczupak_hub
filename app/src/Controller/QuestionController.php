@@ -8,7 +8,6 @@ use App\Form\AnswerType;
 use App\Form\QuestionDeleteType;
 use App\Form\QuestionType;
 use App\Repository\CategoryRepository;
-use App\Repository\QuestionRepository;
 use App\Security\Voter\QuestionVoter;
 use App\Service\QuestionService;
 use App\Service\TagService;
@@ -21,19 +20,26 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 
+/**
+ * Class QuestionController.
+ */
 
 #[Route(
     '/question'
 )]
 
-final class QuestionController extends AbstractController {
+final class QuestionController extends AbstractController
+{
 
     /**
      * Constructor.
      *
-     * @param QuestionServiceInterface $questionService Question service
-     * @param TranslatorInterface      $translator      Translator
+     * @param QuestionService      $questionService     Question service
+     * @param TranslatorInterface  $translator          Translator
+     * @param CategoryRepository   $categoryRepository  Category repository
+     * @param TagService           $tagService          Tag service
      */
+
     public function __construct(
         private readonly QuestionService $questionService,
         private readonly TranslatorInterface $translator,
@@ -44,7 +50,13 @@ final class QuestionController extends AbstractController {
 
 
     /**
-     * Index.
+     * Displays paginated list of questions with optional filters.
+     *
+     * @param int      $page       Current page number (default: 1)
+     * @param int|null $categoryId Optional category filter
+     * @param int|null $tag        Optional tag filter
+     *
+     * @return Response Rendered questions list page
      */
 
     #[Route(
@@ -100,7 +112,7 @@ final class QuestionController extends AbstractController {
 
 
     /**
-     * Create action.
+     * Create a new question.
      *
      * @param Request $request HTTP request
      *
@@ -112,7 +124,7 @@ final class QuestionController extends AbstractController {
         name: 'question_create',
         methods: ['GET', 'POST']
     )]
-    #[IsGranted('ROLE_USER')] // kazdy z rola "user" LUB WYZSZAs
+    #[IsGranted('ROLE_USER')] // kazdy z rola "user" LUB WYZSZA
 
     public function create(Request $request): Response
     {
@@ -151,6 +163,15 @@ final class QuestionController extends AbstractController {
     }
 
 
+
+    /**
+     * Publishes question.
+     *
+     * @param Question $question Related question entity
+     *
+     * @return Response Redirect response to question view
+     */
+
     #[Route(
         '/{id}/publish',
         name: 'question_publish',
@@ -176,7 +197,7 @@ final class QuestionController extends AbstractController {
 
 
     /**
-     * Edit action.
+     * Edits a question.
      *
      * @param Request  $request  HTTP request
      * @param Question $question Question entity
@@ -251,9 +272,8 @@ final class QuestionController extends AbstractController {
 
 
 
-
     /**
-     * Delete action.
+     * Deletes a question.
      *
      * @param Request  $request  HTTP request
      * @param Question $question Question entity

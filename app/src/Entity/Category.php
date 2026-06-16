@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Category entity.
+ */
+
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
@@ -8,9 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-/**
- * Category entity.
- */
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\Table(name: 'categories')]
 

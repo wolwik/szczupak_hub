@@ -1,14 +1,15 @@
 <?php
 
+/**
+ * Answer entity.
+ */
+
 namespace App\Entity;
 
 use App\Repository\AnswerRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Answer entity.
- */
 #[ORM\Entity(repositoryClass: AnswerRepository::class)]
 #[ORM\Table(name: 'answers')]
 

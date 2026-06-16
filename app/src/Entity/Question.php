@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Question entity.
+ */
+
 namespace App\Entity;
 
 use App\Repository\QuestionRepository;
@@ -7,10 +11,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Enum\QuestionStatus;
-
-/**
- * Question entity.
- */
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 #[ORM\Table(name: 'questions')]

@@ -2,16 +2,25 @@
 
 namespace App\Form;
 
-use App\Entity\Question;
 use App\Entity\Tag;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class TagType.
+ */
+
 class TagType extends AbstractType
 {
+    /**
+     * Builds form for creating a new tag.
+     *
+     * @param FormBuilderInterface $builder Form builder instance
+     * @param array<string, mixed> $options Form options
+     */
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -35,6 +44,12 @@ class TagType extends AbstractType
             */
         ;
     }
+
+    /**
+     * Configures the options for this type.
+     *
+     * @param OptionsResolver $resolver The resolver for the options
+     */
 
     public function configureOptions(OptionsResolver $resolver): void
     {

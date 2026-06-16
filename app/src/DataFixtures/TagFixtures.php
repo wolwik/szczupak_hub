@@ -4,8 +4,20 @@ namespace App\DataFixtures;
 
 use App\Entity\Tag;
 
+
+/**
+ * Class AnswerFixtures.
+ *
+ */
+
 class TagFixtures extends AbstractBaseFixtures
 {
+
+    /**
+     * Loads data.
+     *
+     */
+
     protected function loadData(): void
     {
         $this->createMany(10, 'tag', function (int $i) {

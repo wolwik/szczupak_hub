@@ -8,8 +8,19 @@ use App\Entity\User;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 
+/**
+ * Class AnswerFixtures.
+ *
+ */
+
 class AnswerFixtures extends AbstractBaseFixtures implements DependentFixtureInterface
 {
+
+    /**
+     * Loads data.
+     *
+     */
+
     protected function loadData(): void
     {
         if (!$this->manager || !$this->faker) {
@@ -38,6 +49,16 @@ class AnswerFixtures extends AbstractBaseFixtures implements DependentFixtureInt
             return $answer;
         });
     }
+
+
+    /**
+     * This method must return an array of fixtures classes
+     * on which the implementing class depends on.
+     *
+     * @return string[] of dependencies
+     *
+     * @psalm-return array{0: QuestionFixtures::class}
+     */
 
     public function getDependencies(): array
     {

@@ -1,16 +1,10 @@
 <?php
 
-/**
- * Security controller.
- */
-
 namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\AdminChangePasswordFormType;
 use App\Form\ChangePasswordFormType;
-use App\Repository\UserRepository;
-use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,11 +17,26 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+
 /**
  * Class SecurityController.
  */
+
 class SecurityController extends AbstractController
 {
+
+    /**
+     * Constructor.
+     *
+     * @param TranslatorInterface  $translator  Translator
+     */
+
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+    ) {}
+
+
+
     /**
      * Login action.
      *
@@ -35,10 +44,6 @@ class SecurityController extends AbstractController
      *
      * @return Response HTTP response
      */
-    public function __construct(
-        private readonly TranslatorInterface $translator,
-    ) {}
-
 
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
@@ -60,12 +65,36 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/logout', name: 'app_logout')]
+
+
+    /**
+     * Logout action.
+     *
+     */
+
+    #[Route(
+        path: '/logout',
+        name: 'app_logout'
+    )]
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
+
+
+    /**
+     * Changes own password.
+     *
+     * @param Request $request Question entity
+     * @param UserPasswordHasherInterface $hasher Question entity
+     * @param EntityManagerInterface $em Question entity
+     *
+     * @return Response HTTP response
+     *
+     * @throws \LogicException When user is not authenticated
+     * @throws \Exception When current password is invalid
+     */
 
     #[Route(
         '/change-password',
@@ -114,6 +143,18 @@ class SecurityController extends AbstractController
     }
 
 
+
+    /**
+     * Changes anyone's password, action permitted only for admins.
+     *
+     * @param User $user Question entity
+     * @param UserPasswordHasherInterface $hasher Question entity
+     * @param EntityManagerInterface $em Question entity
+     * @param Request $request Question entity
+     *
+     * @return Response HTTP response
+     */
+
     #[Route(
         '/user/{id}/change-password',
         name: 'user_change_password',
@@ -154,6 +195,5 @@ class SecurityController extends AbstractController
         ]);
 
     }
-
 
 }

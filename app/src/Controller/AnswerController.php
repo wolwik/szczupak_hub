@@ -8,7 +8,6 @@ use App\Form\AnswerDeleteType;
 use App\Form\AnswerType;
 use App\Repository\QuestionRepository;
 use App\Security\Voter\AnswerVoter;
-use App\Security\Voter\QuestionVoter;
 use App\Service\AnswerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +17,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 
-
+/**
+ * Class AnswerController.
+ */
 #[Route(
     '/answer'
 )]
@@ -28,6 +29,9 @@ final class AnswerController extends AbstractController
 
     /**
      * Constructor.
+     *
+     * @param AnswerService        $answerService Answer service
+     * @param TranslatorInterface  $translator    Translator
      */
 
     public function __construct(
@@ -38,7 +42,9 @@ final class AnswerController extends AbstractController
 
 
     /**
-     * Index.
+     * Displays list of answers (placeholder view, not used actutally).
+     *
+     * @return Response HTTP response
      */
 
     #[Route(
@@ -57,7 +63,12 @@ final class AnswerController extends AbstractController
 
 
     /**
-     * Create action.
+     * Creates a new answer.
+     *
+     * @param Question $question Related question entity
+     * @param Request  $request  HTTP request
+     *
+     * @return Response Redirect response to question view
      */
 
     #[Route(
@@ -96,7 +107,12 @@ final class AnswerController extends AbstractController
 
 
     /**
-     * Edit action.
+     * Edits an answer.
+     *
+     * @param Request $request HTTP request
+     * @param Answer   $answer  Answer entity to edit
+     *
+     * @return Response Rendered page or redirect response
      */
 
     #[Route(
@@ -136,8 +152,14 @@ final class AnswerController extends AbstractController
     }
 
 
+
     /**
-     * Delete action.
+     * Deletes an answer.
+     *
+     * @param Request $request HTTP request
+     * @param Answer   $answer  Answer entity to delete
+     *
+     * @return Response Redirect or rendered confirmation page
      */
 
     #[Route(
@@ -176,8 +198,14 @@ final class AnswerController extends AbstractController
     }
 
 
+
     /**
-     * Mark as best action.
+     * Marks an answer as the best one for a question.
+     *
+     * @param Answer              $answer            Answer entity
+     * @param QuestionRepository  $questionRepository Repository used for question updates
+     *
+     * @return Response Redirect response to question view
      */
 
     #[Route(
@@ -198,7 +226,6 @@ final class AnswerController extends AbstractController
         );
 
         return $this->redirectToRoute('question_view', ['id'=>$answer->getQuestion()->getId()]);
-
 
     }
 

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Tag entity.
+ */
+
 namespace App\Entity;
 
 use App\Repository\TagRepository;
@@ -7,9 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Tag entity.
- */
+
 #[ORM\Entity(repositoryClass: TagRepository::class)]
 #[ORM\Table(name: 'tags')]
 

@@ -1,7 +1,4 @@
 <?php
-/**
- * User role.
- */
 
 namespace App\Entity\Enum;
 

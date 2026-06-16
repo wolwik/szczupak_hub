@@ -9,29 +9,34 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
-
 /**
- * Class CategoryRepository.
+ * Class QuestionRepository.
  *
  * @extends ServiceEntityRepository<Question>
  */
 class QuestionRepository extends ServiceEntityRepository
 {
-
     /**
      * Constructor.
      *
      * @param ManagerRegistry $registry Manager registry
      */
-    public function __construct(ManagerRegistry $registry) {
+
+    public function __construct(ManagerRegistry $registry)
+    {
         parent::__construct($registry, Question::class);
     }
+
 
     /**
      * Query all records.
      *
+     * @param int|null $categoryId
+     * @param int|null $tagId
+     *
      * @return QueryBuilder Query builder
      */
+
     public function queryAll(
         ?int $categoryId = null,
         ?int $tagId = null,
@@ -59,8 +64,11 @@ class QuestionRepository extends ServiceEntityRepository
 
 
     /**
-     * Query user drafts.
+     * Displays user drafts.
      *
+     * @param User $user User entity
+     *
+     * @return QueryBuilder QueryBuilder
      */
 
     public function queryUserDrafts(User $user): QueryBuilder
@@ -71,13 +79,15 @@ class QuestionRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->setParameter('status', QuestionStatus::DRAFT)
             ->orderBy('question.createdAt', 'DESC');
-
     }
 
 
     /**
-     * All user's questions
+     * Displays all user's questions (currently not used)
      *
+     * @param User $user User entity
+     *
+     * @return QueryBuilder QueryBuilder
      */
 
     public function findByUser(User $user): QueryBuilder
@@ -93,6 +103,7 @@ class QuestionRepository extends ServiceEntityRepository
      *
      * @param Question $question Question entity
      */
+
     public function save(Question $question): void
     {
         $this->getEntityManager()->persist($question);
@@ -103,6 +114,7 @@ class QuestionRepository extends ServiceEntityRepository
      * Delete entity.
      *
      * @param Question $question Question entity
+     * @param bool     $flush    Bool for deleting entity
      */
 
     public function delete(Question $question, bool $flush = true): void

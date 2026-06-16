@@ -3,26 +3,62 @@
 namespace App\Security\Voter;
 
 use App\Entity\Answer;
-use App\Entity\Question;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class AnswerVoter.
+ */
 final class AnswerVoter extends Voter
 {
+    /**
+     * Edit permission.
+     *
+     * @var string
+     */
     public const EDIT = 'ANSWER_EDIT';
 
+    /**
+     * Delete permission.
+     *
+     * @var string
+     */
     public const DELETE = 'ANSWER_DELETE';
 
+    /**
+     * Mark-as-best permission.
+     *
+     * @var string
+     */
     public const MARK_AS_BEST = "ANSWER_MARK_AS_BEST";
 
+
+    /**
+     * Determines if this voter supports the attribute and subject.
+     *
+     * @param string $attribute An attribute
+     * @param mixed  $subject   The subject to secure, e.g. an object the user wants to access or any other PHP type
+     *
+     * @return bool Result
+     */
     protected function supports(string $attribute, mixed $subject): bool
     {
         return in_array($attribute, [self::EDIT, self::DELETE, self::MARK_AS_BEST])
             && $subject instanceof \App\Entity\Answer;
     }
 
+
+    /**
+     * Perform a single access check operation on a given attribute, subject and token.
+     * It is safe to assume that $attribute and $subject already passed the "supports()" method check.
+     *
+     * @param string         $attribute Permission name
+     * @param mixed          $subject   Object
+     * @param TokenInterface $token     Security token
+     *
+     * @return bool Vote result
+     */
     protected function voteOnAttribute(
         string         $attribute,
         mixed          $subject,
@@ -47,17 +83,35 @@ final class AnswerVoter extends Voter
         };
     }
 
+
+    /**
+     * Checks if user can edit answer.
+     *
+     * @param Answer        $answer Answer entity
+     * @param UserInterface $user   User
+     *
+     * @return bool Result
+     */
     private function canEdit(Answer $answer, UserInterface $user): bool
     {
-
         // admin ma zawsze dostęp
         if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
             return true;
         }
+
         //  owner ma dostęp
         return $answer->getAuthor() === $user;
     }
 
+
+    /**
+     * Checks if user can delete answer.
+     *
+     * @param Answer        $answer Answer entity
+     * @param UserInterface $user   User
+     *
+     * @return bool Result
+     */
     private function canDelete(Answer $answer, UserInterface $user): bool
     {
         // admin ma zawsze dostęp
@@ -69,6 +123,15 @@ final class AnswerVoter extends Voter
         return $answer->getAuthor() === $user;
     }
 
+
+    /**
+     * Checks if user can mark answer as the best one.
+     *
+     * @param Answer        $answer Answer entity
+     * @param UserInterface $user   User
+     *
+     * @return bool Result
+     */
     private function canMarkAsBest(Answer $answer, UserInterface $user): bool
     {
         return $answer
