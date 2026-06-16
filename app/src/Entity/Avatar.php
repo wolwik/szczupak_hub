@@ -19,7 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: AvatarRepository::class)]
 #[ORM\Table(name: 'avatars')]
 #[ORM\UniqueConstraint(name: 'uq_avatars_filename', columns: ['filename'])]
-#[UniqueEntity(fields: ['filename'])]
+#[UniqueEntity(fields: ['filename'], message: 'This filename is already in use.')]
+#[UniqueEntity(fields: ['user'], message: 'This user already has an avatar.')]
 class Avatar
 {
     /**
@@ -38,7 +39,7 @@ class Avatar
      * @var User|null
      */
     #[ORM\OneToOne(inversedBy: 'avatar', targetEntity: User::class, fetch: 'EXTRA_LAZY')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     #[Assert\Type(User::class)]
     private ?User $user;
 
