@@ -7,6 +7,8 @@
 namespace App\Entity;
 
 use App\Repository\AnswerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -35,6 +37,19 @@ class Answer {
     #[ORM\ManyToOne(inversedBy: 'answers')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?User $author = null;
+
+    /**
+     * @var Collection<int, Vote>
+     */
+    #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'answer')]
+    private Collection $votes;
+
+
+
+    public function __construct()
+    {
+        $this->votes = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -107,4 +122,39 @@ class Answer {
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Vote>
+     */
+    public function getVotes(): Collection
+    {
+        return $this->votes;
+    }
+
+    public function addVote(Vote $vote): static
+    {
+        if (!$this->votes->contains($vote)) {
+            $this->votes->add($vote);
+            $vote->setAnswer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVote(Vote $vote): static
+    {
+        if ($this->votes->removeElement($vote)) {
+            // set the owning side to null (unless already changed)
+            if ($vote->getAnswer() === $this) {
+                $vote->setAnswer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getVotesCount(): int {
+        return count($this->votes);
+    }
+
 }

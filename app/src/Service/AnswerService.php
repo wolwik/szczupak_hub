@@ -11,10 +11,14 @@ use App\Repository\AnswerRepository;
 use App\Entity\Question;
 use App\Repository\QuestionRepository;
 
-class AnswerService {
+class AnswerService
+{
+
     public function __construct(
-        private readonly AnswerRepository $answerRepository
+        private readonly AnswerRepository $answerRepository,
+        private readonly QuestionRepository $questionRepository
     ) {}
+
 
     public function save(Answer $answer, ?Question $question = null): void
     // par Question jest opcjonalny (ta metoda jest też uzywana do edytowania pytania)
@@ -29,17 +33,28 @@ class AnswerService {
         $this->answerRepository->save($answer);
     }
 
+
     public function delete(Answer $answer): void
     {
         $this->answerRepository->delete($answer);
     }
 
 
-    public function markAsBest(Answer $answer, QuestionRepository $questionRepository): void
+    public function markAsBest(Answer $answer): void
     {
         $question = $answer->getQuestion();
         $question->setBestAnswer($answer);
-        $questionRepository->save($question);
+        $this->questionRepository->save($question);
+    }
+
+    // wywoływane przez VoteService po każdym like
+    public function updateBestAnswer(Question $question): void
+    {
+        $bestAnswer = $this->answerRepository->findMostLikedAnswer($question->getId());
+
+        $question->setBestAnswer($bestAnswer);
+
+        $this->questionRepository->save($question);
     }
 
 }

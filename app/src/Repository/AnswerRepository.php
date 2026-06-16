@@ -50,4 +50,20 @@ class AnswerRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+
+    public function findMostLikedAnswer(int $questionId): ?Answer
+    {
+        return $this->createQueryBuilder('a')
+            ->join('a.votes', 'v')
+            ->where('a.question = :qid')
+            ->setParameter('qid', $questionId)
+            ->groupBy('a.id')
+            ->orderBy('COUNT(v.id)', 'DESC')
+            ->addOrderBy('a.createdAt', 'DESC')
+            ->addOrderBy('a.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 }
