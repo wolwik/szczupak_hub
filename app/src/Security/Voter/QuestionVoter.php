@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\Enum\QuestionStatus;
 use App\Entity\Question;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -133,6 +134,11 @@ final class QuestionVoter extends Voter
      */
     private function canView(Question $question, UserInterface $user): bool
     {
+        // opublikowane pytania są publiczne
+        if ($question->getStatus() === QuestionStatus::PUBLISHED) {
+            return true;
+        }
+
         // tylko owner ma dostęp
         return $question->getAuthor() === $user;
     }
