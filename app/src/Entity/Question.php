@@ -11,31 +11,69 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Enum\QuestionStatus;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 #[ORM\Table(name: 'questions')]
 
-class Question {
+class Question
+{
+    /**
+     * Primary key.
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * Question title.
+     */
     #[ORM\Column(length: 255)]
+    #[Assert\Type('string')]
+    #[Assert\NotBlank(message: 'Tytuł pytania nie może być pusty.')]
+    #[Assert\Length(
+        min: 1,
+        max: 255,
+        minMessage: 'Tytuł jest za krótki (minimum {{ limit }} znaków).',
+        maxMessage: 'Tytuł nie może być dłuższy niż {{ limit }} znaków.'
+    )]
     private ?string $title = null;
 
+    /**
+     * Question content.
+     *
+     */
     #[ORM\Column(type: 'text')]
+    #[Assert\Type('string')]
+    #[Assert\NotBlank(message: 'Treść pytania nie może być pusta.')]
+    #[Assert\Length(min: 5, minMessage: 'Opisz swój problem nieco dokładniej (minimum {{ limit }} znaków).')]
     private string $content;
 
+    /**
+     * Question status.
+     */
     #[ORM\Column(enumType: QuestionStatus::class)]
+    #[Assert\Type(QuestionStatus::class)]
     private QuestionStatus $status = QuestionStatus::DRAFT;
 
-    #[ORM\Column]
+    /**
+     * Created at timestamp.
+     */
+    #[ORM\Column(type: 'datetime')]
+    #[Assert\Type(\DateTime::class)]
     private ?\DateTime $createdAt = null;
 
-    #[ORM\Column(nullable: true)]
+    /**
+     * Updated at timestamp.
+     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Assert\Type(\DateTime::class)]
     private ?\DateTime $updatedAt = null;
 
+    /**
+     * Answers collection.
+     */
     #[ORM\OneToMany(
         mappedBy: 'question',
         targetEntity: Answer::class,
@@ -44,29 +82,45 @@ class Question {
         orphanRemoval: true)
     ]
     #[ORM\OrderBy(['createdAt' => 'DESC'])]
+    #[Assert\Valid]
     private Collection $answers;
 
+    /**
+     * Question category.
+     */
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'questions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
+    #[Assert\NotNull(message: 'Wybierz kategorię dla pytania.')]
+    #[Assert\Type(Category::class)]
     private ?Category $category = null;
 
     /**
+     * Tags collection.
+     *
      * @var Collection<int, Tag>
      */
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'questions')]
     #[ORM\JoinTable(name: 'questions_tags')]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[Assert\Valid]
     private Collection $tags;
 
+    /**
+     * Question author.
+     */
     #[ORM\ManyToOne(inversedBy: 'questions')]
-    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Assert\Type(User::class)]
     private ?User $author = null;
 
+    /**
+     * Best answer.
+     */
     #[ORM\OneToOne(targetEntity: Answer::class)]
-    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    #[ORM\JoinColumn(name: 'best_answer_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[Assert\Type(Answer::class)]
     private ?Answer $bestAnswer = null;
-
 
 
 
