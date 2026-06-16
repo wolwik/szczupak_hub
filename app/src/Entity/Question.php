@@ -53,8 +53,10 @@ class Question {
     /**
      * @var Collection<int, Tag>
      */
-    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'question')]
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'questions')]
     #[ORM\JoinTable(name: 'questions_tags')]
+    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private Collection $tags;
 
     #[ORM\ManyToOne(inversedBy: 'questions')]

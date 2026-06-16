@@ -11,37 +11,74 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AnswerRepository::class)]
 #[ORM\Table(name: 'answers')]
 
 class Answer {
+
+    /**
+     * Primary key.
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * Answer content.
+     */
+
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\Type('string')]
+    #[Assert\NotBlank(message: 'Answer content cannot be empty.')]
+    #[Assert\Length(
+        min: 1,
+        minMessage: 'Answer is too short.',
+    )]
     private ?string $content = null;
 
-    #[ORM\Column]
+    /**
+     * Created at timestamp.
+     */
+    #[ORM\Column(type: 'datetime')]
+    #[Assert\Type(\DateTime::class)]
+    #[Gedmo\Timestampable(on: 'create')]
     private ?\DateTime $createdAt = null;
 
-    #[ORM\Column(nullable: true)]
+    /**
+     * Updated at timestamp.
+     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Assert\Type(\DateTime::class)]
+    #[Gedmo\Timestampable(on: 'update')]
     private ?\DateTime $updatedAt = null;
 
+    /**
+     * Related question.
+     */
     #[ORM\ManyToOne(targetEntity: Question::class, inversedBy: "answers")]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id', nullable: false)]
+    #[Assert\Type(type: Question::class)]
     private ?Question $question = null;
 
-    #[ORM\ManyToOne(inversedBy: 'answers')]
-    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    /**
+     * Author of answer.
+     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'answers')]
+    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?User $author = null;
 
     /**
+     * Votes collection.
+     *
      * @var Collection<int, Vote>
      */
     #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'answer')]
+    #[Assert\Valid]
     private Collection $votes;
 
 

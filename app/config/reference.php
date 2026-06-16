@@ -1316,6 +1316,68 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         }>,
  *     role_hierarchy?: array<string, string|list<scalar|Param|null>>,
  * }
+ * @psalm-type StofDoctrineExtensionsConfig = array{
+ *     orm?: array<string, array{ // Default: []
+ *             translatable?: scalar|Param|null, // Default: false
+ *             timestampable?: scalar|Param|null, // Default: false
+ *             blameable?: scalar|Param|null, // Default: false
+ *             sluggable?: scalar|Param|null, // Default: false
+ *             tree?: scalar|Param|null, // Default: false
+ *             loggable?: scalar|Param|null, // Default: false
+ *             ip_traceable?: scalar|Param|null, // Default: false
+ *             sortable?: scalar|Param|null, // Default: false
+ *             softdeleteable?: scalar|Param|null, // Default: false
+ *             uploadable?: scalar|Param|null, // Default: false
+ *             reference_integrity?: scalar|Param|null, // Default: false
+ *         }>,
+ *     mongodb?: array<string, array{ // Default: []
+ *             translatable?: scalar|Param|null, // Default: false
+ *             timestampable?: scalar|Param|null, // Default: false
+ *             blameable?: scalar|Param|null, // Default: false
+ *             sluggable?: scalar|Param|null, // Default: false
+ *             tree?: scalar|Param|null, // Default: false
+ *             loggable?: scalar|Param|null, // Default: false
+ *             ip_traceable?: scalar|Param|null, // Default: false
+ *             sortable?: scalar|Param|null, // Default: false
+ *             softdeleteable?: scalar|Param|null, // Default: false
+ *             uploadable?: scalar|Param|null, // Default: false
+ *             reference_integrity?: scalar|Param|null, // Default: false
+ *         }>,
+ *     class?: array{
+ *         translatable?: scalar|Param|null, // Default: "Gedmo\\Translatable\\TranslatableListener"
+ *         timestampable?: scalar|Param|null, // Default: "Gedmo\\Timestampable\\TimestampableListener"
+ *         blameable?: scalar|Param|null, // Default: "Gedmo\\Blameable\\BlameableListener"
+ *         sluggable?: scalar|Param|null, // Default: "Gedmo\\Sluggable\\SluggableListener"
+ *         tree?: scalar|Param|null, // Default: "Gedmo\\Tree\\TreeListener"
+ *         loggable?: scalar|Param|null, // Default: "Gedmo\\Loggable\\LoggableListener"
+ *         sortable?: scalar|Param|null, // Default: "Gedmo\\Sortable\\SortableListener"
+ *         softdeleteable?: scalar|Param|null, // Default: "Gedmo\\SoftDeleteable\\SoftDeleteableListener"
+ *         uploadable?: scalar|Param|null, // Default: "Gedmo\\Uploadable\\UploadableListener"
+ *         reference_integrity?: scalar|Param|null, // Default: "Gedmo\\ReferenceIntegrity\\ReferenceIntegrityListener"
+ *     },
+ *     softdeleteable?: array{
+ *         handle_post_flush_event?: bool|Param, // Default: false
+ *     },
+ *     uploadable?: array{
+ *         default_file_path?: scalar|Param|null, // Default: null
+ *         mime_type_guesser_class?: scalar|Param|null, // Default: "Stof\\DoctrineExtensionsBundle\\Uploadable\\MimeTypeGuesserAdapter"
+ *         default_file_info_class?: scalar|Param|null, // Default: "Stof\\DoctrineExtensionsBundle\\Uploadable\\UploadedFileInfo"
+ *         validate_writable_directory?: bool|Param, // Default: true
+ *     },
+ *     default_locale?: scalar|Param|null, // Default: "en"
+ *     translation_fallback?: bool|Param, // Default: false
+ *     persist_default_translation?: bool|Param, // Default: false
+ *     skip_translation_on_load?: bool|Param, // Default: false
+ *     metadata_cache_pool?: scalar|Param|null, // Default: null
+ * }
+ * @psalm-type WebProfilerConfig = array{
+ *     toolbar?: bool|array{ // Profiler toolbar configuration
+ *         enabled?: bool|Param, // Default: false
+ *         ajax_replace?: bool|Param, // Replace toolbar on AJAX requests // Default: false
+ *     },
+ *     intercept_redirects?: bool|Param, // Default: false
+ *     excluded_ajax_paths?: scalar|Param|null, // Default: "^/((index|app(_[\\w]+)?)\\.php/)?_wdt"
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1327,6 +1389,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     twig_extra?: TwigExtraConfig,
  *     knp_paginator?: KnpPaginatorConfig,
  *     security?: SecurityConfig,
+ *     stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1339,6 +1402,8 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         twig_extra?: TwigExtraConfig,
  *         knp_paginator?: KnpPaginatorConfig,
  *         security?: SecurityConfig,
+ *         stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
+ *         web_profiler?: WebProfilerConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1351,6 +1416,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         twig_extra?: TwigExtraConfig,
  *         knp_paginator?: KnpPaginatorConfig,
  *         security?: SecurityConfig,
+ *         stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1363,6 +1429,8 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         twig_extra?: TwigExtraConfig,
  *         knp_paginator?: KnpPaginatorConfig,
  *         security?: SecurityConfig,
+ *         stof_doctrine_extensions?: StofDoctrineExtensionsConfig,
+ *         web_profiler?: WebProfilerConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,
