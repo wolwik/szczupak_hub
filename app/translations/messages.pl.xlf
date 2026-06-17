@@ -43,8 +43,6 @@
           <target>Brak elementów</target>
         </trans-unit>
 
-
-
     <trans-unit id="label.email">
       <source>label.email</source>
       <target>Email</target>
@@ -197,21 +195,21 @@
 
         <trans-unit id="label.register">
           <source>label.register</source>
-          <target>zarejestruj</target>
+          <target>zarejestruj,</target>
         </trans-unit>
 
         <trans-unit id="label.to_ask">
           <source>label.to_ask</source>
-          <target>, żeby zadać pytanie!</target>
+          <target>żeby zadać pytanie!</target>
         </trans-unit>
 
         <trans-unit id="label.to_answer">
-          <source>label.to_ask</source>
+          <source>label.to_answer</source>
           <target>, żeby dodać odpowiedź.</target>
         </trans-unit>
 
         <trans-unit id="label.deleted_user">
-          <source>label.to_ask</source>
+          <source>label.deleted_user</source>
           <target>[usunięty użytkownik]</target>
         </trans-unit>
 

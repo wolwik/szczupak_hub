@@ -400,8 +400,6 @@
           <target>Tag list</target>
         </trans-unit>
 
-
-
       <trans-unit id="message.answer_created_successfully">
         <source>message.answer_created_successfully</source>
         <target>Answer created successfully.</target>
