@@ -77,7 +77,12 @@ class Answer {
      *
      * @var Collection<int, Vote>
      */
-    #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'answer')]
+    #[ORM\OneToMany(
+        targetEntity: Vote::class,
+        mappedBy: 'answer',
+        cascade: ['remove'],
+        orphanRemoval: true
+    )]
     #[Assert\Valid]
     private Collection $votes;
 
