@@ -31,16 +31,8 @@ class CategoryType extends AbstractType
                     'label' => 'label.title',
                     'required' => true,
                     'attr' => ['max_length' => 64, 'placeholder' => 'Wybierz kategorie'],
-                ])
-            ->add(
-                'slug',
-            TextType::class,
-                [
-                    'label' => 'label.title',
-                    'required' => true,
-                    'attr' => ['max_length' => 64, 'placeholder' => 'Wybierz slug'],
-                ]
-            );
+                ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

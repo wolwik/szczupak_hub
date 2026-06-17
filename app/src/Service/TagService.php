@@ -8,8 +8,6 @@ namespace App\Service;
 
 use App\Entity\Tag;
 use App\Repository\TagRepository;
-use Knp\Component\Pager\Pagination\PaginationInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -21,13 +19,12 @@ class TagService {
     public function __construct(
         private readonly TagRepository $tagRepository,
         private readonly TranslatorInterface $translator,
-        private readonly SluggerInterface $slugger,
     ) {}
 
-    public function save(Tag $tag) {
+    public function save(Tag $tag, SluggerInterface $slugger) {
 
         // generating slug
-        $slug = $this->slugger->slug($tag->getName())
+        $slug = $slugger->slug($tag->getName())
         ->lower()
         ->toString();
 

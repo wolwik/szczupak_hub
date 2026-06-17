@@ -81,7 +81,7 @@ final class CategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->categoryRepository->save($category);
+            $this->categoryService->save($category);
 
             $this->addFlash(
                 'success',
@@ -126,7 +126,8 @@ final class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->categoryRepository->save($category);
+
+            $this->categoryService->save($category);
 
             $this->addFlash(
                 'success',

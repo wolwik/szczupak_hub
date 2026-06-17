@@ -26,15 +26,13 @@ class CategoryFixtures extends AbstractBaseFixtures
         }
 
         $this->createMany(10, 'category', function (int $i) {
+
             $category = new Category();
 
-            $category->setName(
-                $this->faker->word()
-            );
+            $name = $this->faker->word();
 
-            $category->setSlug(
-                $this->faker->slug()
-            );
+            $category->setName($name);
+            $category->setSlug(strtolower(str_replace(' ', '-', $name)));
 
             return $category;
         });

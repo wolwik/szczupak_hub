@@ -47,6 +47,8 @@ class Tag
 
     /**
      * Tag slug.
+     *
+     * Automatically generated.
      */
     #[ORM\Column(length: 255)]
     #[Assert\Type('string')]

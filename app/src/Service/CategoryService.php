@@ -8,9 +8,7 @@ namespace App\Service;
 
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
-use Knp\Component\Pager\Pagination\PaginationInterface;
-use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 /*
  * Class CategoryService
@@ -18,14 +16,19 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CategoryService {
     public function __construct(
-        private CategoryRepository $categoryRepository,
-        private TranslatorInterface $translator,
+        private readonly CategoryRepository $categoryRepository,
+        private readonly SluggerInterface $slugger
     ) {}
 
-    public function save(Category $category) {
-        if (null === $category->getId()) {
-            $this->categoryRepository->save($category);
-        }
+    public function save(Category $category): void
+    {
+        $slug = $this->slugger->slug($category->getName())
+            ->lower()
+            ->toString();
+
+        $category->setSlug($slug);
+
+        $this->categoryRepository->save($category);
 
     }
 
