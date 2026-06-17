@@ -42,7 +42,6 @@ class VoteService
 
         $vote->setAnswer($answer);
         $vote->setUser($user);
-        $vote->setCreatedAt(new \DateTime);
 
         $this->voteRepository->save($vote);
 
