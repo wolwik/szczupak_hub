@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Category{% endblock %}
+{% block title %}{{ 'title.category_create'|trans }}{% endblock %}
 
 {% block body %}
 
@@ -14,13 +14,13 @@
 
                     <div class="card-body p-4">
 
-                        <h3 class="mb-4">Create new Category</h3>
+                        <h3 class="mb-4">{{ 'label.category_add'|trans }}</h3>
 
                         {{ include('category/_form.html.twig') }}
 
                         <div class="d-flex justify-content-between align-items-center mt-4">
 
-                            <a href="{{ path('category_list') }}" class="btn btn-outline-secondary btn-sm">Wróć</a>
+                            <a href="{{ path('category_list') }}" class="btn btn-outline-secondary btn-sm">{{ 'label.back'|trans }}</a>
 
                         </div>
 

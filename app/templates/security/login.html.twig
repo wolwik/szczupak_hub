@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in{% endblock %}
+{% block title %}{{ 'title.login'|trans }}{% endblock %}
 
 {% block body %}
 
@@ -14,7 +14,7 @@
 
                     <div class="card-body p-4">
 
-                        <h3 class="text-center mb-4">Zaloguj się</h3>
+                        <h3 class="text-center mb-4">{{ 'label.login_screen'|trans }}</h3>
 
                         {% if error %}
                             <div class="alert alert-danger">
@@ -25,14 +25,14 @@
                         {% if app.user %}
                             <div class="alert alert-info">
                                 Jesteś zalogowany jako {{ app.user.userIdentifier }}.
-                                <a href="{{ logout_path() }}">Wyloguj</a>
+                                <a href="{{ logout_path() }}">{{ 'label.logout'|trans }}</a>
                             </div>
                         {% endif %}
 
                         <form method="post" action="{{ path('app_login') }}">
 
                             <div class="mb-3">
-                                <label for="username" class="form-label">Email</label>
+                                <label for="username" class="form-label">{{ 'label.email'|trans }}</label>
                                 <input type="email"
                                        value="{{ last_username }}"
                                        name="_username"
@@ -44,7 +44,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="password" class="form-label">Hasło</label>
+                                <label for="password" class="form-label">{{ 'label.password'|trans }}</label>
                                 <input type="password"
                                        name="_password"
                                        id="password"
@@ -58,7 +58,7 @@
                                    value="{{ csrf_token('authenticate') }}">
 
                             <button class="btn btn-primary w-100 mt-2" type="submit">
-                                Zaloguj
+                                {{ 'label.login'|trans }}
                             </button>
 
                         </form>
@@ -66,8 +66,8 @@
                         <hr class="my-4">
 
                         <div class="text-center small">
-                            Nie masz konta?
-                            <a href="{{ url('register') }}">Zarejestruj się</a>
+                            {{ 'label.dont_have_account'|trans }}
+                            <a href="{{ url('register') }}"> {{ 'label.register_yourself'|trans }}</a>
                         </div>
 
                     </div>

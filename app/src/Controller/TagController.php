@@ -25,19 +25,16 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class TagController extends AbstractController
 {
-
     /**
      * Constructor.
      *
      * @param TagService           $tagService     Tag service
      * @param TranslatorInterface  $translator     Translator
      */
-
     public function __construct(
         private readonly TagService $tagService,
         private readonly TranslatorInterface $translator
     ) {}
-
 
 
     /**
@@ -45,7 +42,6 @@ final class TagController extends AbstractController
      *
      * @return Response HTTP response
      */
-
     #[Route(
         '/tag_list',
         name: 'tag_list',
@@ -59,7 +55,6 @@ final class TagController extends AbstractController
     }
 
 
-
     /**
      * Creates a new tag.
      *
@@ -67,7 +62,6 @@ final class TagController extends AbstractController
      *
      * @return Response Redirect response to question view
      */
-
     #[Route(
         '/create',
         name: 'tag_new',
@@ -85,7 +79,7 @@ final class TagController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.success.new_category')
+                $this->translator->trans('message.tag_created_successfully')
             );
 
             return $this->redirectToRoute('tag_list', [], Response::HTTP_SEE_OTHER);
@@ -105,7 +99,6 @@ final class TagController extends AbstractController
      *
      * @return Response HTTP response
      */
-
     #[Route(
         '/{id}/edit',
         name: 'tag_edit',
@@ -129,7 +122,7 @@ final class TagController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.edited_successfully')
+                $this->translator->trans('message.tag_edited_successfully')
             );
 
             return $this->redirectToRoute('tag_list');
@@ -146,16 +139,14 @@ final class TagController extends AbstractController
     }
 
 
-
     /**
-     * Deletes a category.
+     * Deletes a tag.
      *
      * @param Request  $request  HTTP request
      * @param Tag      $tag      Tag entity
      *
      * @return Response Redirect or rendered confirmation page
      */
-
     #[Route(
         '/{id}/delete',
         name: 'tag_delete',
@@ -177,7 +168,7 @@ final class TagController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.deleted_successfully')
+                $this->translator->trans('message.tag_deleted_successfully')
             );
 
             return $this->redirectToRoute('tag_list');

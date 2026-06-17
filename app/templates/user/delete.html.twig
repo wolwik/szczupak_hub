@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ 'title.tag_delete'|trans }}
+    {{ 'title.user_delete'|trans }}
 {% endblock %}
 
 {% block body %}
@@ -17,11 +17,11 @@
                     <div class="card-body p-4">
 
                     <h3 class="text-danger mb-3">
-                        {{ 'title.tag_delete'|trans }}
+                        {{ 'title.user_delete'|trans }} {{ user.email }}
                     </h3>
 
                     <p class="mb-4 text-muted">
-                        {{ 'message.delete_confirm'|trans }}
+                        {{ 'label.irreversible_action'|trans }}
                     </p>
 
 
@@ -31,7 +31,7 @@
                     <div class="d-flex justify-content-between align-items-center mt-4">
 
                         <a href="{{ path('account_index') }}" class="btn btn-outline-secondary btn-sm">
-                            Anuluj
+                            {{ 'label.back'|trans }}
                         </a>
 
                         {{ form_widget(form.delete, {

@@ -31,7 +31,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class UserController extends AbstractController
 {
-
     /**
      * Constructor.
      *
@@ -40,14 +39,12 @@ final class UserController extends AbstractController
      * @param UserRepository       $userRepository   User repository
      * @param QuestionService      $questionService  Question service
      */
-
     public function __construct(
         private readonly UserService $userService,
         private readonly TranslatorInterface $translator,
         private readonly UserRepository $userRepository,
         private readonly QuestionService $questionService,
     ) {}
-
 
 
     /**
@@ -150,7 +147,6 @@ final class UserController extends AbstractController
     }
 
 
-
     /**
      * Edits currently logged-in user's data.
      *
@@ -182,7 +178,7 @@ final class UserController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.edited_successfully')
+                $this->translator->trans('message.user_edited_successfully')
             );
 
             return $this->redirectToRoute('account_index');
@@ -193,7 +189,6 @@ final class UserController extends AbstractController
         ]);
 
     }
-
 
 
     /**
@@ -223,7 +218,7 @@ final class UserController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.edited_successfully')
+                $this->translator->trans('message.user_edited_successfully')
             );
 
             return $this->redirectToRoute('user_list');
@@ -233,7 +228,6 @@ final class UserController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
 
 
     /**
@@ -262,7 +256,7 @@ final class UserController extends AbstractController
             throw new \LogicException();
         }
 
-        $form = $this->createForm(AccountDeleteType::class);
+        $form = $this->createForm(UserDeleteType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -275,7 +269,7 @@ final class UserController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.deleted_successfully')
+                $this->translator->trans('message.user_deleted_successfully')
             );
 
             return $this->redirectToRoute('app_login');
@@ -286,7 +280,6 @@ final class UserController extends AbstractController
             'user' => $user,
         ]);
     }
-
 
 
     /**
@@ -324,7 +317,7 @@ final class UserController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.deleted_successfully')
+                $this->translator->trans('message.user_deleted_successfully')
             );
 
             return $this->redirectToRoute('user_list');
@@ -333,10 +326,10 @@ final class UserController extends AbstractController
 
         return $this->render('user/delete.html.twig', [
             'form' => $form->createView(),
+            'user' => $user,
         ]);
 
     }
-
 
 
     /**
@@ -363,12 +356,11 @@ final class UserController extends AbstractController
 
         $this->addFlash(
             'success',
-            $this->translator->trans('message.edited_successfully')
+            $this->translator->trans('message.admin_permissions_granted')
         );
 
         return $this->redirectToRoute('user_list');
     }
-
 
 
     /**
@@ -401,7 +393,7 @@ final class UserController extends AbstractController
 
         $this->addFlash(
             'success',
-            $this->translator->trans('message.removed_successfully')
+            $this->translator->trans('message.admin_permissions_removed')
         );
 
         return $this->redirectToRoute('user_list');
@@ -432,7 +424,7 @@ final class UserController extends AbstractController
 
         $this->addFlash(
             'success',
-            $this->translator->trans('message.blocked_successfully')
+            $this->translator->trans('message.user_blocked_successfully')
         );
 
         return $this->redirectToRoute('user_list');
@@ -462,7 +454,7 @@ final class UserController extends AbstractController
 
         $this->addFlash(
             'success',
-            $this->translator->trans('message.unblocked_successfully')
+            $this->translator->trans('message.user_unblocked_successfully')
         );
 
         return $this->redirectToRoute('user_list');

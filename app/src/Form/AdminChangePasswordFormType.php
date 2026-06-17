@@ -22,6 +22,7 @@ class AdminChangePasswordFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('newPassword', PasswordType::class, [
+            'label' => 'label.new_password',
             'mapped' => false, // dajemy bo pole nie istnieje w encji, to dane do przetworzenia (zahashowania)
         ]);
     }

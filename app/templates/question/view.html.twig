@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    View question
+    {{ 'title.question_view'|trans }}
 {% endblock %}
 
 {% block body %}
@@ -43,7 +43,7 @@
                             {% if question.author %}
                                 <span class="text-primary fw-bold">{{ question.author.nickname}}</span>
                             {% else %}
-                                <span class="text-muted">[ deleted user ]</span>
+                                <span class="text-muted">{{ 'label.deleted_user'|trans }}</span>
                             {% endif %}
 
                             {% if question.author %}
@@ -61,7 +61,7 @@
                                 {{ tag.slug }}
                             </span>
                             {% else %}
-                                <span class="text-muted">brak tagów</span>
+                                <span class="text-muted">{{ 'label.no_tags'|trans }}</span>
                             {% endfor %}
                         </div>
 
@@ -80,13 +80,13 @@
 
                     {% if is_granted('QUESTION_EDIT', question) %}
                         <a href="{{ url('question_edit', {id: question.id}) }}" class="btn btn-outline-primary btn-sm">
-                            Edit
+                            {{ 'label.edit'|trans }}
                         </a>
                     {% endif %}
 
                     {% if is_granted('QUESTION_DELETE', question) %}
                         <a href="{{ url('question_delete', {id: question.id}) }}" class="btn btn-outline-danger btn-sm">
-                            Delete
+                            {{ 'label.delete'|trans }}
                         </a>
                     {% endif %}
                 </div>
@@ -102,10 +102,10 @@
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
 
-                    <h4 class="mb-4">Odpowiedzi</h4>
+                    <h4 class="mb-4">{{ 'label.answers'|trans }}</h4>
 
                     {% if question.answers is empty %}
-                        <p class="text-muted">Brak odpowiedzi</p>
+                        <p class="text-muted">{{ 'label.no_answers'|trans }}</p>
                     {% else %}
 
                         {% for answer in question.answers %}
@@ -143,7 +143,7 @@
                                                 {% if answer.author %}
                                                     <span class="text-primary fw-bold">{{ answer.author.nickname}}</span>
                                                 {% else %}
-                                                    <span class="text-muted">[ deleted user ]</span>
+                                                    <span class="text-muted">{{ 'label.deleted_user'|trans }}</span>
                                                 {% endif %}
 
                                                 {% if answer.author %}
@@ -164,7 +164,7 @@
 
                                     {% if answer.updatedAt %}
                                         <div class="text-muted small">
-                                            Edytowano: {{ answer.updatedAt|date('Y-m-d H:i') }}
+                                            {{ 'label.updated'|trans }} {{ answer.updatedAt|date('Y-m-d H:i') }}
                                         </div>
                                     {% endif %}
 
@@ -173,7 +173,7 @@
                                 <!-- BEST BADGE -->
                                 {% if isBest %}
                                     <span class="badge bg-success mb-2">
-                                    Najlepsza odpowiedź
+                                    {{ 'label.best_answer'|trans }}
                                 </span>
                                 {% endif %}
 
@@ -195,23 +195,18 @@
                                     {% if is_granted('ANSWER_EDIT', answer) %}
                                         <a href="{{ url('answer_edit', {id: answer.id}) }}"
                                            class="btn btn-sm btn-outline-primary">
-                                            Edytuj
+                                            {{ 'label.edit'|trans }}
                                         </a>
                                     {% endif %}
 
                                     {% if is_granted('ANSWER_DELETE', answer) %}
                                         <a href="{{ url('answer_delete', {id: answer.id}) }}"
                                            class="btn btn-sm btn-outline-danger">
-                                            Usuń
+                                            {{ 'label.delete'|trans }}
                                         </a>
                                     {% endif %}
 
-                                    {% if is_granted('ANSWER_MARK_AS_BEST', answer) %}
-                                        <a href="{{ url('answer_best', {id: answer.id}) }}"
-                                           class="btn btn-sm btn-outline-success">
-                                            Oznacz jako najlepsza
-                                        </a>
-                                    {% endif %}
+
 
                                 </div>
 
@@ -231,7 +226,7 @@
 
                     {% if app.user %}
 
-                        <h5 class="mb-3">Dodaj odpowiedź</h5>
+                        <h5 class="mb-3">{{ 'label.answer_add'|trans }}</h5>
 
                         {{ form_errors(answerForm) }}
 
@@ -243,11 +238,11 @@
                         {{ form_widget(answerForm) }}
 
                         <p class="text-muted p-block">
-                            Możesz użyć formatu markdown!
+                            {{ 'label.markdown_info'|trans }}
                         </p>
 
                         <button type="submit" class="btn btn-primary mt-3">
-                            Dodaj odpowiedź
+                            {{ 'label.publish'|trans }}
                         </button>
 
 
@@ -258,7 +253,7 @@
                     {% else %}
 
                         <p class="text-muted mb-0">
-                            <a href="{{ url('app_login') }}">Zaloguj </a> lub <a href="{{ url('register') }}">zarejestruj</a> się, aby dodać odpowiedź.
+                            <a href="{{ url('app_login') }}">{{ 'label.login'|trans }}</a>{{ 'label.or'|trans }}<a href="{{ url('register') }}">{{ 'label.register'|trans }}</a>{{ 'label.to_answer'|trans }}
                         </p>
 
                     {% endif %}
@@ -269,7 +264,7 @@
 
         {% else %}
 
-            <a href="{{ path('question_publish', {id: question.id}) }}" class="btn btn-success btn mb-4">Opublikuj</a>
+            <a href="{{ path('question_publish', {id: question.id}) }}" class="btn btn-success btn mb-4">{{ 'label.publish'|trans }}</a>
 
         {% endif %}
 

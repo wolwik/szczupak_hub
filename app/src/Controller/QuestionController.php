@@ -30,7 +30,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class QuestionController extends AbstractController
 {
-
     /**
      * Constructor.
      *
@@ -46,7 +45,6 @@ final class QuestionController extends AbstractController
         private readonly CategoryRepository $categoryRepository,
         private readonly TagService $tagService,
     ) {}
-
 
 
     /**
@@ -82,9 +80,8 @@ final class QuestionController extends AbstractController
     }
 
 
-
     /**
-     * View action.
+     * Single question's view.
      *
      * @param Question $question Question entity
      *
@@ -113,9 +110,8 @@ final class QuestionController extends AbstractController
     }
 
 
-
     /**
-     * Create a new question.
+     * Creates a new question.
      *
      * @param Request $request HTTP request
      *
@@ -152,7 +148,7 @@ final class QuestionController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.created_successfully')
+                $this->translator->trans('message.question_created_successfully')
             );
 
             // pytanie najpierw tworzone jest jako szkic. Odsyłamy na konto, gdzie można je opublikować:
@@ -164,7 +160,6 @@ final class QuestionController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
 
 
     /**
@@ -191,16 +186,15 @@ final class QuestionController extends AbstractController
 
         $this->addFlash(
             'success',
-            $this->translator->trans('message.published_successfully')
+            $this->translator->trans('message.question_published_successfully')
         );
 
         return $this->redirectToRoute('question_view', ['id' => $question->getId()]);
     }
 
 
-
     /**
-     * Edits a question.
+     * Edits question.
      *
      * @param Request  $request  HTTP request
      * @param Question $question Question entity
@@ -259,7 +253,7 @@ final class QuestionController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.edited_successfully')
+                $this->translator->trans('message.question_edited_successfully')
             );
 
             return $this->redirectToRoute('question_view', ['id' => $question->getId()]);
@@ -274,7 +268,6 @@ final class QuestionController extends AbstractController
             ]
         );
     }
-
 
 
     /**
@@ -309,7 +302,7 @@ final class QuestionController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.deleted_successfully')
+                $this->translator->trans('message.question_deleted_successfully')
             );
 
             return $this->redirectToRoute('question_list');

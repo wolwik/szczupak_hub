@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello QuestionController!{% endblock %}
+{% block title %}{{ 'title.question_list'|trans }}{% endblock %}
 
 {% block body %}
 
@@ -19,17 +19,17 @@
 
                         {% if app.user %}
                             <a href="{{ url('question_create') }}" class="btn btn-success btn mb-4">
-                                Zadaj pytanie
+                                {{ 'label.add_question'|trans }}
                             </a>
                         {% else %}
 
                             <div class="card shadow-sm mb-4">
                                 <div class="card-body bg-warning p-3">
 
-                                    <a href="{{ url('app_login') }}" class="text-decoration-underline">Zaloguj</a>
-                                    lub
-                                    <a href="{{ url('register') }}" class="text-decoration-underline">zarejestruj</a>
-                                    aby zadać pytanie!
+                                    <a href="{{ url('app_login') }}" class="text-decoration-underline">{{ 'label.login'|trans }}</a>
+                                    {{ 'label.or'|trans }}
+                                    <a href="{{ url('register') }}" class="text-decoration-underline">{{ 'label.register'|trans }}</a>
+                                    {{ 'label.to_ask'|trans }}
 
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                                                 {% if question.author %}
                                                     <span class="text-primary fw-bold">{{ question.author.nickname }}</span>
                                                 {% else %}
-                                                    <span class="text-muted">[ deleted user ]</span>
+                                                    <span class="text-muted">{{ 'label.deleted_user'|trans }}</span>
                                                 {% endif %}
                                             </p>
 
@@ -98,7 +98,7 @@
 
                                             {% if question.updatedAt %}
                                                 <p class="text-muted small">
-                                                (edytowane {{ question.updatedAt|date('Y-m-d H:i') }})
+                                                ({{ 'label.updated'|trans }} {{ question.updatedAt|date('Y-m-d H:i') }})
                                             </p>
                                             {% endif %}
 
@@ -122,7 +122,7 @@
                                                 {{ tag.slug }}
                                             </a>
                                         {% else %}
-                                            <span class="text-muted small">brak tagów</span>
+                                            <span class="text-muted small">{{ 'label.no_tags' }}</span>
                                         {% endfor %}
 
                                     </div>
@@ -154,13 +154,13 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
 
-                        <h5 class="mb-3">Kategorie</h5>
+                        <h5 class="mb-3">{{ 'label.categories'|trans }}</h5>
 
                         <ul class="list-unstyled gap-2 d-flex flex-wrap">
 
                             <li class="mb-2">
                                 <a href="{{ path('question_list') }}" class="btn btn-sm btn-outline-info text-decoration-none">
-                                    wszystkie
+                                    {{ 'label.all'|trans }}
                                 </a>
                             </li>
 
@@ -180,10 +180,10 @@
                 <div class="card shadow-sm mt-4">
                     <div class="card-body">
 
-                        <h5>Cytat dnia</h5>
+                        <h5>{{ 'label.quote_title'|trans }}</h5>
                         <figure>
                             <blockquote class="blockquote">
-                                <p>"Cierpliwość to nie cnota, to jest podstawowy sprzęt wędkarski."</p>
+                                <p>{{ 'label.quote'|trans }}</p>
                             </blockquote>
                             <figcaption class="blockquote-footer">
                                 SandaczHunter3000 <cite title="Source Title">SPŁAWIK i GRUNT - Postępowy Portal Wędkarski</cite>

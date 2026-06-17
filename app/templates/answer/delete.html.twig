@@ -17,21 +17,19 @@
                     <div class="card-body p-4">
 
                         <h3 class="text-danger mb-3">
-                            Usuń odpowiedź
+                            {{ 'label.delete_answer'|trans }}
                         </h3>
 
                         <p class="mb-4 text-muted">
-                            Ta operacja jest nieodwracalna. Odpowiedź zostanie trwale usunięta.
+                            {{ 'label.irreversible_action'|trans }}
                         </p>
-
-
 
                         {{ form_start(form) }}
 
                         <div class="d-flex justify-content-between align-items-center mt-4">
 
                             <a href="{{ path('question_list') }}" class="btn btn-outline-secondary btn-sm">
-                                Anuluj
+                                {{ 'label.back'|trans }}
                             </a>
 
                             {{ form_widget(form.delete, {

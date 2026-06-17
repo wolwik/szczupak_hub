@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User index{% endblock %}
+{% block title %}{{ 'title.user_list'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>User index</h1>
+    <h1>{{ 'label.user_list'|trans }}</h1>
 
     <table class="table">
         <thead>
         <tr>
-            <th>Id</th>
-            <th>Nickname</th>
-            <th>Email</th>
-            <th>Role</th>
+            <th>{{ 'label.id'|trans }}</th>
+            <th>{{ 'label.nickname'|trans }}</th>
+            <th>{{ 'label.email'|trans }}</th>
+            <th>{{ 'label.roles'|trans }}</th>
         </tr>
         </thead>
         <tbody>
@@ -29,20 +29,20 @@
                 </td>
 
                 <td>
-                    <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-sm btn-primary">edit</a>
-                    <a href="{{ path('user_delete', {'id': user.id}) }}" class="btn btn-sm btn-danger">delete</a>
-                    <a href="{{ path('user_change_password', {'id': user.id}) }}" class="btn btn-sm btn-warning">change password</a>
+                    <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-sm btn-primary">{{ 'label.edit'|trans }}</a>
+                    <a href="{{ path('user_delete', {'id': user.id}) }}" class="btn btn-sm btn-danger">{{ 'label.delete'|trans }}</a>
+                    <a href="{{ path('user_change_password', {'id': user.id}) }}" class="btn btn-sm btn-warning">{{ 'label.change_password'|trans }}</a>
 
                     {% if user.isAdmin %}
-                        <a href="{{ path('user_remove_admin', {'id': user.id}) }}" class="btn btn-sm btn-info">remove admin</a>
+                        <a href="{{ path('user_remove_admin', {'id': user.id}) }}" class="btn btn-sm btn-info">{{ 'label.remove_admin'|trans }}</a>
                     {% else %}
-                        <a href="{{ path('user_make_admin', {'id': user.id}) }}" class="btn btn-sm btn-success">make admin</a>
+                        <a href="{{ path('user_make_admin', {'id': user.id}) }}" class="btn btn-sm btn-success">{{ 'label.make_admin'|trans }}</a>
                     {% endif %}
 
                     {% if user.isBlocked %}
-                        <a href="{{ path('user_unblock_admin', {'id': user.id}) }}" class="btn btn-sm btn-success">unblock</a>
+                        <a href="{{ path('user_unblock_admin', {'id': user.id}) }}" class="btn btn-sm btn-success">{{ 'label.unblock'|trans }}</a>
                     {% else %}
-                        <a href="{{ path('user_block_admin', {'id': user.id}) }}" class="btn btn-sm btn-dark">block</a>
+                        <a href="{{ path('user_block_admin', {'id': user.id}) }}" class="btn btn-sm btn-dark">{{ 'label.block'|trans }}</a>
                     {% endif %}
 
                 </td>

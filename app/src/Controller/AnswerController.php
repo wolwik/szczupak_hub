@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-
 /**
  * Class AnswerController.
  */
@@ -26,7 +25,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class AnswerController extends AbstractController
 {
-
     /**
      * Constructor.
      *
@@ -38,28 +36,6 @@ final class AnswerController extends AbstractController
         private readonly AnswerService $answerService,
         private readonly TranslatorInterface $translator
     ) {}
-
-
-
-    /**
-     * Displays list of answers (placeholder view, not used actutally).
-     *
-     * @return Response HTTP response
-     */
-
-    #[Route(
-        '/answer_list',
-        name: 'answer_list',
-        methods: ['GET']
-    )]
-
-    public function index(): Response
-    {
-        return $this->render('answer/index.html.twig', [
-            'controller_name' => 'AnswerController',
-        ]);
-    }
-
 
 
     /**
@@ -93,7 +69,7 @@ final class AnswerController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.created_successfully')
+                $this->translator->trans('message.answer_created_successfully')
             );
 
         }
@@ -103,7 +79,6 @@ final class AnswerController extends AbstractController
     }
 
     // nie renderujemy twiga, bo to jest w twigu renderowanym przez Question
-
 
 
     /**
@@ -139,7 +114,7 @@ final class AnswerController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.edited_successfully')
+                $this->translator->trans('message.answer_edited_successfully')
             );
 
             return $this->redirectToRoute('question_view', ['id' => $answer->getQuestion()->getId()]); // pobranie id pytania
@@ -150,7 +125,6 @@ final class AnswerController extends AbstractController
             'answer' => $answer,
         ]);
     }
-
 
 
     /**
@@ -185,7 +159,7 @@ final class AnswerController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.deleted_successfully')
+                $this->translator->trans('message.answer_deleted_successfully')
             );
 
             return $this->redirectToRoute('question_view', ['id' => $answer->getQuestion()->getId()]);
@@ -196,7 +170,6 @@ final class AnswerController extends AbstractController
             'question' => $answer,
         ]);
     }
-
 
 
     /**
@@ -222,12 +195,11 @@ final class AnswerController extends AbstractController
 
         $this->addFlash(
             'success',
-            'Najlepsza odpowiedź została wybrana.'
+            $this->translator->trans('message.best_answer_selected')
         );
 
         return $this->redirectToRoute('question_view', ['id'=>$answer->getQuestion()->getId()]);
 
     }
-
 
 }

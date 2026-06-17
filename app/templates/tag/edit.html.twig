@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ 'title.tag_edit'|trans({'%id%': tag.id|default('')}) }}
+    {{ 'title.tag_edit'|trans }}
 {% endblock %}
 
 {% block body %}
@@ -24,11 +24,11 @@
                         <div class="d-flex justify-content-between align-items-center mt-4">
 
                             <a href="{{ url('tag_list') }}" class="btn btn-outline-secondary btn-sm">
-                                {{ 'action.back_to_list'|trans }}
+                                {{ 'label.back'|trans }}
                             </a>
 
                             <button type="submit" class="btn btn-primary">
-                                {{ 'action.save'|trans }}
+                                {{ 'label.save'|trans }}
                             </button>
 
                         </div>

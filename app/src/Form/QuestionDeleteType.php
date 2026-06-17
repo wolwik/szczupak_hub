@@ -27,7 +27,7 @@ class QuestionDeleteType extends AbstractType
                 'data' => 'DELETE',
             ])
             ->add('delete', SubmitType::class, [
-                'label' => 'action.delete',
+                'label' => 'label.delete',
             ]);
     }
 }

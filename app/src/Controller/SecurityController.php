@@ -24,17 +24,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SecurityController extends AbstractController
 {
-
     /**
      * Constructor.
      *
      * @param TranslatorInterface  $translator  Translator
      */
-
     public function __construct(
         private readonly TranslatorInterface $translator,
     ) {}
-
 
 
     /**
@@ -44,7 +41,6 @@ class SecurityController extends AbstractController
      *
      * @return Response HTTP response
      */
-
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -66,12 +62,10 @@ class SecurityController extends AbstractController
     }
 
 
-
     /**
      * Logout action.
      *
      */
-
     #[Route(
         path: '/logout',
         name: 'app_logout'
@@ -80,7 +74,6 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
-
 
 
     /**
@@ -95,7 +88,6 @@ class SecurityController extends AbstractController
      * @throws \LogicException When user is not authenticated
      * @throws \Exception When current password is invalid
      */
-
     #[Route(
         '/change-password',
         name: 'change_password'
@@ -134,14 +126,13 @@ class SecurityController extends AbstractController
                 $this->translator->trans('message.password_changed_successfully')
             );
 
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('account_index');
         }
 
         return $this->render('security/change_password.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
 
 
     /**
@@ -154,7 +145,6 @@ class SecurityController extends AbstractController
      *
      * @return Response HTTP response
      */
-
     #[Route(
         '/user/{id}/change-password',
         name: 'user_change_password',
@@ -183,7 +173,7 @@ class SecurityController extends AbstractController
 
             $this->addFlash(
                 'success',
-                'Hasło zostało zmienione'
+                $this->translator->trans('message.password_changed_successfully')
             );
 
             return $this->redirectToRoute('user_list');
@@ -193,7 +183,6 @@ class SecurityController extends AbstractController
             'form' => $form->createView(),
             'user' => $user,
         ]);
-
     }
 
 }

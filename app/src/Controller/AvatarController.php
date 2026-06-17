@@ -84,7 +84,7 @@ class AvatarController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.created_successfully')
+                $this->translator->trans('message.avatar_created_successfully')
             );
 
             return $this->redirectToRoute('account_index');
@@ -142,7 +142,7 @@ class AvatarController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.edited_successfully')
+                $this->translator->trans('message.avatar_edited_successfully')
             );
 
             return $this->redirectToRoute('account_index');
@@ -177,7 +177,10 @@ class AvatarController extends AbstractController
 
         $this->avatarService->delete($user);
 
-        $this->addFlash('success', 'Avatar usunięty');
+        $this->addFlash(
+            'success',
+            $this->translator->trans('message.avatar_deleted_successfully')
+        );
 
         return $this->redirectToRoute('account_index');
     }

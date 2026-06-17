@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+    {{ 'title.tag_add'|trans }}
+{% endblock %}
+
 {% block body %}
 
     <div class="container py-4">
@@ -12,16 +16,16 @@
 
                     <div class="card-body p-4">
 
-                        <h3 class="mb-4">Create tag</h3>
+                        <h3 class="mb-4">{{ 'label.tag_add'|trans }}</h3>
 
                         {{ form_start(form) }}
                         {{ form_widget(form) }}
 
                         <div class="d-flex justify-content-between align-items-center mt-4">
 
-                            <a href="{{ path('tag_list') }}" class="btn btn-outline-secondary btn-sm">Wróć</a>
+                            <a href="{{ path('tag_list') }}" class="btn btn-outline-secondary btn-sm">{{ 'label.back'|trans }}</a>
 
-                       `    <button type="submit" class="btn btn-primary">Dodaj</button>
+                       `    <button type="submit" class="btn btn-primary">{{ 'label.save'|trans }}</button>
 
                         </div>
 

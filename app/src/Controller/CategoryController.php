@@ -25,7 +25,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[IsGranted('ROLE_ADMIN')]
 final class CategoryController extends AbstractController
 {
-
     /**
      * Constructor.
      *
@@ -39,7 +38,6 @@ final class CategoryController extends AbstractController
         private readonly CategoryService $categoryService,
         private readonly TranslatorInterface $translator
     ) {}
-
 
 
     /**
@@ -60,7 +58,6 @@ final class CategoryController extends AbstractController
             'categories' => $categoryRepository->findAll(),
         ]);
     }
-
 
     /**
      * Creates a new category.
@@ -88,7 +85,7 @@ final class CategoryController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.success.new_category')
+                $this->translator->trans('message.category_created_successfully')
             );
 
             return $this->redirectToRoute('category_list', [], Response::HTTP_SEE_OTHER);
@@ -99,30 +96,6 @@ final class CategoryController extends AbstractController
             'form' => $form,
         ]);
     }
-
-
-
-    /**
-     * Shows chosen category.
-     *
-     * @param Category $category HTTP request
-     *
-     * @return Response Rendered page or redirect response
-     */
-
-    #[Route(
-        '/{id}/show',
-        name: 'category_show',
-        methods: ['GET']
-    )]
-
-    public function show(Category $category): Response
-    {
-        return $this->render('category/show.html.twig', [
-            'category' => $category,
-        ]);
-    }
-
 
 
     /**
@@ -157,7 +130,7 @@ final class CategoryController extends AbstractController
 
             $this->addFlash(
                 'success',
-                $this->translator->trans('message.edited_successfully')
+                $this->translator->trans('message.category_edited_successfully')
             );
 
             return $this->redirectToRoute('category_list');
@@ -168,7 +141,6 @@ final class CategoryController extends AbstractController
             'category' => $category
         ]);
     }
-
 
 
     /**
@@ -197,9 +169,15 @@ final class CategoryController extends AbstractController
             $deleted = $this->categoryService->delete($category);
 
             if ($deleted) {
-                $this->addFlash('success', 'Kategoria została usunięta.');
+                $this->addFlash(
+                    'success',
+                    $this->translator->trans('message.category_deleted_successfully')
+                );
             } else {
-                $this->addFlash('warning', 'Nie można usunąć kategorii, ponieważ ma przypisane pytania.');
+                $this->addFlash(
+                    'warning',
+                    $this->translator->trans('message.category_deleted_unsuccessfully')
+                );
             }
 
             return $this->redirectToRoute('category_list');
@@ -210,6 +188,5 @@ final class CategoryController extends AbstractController
             'category' => $category,
         ]);
     }
-
 
 }

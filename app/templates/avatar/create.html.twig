@@ -12,7 +12,7 @@
 
                     <div class="card-body p-4">
 
-                        <h3 class="mb-4">Add avatar</h3>
+                        <h3 class="mb-4">{{ 'label.add_avatar'|trans }}</h3>
 
                         {{ form_start(form) }}
                         {{ form_widget(form) }}
@@ -21,7 +21,7 @@
 
                             <a href="{{ path('account_index') }}" class="btn btn-outline-secondary btn-sm">Wróć</a>
 
-                            <button type="submit" class="btn btn-primary">Dodaj</button>
+                            <button type="submit" class="btn btn-primary">{{ 'label.save'|trans }}</button>
 
                         </div>
 

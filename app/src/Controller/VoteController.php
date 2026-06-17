@@ -49,10 +49,12 @@ final class VoteController extends AbstractController
 
         $this->voteService->vote($answer, $user);
 
+        /* niepotrzebne
         $this->addFlash(
             'success',
             $this->translator->trans('message.voted_successfully')
         );
+        */
 
         return $this->redirectToRoute('question_view', [
             'id' => $answer->getQuestion()->getId()

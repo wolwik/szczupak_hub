@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Category index{% endblock %}
+{% block title %}{{ 'title.category_list'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Category index</h1>
+    <h1>{{ 'label.category_list'|trans }}</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Slug</th>
-                <th>actions</th>
+                <th>{{ 'label.id'|trans }}</th>
+                <th>{{ 'label.name'|trans }}</th>
+                <th>{{ 'label.slug'|trans }}</th>
+                <th>{{ 'label.actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -21,18 +21,17 @@
                 <td>{{ category.name }}</td>
                 <td>{{ category.slug }}</td>
                 <td>
-                    <a href="{{ path('category_show', {'id': category.id}) }}" class="btn btn-sm btn-success">show</a>
-                    <a href="{{ path('category_edit', {'id': category.id}) }}" class="btn btn-sm btn-primary">edit</a>
-                    <a href="{{ path('category_delete', {'id': category.id}) }}" class="btn btn-sm btn-danger">delete</a>
+                    <a href="{{ path('category_edit', {'id': category.id}) }}" class="btn btn-sm btn-primary">{{ 'label.edit'|trans }}</a>
+                    <a href="{{ path('category_delete', {'id': category.id}) }}" class="btn btn-sm btn-danger">{{ 'label.delete'|trans }}</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="4">{{ 'label.no_records'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('category_new') }}" class="btn btn-success btn mb-4">Create new</a>
+    <a href="{{ path('category_new') }}" class="btn btn-success btn mb-4">{{ 'label.create_new'|trans }}</a>
 {% endblock %}
