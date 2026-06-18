@@ -104,7 +104,6 @@ class Question
     #[ORM\JoinTable(name: 'questions_tags')]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    #[Assert\Valid]
     private Collection $tags;
 
     /**

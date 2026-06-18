@@ -66,7 +66,6 @@ class Tag
      * @var Collection<int, Question>
      */
     #[ORM\ManyToMany(targetEntity: Question::class, mappedBy: 'tags')]
-    #[Assert\Valid]
     private Collection $questions;
 
     /**
@@ -94,6 +93,7 @@ class Tag
      *
      * @return $this
      */
+
     public function setId(int $id): static
     {
         $this->id = $id;
