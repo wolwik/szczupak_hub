@@ -1,7 +1,12 @@
 <?php
 
 /**
- * Avatar service.
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace App\Service;
@@ -27,12 +32,9 @@ class AvatarService implements AvatarServiceInterface
      * @param FileUploadServiceInterface $fileUploadService File upload service
      * @param Filesystem                 $filesystem        Filesystem component
      */
-    public function __construct(
-        string $targetDirectory,
-        AvatarRepository $avatarRepository,
-        FileUploadServiceInterface $fileUploadService,
-        Filesystem $filesystem
-    ) {}
+    public function __construct(private readonly string $targetDirectory, private readonly AvatarRepository $avatarRepository, private readonly FileUploadServiceInterface $fileUploadService, private readonly Filesystem $filesystem)
+    {
+    }
 
     /**
      * Update avatar.
@@ -47,7 +49,7 @@ class AvatarService implements AvatarServiceInterface
 
         if ($oldFilename) {
             $this->filesystem->remove(
-                $this->targetDirectory . '/' . $oldFilename
+                $this->targetDirectory.'/'.$oldFilename
             );
         }
 
@@ -57,7 +59,6 @@ class AvatarService implements AvatarServiceInterface
         $avatar->setUser($user);
 
         $this->avatarRepository->save($avatar);
-
     }
 
     /**
@@ -93,7 +94,7 @@ class AvatarService implements AvatarServiceInterface
 
         if ($filename) {
             $this->filesystem->remove(
-                $this->targetDirectory . '/' . $filename
+                $this->targetDirectory.'/'.$filename
             );
         }
 
@@ -101,5 +102,4 @@ class AvatarService implements AvatarServiceInterface
 
         $this->avatarRepository->delete($avatar);
     }
-
 }

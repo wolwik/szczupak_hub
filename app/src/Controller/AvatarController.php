@@ -1,6 +1,12 @@
 <?php
+
 /**
- * Avatar controller.
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace App\Controller;
@@ -19,7 +25,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Class AvatarController.
  */
-#[Route('/avatar')]
+#[\Symfony\Component\Routing\Attribute\Route('/avatar')]
 class AvatarController extends AbstractController
 {
     /**
@@ -28,10 +34,9 @@ class AvatarController extends AbstractController
      * @param AvatarServiceInterface $avatarService Avatar service
      * @param TranslatorInterface    $translator    Translator
      */
-    public function __construct(
-        private readonly AvatarServiceInterface $avatarService,
-        private readonly TranslatorInterface $translator
-    ) {}
+    public function __construct(private readonly AvatarServiceInterface $avatarService, private readonly TranslatorInterface $translator)
+    {
+    }
 
     /**
      * Create action.
@@ -40,14 +45,13 @@ class AvatarController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route(
-        '/create',
-        name: 'avatar_create',
-        methods: 'GET|POST'
-    )] public function create(Request $request): Response
+    #[\Symfony\Component\Routing\Attribute\Route('/create', name: 'avatar_create', methods: 'GET|POST')]
+    public function create(Request $request): Response
     {
-        /** @var User $user */
         $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new \LogicException();
+        }
 
         if ($user->getAvatar()) {
             return $this->redirectToRoute('avatar_edit');
@@ -84,24 +88,20 @@ class AvatarController extends AbstractController
         );
     }
 
-
     /**
      * Edit action.
      *
      * @param Request $request HTTP request
-     * @param Avatar  $avatar  Avatar entity
      *
      * @return Response HTTP response
      */
-    #[Route(
-        '/edit',
-        name: 'avatar_edit',
-        methods: 'GET|PUT'
-    )]
+    #[\Symfony\Component\Routing\Attribute\Route('/edit', name: 'avatar_edit', methods: 'GET|PUT')]
     public function edit(Request $request): Response
     {
-        /** @var User $user */
         $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new \LogicException();
+        }
 
         $avatar = $user->getAvatar();
 
@@ -145,23 +145,18 @@ class AvatarController extends AbstractController
         );
     }
 
-
     /**
      * Delete action.
      *
-     * @param Request $request HTTP request
-     * @param Avatar  $avatar  Avatar entity
-     *
      * @return Response HTTP response
      */
-    #[Route(
-        '/delete',
-        name: 'avatar_delete',
-        methods: 'GET|PUT|POST'
-    )]
+    #[\Symfony\Component\Routing\Attribute\Route('/delete', name: 'avatar_delete', methods: 'GET|PUT|POST')]
     public function delete(): Response
     {
         $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new \LogicException();
+        }
 
         $this->avatarService->delete($user);
 
@@ -172,6 +167,4 @@ class AvatarController extends AbstractController
 
         return $this->redirectToRoute('account_index');
     }
-
-
 }

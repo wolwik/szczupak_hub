@@ -1,8 +1,16 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Repository;
 
-use App\Entity\Answer;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,24 +30,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      *
      * @param ManagerRegistry $registry Manager registry
      */
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
     }
-
 
     /**
      * Save entity.
      *
      * @param User $user User entity
      */
-
-    public function save(User $user): void {
+    public function save(User $user): void
+    {
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
-
 
     /**
      * Finds user by email.
@@ -48,7 +53,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      *
      * @return User User entity
      */
-
     public function findByEmail(string $email): ?User
     {
         return $this->createQueryBuilder('u')
@@ -58,7 +62,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getOneOrNullResult();
     }
 
-
     /**
      * Finds user by nickname.
      *
@@ -66,7 +69,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      *
      * @return User User entity
      */
-
     public function findByNickname(string $nickname): ?User
     {
         return $this->createQueryBuilder('u')
@@ -76,13 +78,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getOneOrNullResult();
     }
 
-
     /**
      * Finds every administrator.
      *
      * @return array Array of admins
      */
-
     public function findAdmins(): array
     {
         return $this->createQueryBuilder('u')
@@ -91,7 +91,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getResult();
     }
-
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
@@ -110,14 +109,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-
     /**
      * Delete entity.
      *
      * @param User $user  User entity
      * @param bool $flush Bool for deleting entity
      */
-
     public function delete(User $user, bool $flush = true): void
     {
         $this->getEntityManager()->remove($user);
@@ -127,7 +124,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
     }
 
-
     /**
      * Displays users in admin panel. The currently logged-in admin cannot do any actions on himself in this endpoint.
      *
@@ -135,7 +131,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      *
      * @return array Array of users
      */
-
     public function findAllExceptCurrentUser(int $userId): array
     {
         return $this->createQueryBuilder('u')
@@ -144,8 +139,4 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getResult();
     }
-
-
-
-
 }

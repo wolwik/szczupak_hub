@@ -1,7 +1,12 @@
 <?php
 
 /**
- * User entity.
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace App\Entity;
@@ -16,10 +21,12 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Class User.
+ */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'users')]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])] // to jest dla DB
-// to do ładnych komunikatów w formularzu:
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(
     fields: ['email'],
     message: 'Email is already taken'
@@ -28,8 +35,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     fields: ['nickname'],
     message: 'Nickname is already taken'
 )]
-
-
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
@@ -42,8 +47,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Email.
-     *
-     * @var string|null
      */
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Assert\NotBlank]
@@ -60,50 +63,61 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Hashed password.
-     *
-     * @var string|null
      */
     #[ORM\Column(type: 'string')]
     #[Assert\NotBlank]
     private ?string $password = null;
 
     /**
-     * Plain password
-     *
-     * @var string|null
+     * Plain password.
      */
-
-    private ?string $plainPassword;
+    private ?string $plainPassword = null;
 
     /**
+     * Questions collection.
+     *
      * @var Collection<int, Question>
      */
     #[ORM\OneToMany(targetEntity: Question::class, mappedBy: 'author')]
     private Collection $questions;
 
     /**
+     * Answers collection.
+     *
      * @var Collection<int, Answer>
      */
     #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'author')]
     private Collection $answers;
 
-    #[ORM\Column(length: 50, nullable: true, unique: true)] // tymczasowo zeby mysql sie nie wywalil na ryj
+    /**
+     * Nickname.
+     */
+    #[ORM\Column(length: 50, nullable: true, unique: true)]
     private ?string $nickname = null;
 
+    /**
+     * Is user blocked flag.
+     */
     #[ORM\Column(type: 'boolean')]
     private bool $isBlocked = false;
 
+    /**
+     * User avatar.
+     */
     #[ORM\OneToOne(mappedBy: 'user', targetEntity: Avatar::class)]
     private ?Avatar $avatar = null;
 
     /**
+     * Votes collection.
+     *
      * @var Collection<int, Vote>
      */
     #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'user')]
     private Collection $votes;
 
-
-
+    /**
+     * Constructor.
+     */
     public function __construct()
     {
         $this->questions = new ArrayCollection();
@@ -135,10 +149,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * Setter for email.
      *
      * @param string $email Email
+     *
+     * @return $this
      */
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -159,7 +176,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @see UserInterface
      *
-     * @return list<string>
+     * @return list<string> Roles list
      */
     public function getRoles(): array
     {
@@ -174,6 +191,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * Setter for roles.
      *
      * @param list<int, string> $roles Roles
+     *
+     * @return $this
      */
     public function setRoles(array $roles): static
     {
@@ -198,6 +217,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * Setter for password.
      *
      * @param string $password User password
+     *
+     * @return $this
      */
     public function setPassword(string $password): static
     {
@@ -218,13 +239,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Question>
+     * Getter for questions.
+     *
+     * @return Collection<int, Question> Questions collection
      */
     public function getQuestions(): Collection
     {
         return $this->questions;
     }
 
+    /**
+     * Adds a question.
+     *
+     * @param Question $question Question entity
+     *
+     * @return $this
+     */
     public function addQuestion(Question $question): static
     {
         if (!$this->questions->contains($question)) {
@@ -235,6 +265,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Removes a question.
+     *
+     * @param Question $question Question entity
+     *
+     * @return $this
+     */
     public function removeQuestion(Question $question): static
     {
         if ($this->questions->removeElement($question)) {
@@ -248,13 +285,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Answer>
+     * Getter for answers.
+     *
+     * @return Collection<int, Answer> Answers collection
      */
     public function getAnswers(): Collection
     {
         return $this->answers;
     }
 
+    /**
+     * Adds an answer.
+     *
+     * @param Answer $answer Answer entity
+     *
+     * @return $this
+     */
     public function addAnswer(Answer $answer): static
     {
         if (!$this->answers->contains($answer)) {
@@ -265,6 +311,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Removes an answer.
+     *
+     * @param Answer $answer Answer entity
+     *
+     * @return $this
+     */
     public function removeAnswer(Answer $answer): static
     {
         if ($this->answers->removeElement($answer)) {
@@ -277,11 +330,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Getter for nickname.
+     *
+     * @return string|null Nickname
+     */
     public function getNickname(): ?string
     {
         return $this->nickname;
     }
 
+    /**
+     * Setter for nickname.
+     *
+     * @param string $nickname Nickname
+     *
+     * @return $this
+     */
     public function setNickname(string $nickname): static
     {
         $this->nickname = $nickname;
@@ -289,12 +354,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Getter for plain password.
+     *
+     * @return string|null Plain password
+     */
     public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
 
-
+    /**
+     * Setter for plain password.
+     *
+     * @param string $password Plain password
+     *
+     * @return $this
+     */
     public function setPlainPassword(string $password): self
     {
         $this->plainPassword = $password;
@@ -302,11 +378,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Checks if the user is an admin.
+     *
+     * @return bool True if admin, false otherwise
+     */
     public function isAdmin(): bool
     {
         return in_array(UserRole::ROLE_ADMIN->value, $this->getRoles(), true);
     }
 
+    /**
+     * Promotes user to admin.
+     */
     public function promoteToAdmin(): void
     {
         if (!in_array(UserRole::ROLE_ADMIN->value, $this->roles, true)) {
@@ -314,30 +398,57 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
     }
 
+    /**
+     * Removes admin role from user.
+     */
     public function removeAdminRole(): void
     {
-        if (in_array(UserRole::ROLE_ADMIN->value, $this->roles)) {
+        if (in_array(UserRole::ROLE_ADMIN->value, $this->roles, true)) {
             $this->roles = array_values(array_diff($this->roles, [UserRole::ROLE_ADMIN->value]));
         }
     }
 
-
+    /**
+     * Checks if user is blocked.
+     *
+     * @return bool Blocked status
+     */
     public function getIsBlocked(): bool
     {
         return $this->isBlocked;
     }
 
+    /**
+     * Setter for blocked status.
+     *
+     * @param bool $isBlocked Blocked status flag
+     *
+     * @return $this
+     */
     public function setIsBlocked(bool $isBlocked): self
     {
         $this->isBlocked = $isBlocked;
+
         return $this;
     }
 
+    /**
+     * Getter for avatar.
+     *
+     * @return Avatar|null Avatar entity
+     */
     public function getAvatar(): ?Avatar
     {
         return $this->avatar;
     }
 
+    /**
+     * Setter for avatar.
+     *
+     * @param Avatar|null $avatar Avatar entity
+     *
+     * @return $this
+     */
     public function setAvatar(?Avatar $avatar): self
     {
         $this->avatar = $avatar;
@@ -346,13 +457,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Vote>
+     * Getter for votes.
+     *
+     * @return Collection<int, Vote> Votes collection
      */
     public function getVotes(): Collection
     {
         return $this->votes;
     }
 
+    /**
+     * Adds a vote.
+     *
+     * @param Vote $vote Vote entity
+     *
+     * @return $this
+     */
     public function addVote(Vote $vote): static
     {
         if (!$this->votes->contains($vote)) {
@@ -363,6 +483,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * Removes a vote.
+     *
+     * @param Vote $vote Vote entity
+     *
+     * @return $this
+     */
     public function removeVote(Vote $vote): static
     {
         if ($this->votes->removeElement($vote)) {
@@ -374,8 +501,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
-
-
-
 }

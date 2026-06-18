@@ -1,7 +1,12 @@
 <?php
 
 /**
- * Question service interface.
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace App\Contract;
@@ -18,9 +23,9 @@ interface QuestionServiceInterface
     /**
      * Get paginated list of questions.
      *
-     * @param int $page Page number
+     * @param int      $page       Page number
      * @param int|null $categoryId Category ID filter
-     * @param int|null $tagId Tag ID filter
+     * @param int|null $tagId      Tag ID filter
      *
      * @return PaginationInterface Pagination interface
      */

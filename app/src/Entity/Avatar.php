@@ -1,7 +1,12 @@
 <?php
 
 /**
- * Avatar entity.
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace App\Entity;
@@ -25,8 +30,6 @@ class Avatar
 {
     /**
      * Primary key.
-     *
-     * @var int|null
      */
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -35,22 +38,18 @@ class Avatar
 
     /**
      * User.
-     *
-     * @var User|null
      */
     #[ORM\OneToOne(inversedBy: 'avatar', targetEntity: User::class, fetch: 'EXTRA_LAZY')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[Assert\Type(User::class)]
-    private ?User $user;
+    private ?User $user = null;
 
     /**
      * Filename.
-     *
-     * @var string|null
      */
     #[ORM\Column(type: 'string', length: 191)]
     #[Assert\Type('string')]
-    private ?string $filename;
+    private ?string $filename = null;
 
     /**
      * Getter for Id.

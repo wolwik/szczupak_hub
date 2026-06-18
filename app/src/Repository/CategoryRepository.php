@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Repository;
 
 use App\Entity\Category;
@@ -18,25 +27,21 @@ class CategoryRepository extends ServiceEntityRepository
      *
      * @param ManagerRegistry $registry Manager registry
      */
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Category::class);
     }
-
 
     /**
      * Save entity.
      *
      * @param Category $category Category entity
      */
-
     public function save(Category $category): void
     {
         $this->getEntityManager()->persist($category);
         $this->getEntityManager()->flush();
     }
-
 
     /**
      * Delete entity.
@@ -44,7 +49,6 @@ class CategoryRepository extends ServiceEntityRepository
      * @param Category $category Category entity
      * @param bool     $flush    Bool for deleting entity
      */
-
     public function delete(Category $category, bool $flush = true): void
     {
         $this->getEntityManager()->remove($category);

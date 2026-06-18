@@ -1,7 +1,17 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Security\Voter;
 
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use App\Entity\Answer;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -31,8 +41,7 @@ final class AnswerVoter extends Voter
      *
      * @var string
      */
-    public const MARK_AS_BEST = "ANSWER_MARK_AS_BEST";
-
+    public const MARK_AS_BEST = 'ANSWER_MARK_AS_BEST';
 
     /**
      * Determines if this voter supports the attribute and subject.
@@ -45,9 +54,8 @@ final class AnswerVoter extends Voter
     protected function supports(string $attribute, mixed $subject): bool
     {
         return in_array($attribute, [self::EDIT, self::DELETE, self::MARK_AS_BEST])
-            && $subject instanceof \App\Entity\Answer;
+            && $subject instanceof Answer;
     }
-
 
     /**
      * Perform a single access check operation on a given attribute, subject and token.
@@ -59,11 +67,7 @@ final class AnswerVoter extends Voter
      *
      * @return bool Vote result
      */
-    protected function voteOnAttribute(
-        string         $attribute,
-        mixed          $subject,
-        TokenInterface $token
-    ): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $user = $token->getUser();
 
@@ -82,7 +86,6 @@ final class AnswerVoter extends Voter
             default => false,
         };
     }
-
 
     /**
      * Checks if user can edit answer.
@@ -103,7 +106,6 @@ final class AnswerVoter extends Voter
         return $answer->getAuthor() === $user;
     }
 
-
     /**
      * Checks if user can delete answer.
      *
@@ -122,7 +124,6 @@ final class AnswerVoter extends Voter
         // owner ma dostęp
         return $answer->getAuthor() === $user;
     }
-
 
     /**
      * Checks if user can mark answer as the best one.

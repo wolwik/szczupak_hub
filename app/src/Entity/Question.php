@@ -1,7 +1,12 @@
 <?php
 
 /**
- * Question entity.
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace App\Entity;
@@ -16,6 +21,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 #[ORM\Table(name: 'questions')]
 
+/**
+ * Class Question.
+ */
 class Question
 {
     /**
@@ -42,7 +50,6 @@ class Question
 
     /**
      * Question content.
-     *
      */
     #[ORM\Column(type: 'text')]
     #[Assert\Type('string')]
@@ -74,13 +81,7 @@ class Question
     /**
      * Answers collection.
      */
-    #[ORM\OneToMany(
-        mappedBy: 'question',
-        targetEntity: Answer::class,
-        fetch: 'EXTRA_LAZY',
-        cascade: ['remove'],
-        orphanRemoval: true)
-    ]
+    #[ORM\OneToMany(mappedBy: 'question', targetEntity: Answer::class, fetch: 'EXTRA_LAZY', cascade: ['remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['createdAt' => 'DESC'])]
     #[Assert\Valid]
     private Collection $answers;
@@ -122,19 +123,32 @@ class Question
     #[Assert\Type(Answer::class)]
     private ?Answer $bestAnswer = null;
 
-
-
+    /**
+     * Constructor.
+     */
     public function __construct()
     {
         $this->answers = new ArrayCollection();
         $this->tags = new ArrayCollection();
     }
 
+    /**
+     * Getter for ID.
+     *
+     * @return int|null Id
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * Setter for ID.
+     *
+     * @param int $id Id
+     *
+     * @return $this
+     */
     public function setId(int $id): static
     {
         $this->id = $id;
@@ -142,11 +156,23 @@ class Question
         return $this;
     }
 
+    /**
+     * Getter for title.
+     *
+     * @return string|null Title
+     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
+    /**
+     * Setter for title.
+     *
+     * @param string $title Title
+     *
+     * @return $this
+     */
     public function setTitle(string $title): static
     {
         $this->title = $title;
@@ -154,11 +180,23 @@ class Question
         return $this;
     }
 
+    /**
+     * Getter for content.
+     *
+     * @return string|null Content
+     */
     public function getContent(): ?string
     {
         return $this->content;
     }
 
+    /**
+     * Setter for content.
+     *
+     * @param string $content Content
+     *
+     * @return $this
+     */
     public function setContent(string $content): static
     {
         $this->content = $content;
@@ -166,22 +204,47 @@ class Question
         return $this;
     }
 
+    /**
+     * Getter for status.
+     *
+     * @return QuestionStatus Status
+     */
     public function getStatus(): QuestionStatus
     {
         return $this->status;
     }
 
+    /**
+     * Setter for status.
+     *
+     * @param QuestionStatus $status Status
+     *
+     * @return $this
+     */
     public function setStatus(QuestionStatus $status): self
     {
         $this->status = $status;
+
         return $this;
     }
 
+    /**
+     * Getter for creation date.
+     *
+     * @return \DateTime|null Created at
+     */
     public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
+    /**
+     * Setter for creation date.
+     *
+     * @param \DateTime $createdAt Created at
+     *
+     * @return $this
+     */
     public function setCreatedAt(\DateTime $createdAt): static
     {
         $this->createdAt = $createdAt;
@@ -189,11 +252,23 @@ class Question
         return $this;
     }
 
+    /**
+     * Getter for update date.
+     *
+     * @return \DateTime|null Updated at
+     */
     public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
 
+    /**
+     * Setter for update date.
+     *
+     * @param \DateTime|null $updatedAt Updated at
+     *
+     * @return $this
+     */
     public function setUpdatedAt(?\DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
@@ -201,11 +276,23 @@ class Question
         return $this;
     }
 
+    /**
+     * Getter for category.
+     *
+     * @return Category|null Category entity
+     */
     public function getCategory(): ?Category
     {
         return $this->category;
     }
 
+    /**
+     * Setter for category.
+     *
+     * @param Category|null $category Category entity
+     *
+     * @return $this
+     */
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
@@ -213,19 +300,33 @@ class Question
         return $this;
     }
 
+    /**
+     * Getter for answers.
+     *
+     * @return Collection<int, Answer> Answers collection
+     */
     public function getAnswers(): Collection
     {
         return $this->answers;
     }
 
     /**
-     * @return Collection<int, Tag>
+     * Getter for tags.
+     *
+     * @return Collection<int, Tag> Tags collection
      */
     public function getTags(): Collection
     {
         return $this->tags;
     }
 
+    /**
+     * Adds a tag to the question.
+     *
+     * @param Tag $tag Tag entity
+     *
+     * @return $this
+     */
     public function addTag(Tag $tag): static
     {
         if (!$this->tags->contains($tag)) {
@@ -236,6 +337,13 @@ class Question
         return $this;
     }
 
+    /**
+     * Removes a tag from the question.
+     *
+     * @param Tag $tag Tag entity
+     *
+     * @return $this
+     */
     public function removeTag(Tag $tag): static
     {
         if ($this->tags->removeElement($tag)) {
@@ -245,17 +353,35 @@ class Question
         return $this;
     }
 
+    /**
+     * Clears all tags from the question.
+     *
+     * @return $this
+     */
     public function clearTags(): self
     {
         $this->tags->clear();
+
         return $this;
     }
 
+    /**
+     * Getter for author.
+     *
+     * @return User|null User entity
+     */
     public function getAuthor(): ?User
     {
         return $this->author;
     }
 
+    /**
+     * Setter for author.
+     *
+     * @param User|null $author User entity
+     *
+     * @return $this
+     */
     public function setAuthor(?User $author): static
     {
         $this->author = $author;
@@ -263,16 +389,27 @@ class Question
         return $this;
     }
 
+    /**
+     * Getter for best answer.
+     *
+     * @return Answer|null Answer entity
+     */
     public function getBestAnswer(): ?Answer
     {
         return $this->bestAnswer;
     }
 
+    /**
+     * Setter for best answer.
+     *
+     * @param Answer|null $bestAnswer Answer entity
+     *
+     * @return $this
+     */
     public function setBestAnswer(?Answer $bestAnswer): self
     {
         $this->bestAnswer = $bestAnswer;
 
         return $this;
     }
-
 }

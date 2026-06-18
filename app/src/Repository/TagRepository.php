@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Repository;
 
 use App\Entity\Tag;
@@ -11,7 +20,6 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @extends ServiceEntityRepository<Tag>
  */
-
 class TagRepository extends ServiceEntityRepository
 {
     /**
@@ -19,37 +27,30 @@ class TagRepository extends ServiceEntityRepository
      *
      * @param ManagerRegistry $registry Manager registry
      */
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Tag::class);
     }
-
 
     /**
      * Save entity.
      *
      * @param Tag $tag Tag entity
      */
-
     public function save(Tag $tag): void
     {
         $this->getEntityManager()->persist($tag);
         $this->getEntityManager()->flush();
     }
 
-
     /**
      * Delete entity.
      *
      * @param Tag $tag Tag entity
      */
-
     public function delete(Tag $tag): void
     {
         $this->getEntityManager()->remove($tag);
         $this->getEntityManager()->flush();
     }
-
-
 }

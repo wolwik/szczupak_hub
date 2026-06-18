@@ -1,7 +1,17 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Security\Voter;
 
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use App\Entity\Enum\QuestionStatus;
 use App\Entity\Question;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -34,7 +44,6 @@ final class QuestionVoter extends Voter
      */
     public const VIEW = 'QUESTION_VIEW';
 
-
     /**
      * Determines if this voter supports the attribute and subject.
      *
@@ -46,9 +55,8 @@ final class QuestionVoter extends Voter
     protected function supports(string $attribute, mixed $subject): bool
     {
         return in_array($attribute, [self::EDIT, self::DELETE, self::VIEW])
-            && $subject instanceof \App\Entity\Question;
+            && $subject instanceof Question;
     }
-
 
     /**
      * Perform a single access check operation on a given attribute, subject and token.
@@ -60,11 +68,8 @@ final class QuestionVoter extends Voter
      *
      * @return bool Vote result
      */
-    protected function voteOnAttribute(
-        string $attribute,
-        mixed $subject,
-        TokenInterface $token
-    ): bool {
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
+    {
         $user = $token->getUser();
 
         if (!$user instanceof UserInterface) {
@@ -82,7 +87,6 @@ final class QuestionVoter extends Voter
             default => false,
         };
     }
-
 
     /**
      * Checks if user can edit question.
@@ -103,7 +107,6 @@ final class QuestionVoter extends Voter
         return $question->getAuthor() === $user;
     }
 
-
     /**
      * Checks if user can delete question.
      *
@@ -123,7 +126,6 @@ final class QuestionVoter extends Voter
         return $question->getAuthor() === $user;
     }
 
-
     /**
      * Checks if user can view question draft.
      *
@@ -135,7 +137,7 @@ final class QuestionVoter extends Voter
     private function canView(Question $question, UserInterface $user): bool
     {
         // opublikowane pytania są publiczne
-        if ($question->getStatus() === QuestionStatus::PUBLISHED) {
+        if (QuestionStatus::PUBLISHED === $question->getStatus()) {
             return true;
         }
 
@@ -143,6 +145,3 @@ final class QuestionVoter extends Voter
         return $question->getAuthor() === $user;
     }
 }
-
-
-

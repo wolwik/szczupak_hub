@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Form;
 
 use App\Entity\Category;
@@ -11,8 +20,17 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class QuestionType.
+ */
 class QuestionType extends AbstractType
 {
+    /**
+     * Builds the form.
+     *
+     * @param FormBuilderInterface $builder The form builder
+     * @param array<string, mixed> $options Form options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -22,8 +40,8 @@ class QuestionType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'max_length' => 64,
-                    //'placeholder' => 'Tytuł pytania',
-                    'class' => 'form-control'
+                    // 'placeholder' => 'Tytuł pytania',
+                    'class' => 'form-control',
                 ],
             ])
 
@@ -33,8 +51,8 @@ class QuestionType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'rows' => 6,
-                    //'placeholder' => 'Zadaj pytanie, opowiedz historię...',
-                    'class' => 'form-control'
+                    // 'placeholder' => 'Zadaj pytanie, opowiedz historię...',
+                    'class' => 'form-control',
                 ],
             ])
 
@@ -44,9 +62,9 @@ class QuestionType extends AbstractType
                 'choice_label' => 'name',
                 'label' => 'label.category',
                 'required' => true,
-                //'placeholder' => 'Wybierz kategorię',
+                // 'placeholder' => 'Wybierz kategorię',
                 'attr' => [
-                    'class' => 'form-select'
+                    'class' => 'form-select',
                 ],
             ])
 
@@ -56,17 +74,27 @@ class QuestionType extends AbstractType
                 'required' => true,
                 'label' => 'label.tags',
                 'attr' => [
-                    //'placeholder' => 'karp, spinning, jezioro...',
-                    'class' => 'form-control'
+                    // 'placeholder' => 'karp, spinning, jezioro...',
+                    'class' => 'form-control',
                 ],
             ]);
     }
 
+    /**
+     * Configures the options for this type.
+     *
+     * @param OptionsResolver $resolver The resolver for the options
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => Question::class]);
     }
 
+    /**
+     * Returns the prefix of the template block name for this type.
+     *
+     * @return string The prefix of the template block name
+     */
     public function getBlockPrefix(): string
     {
         return 'question';

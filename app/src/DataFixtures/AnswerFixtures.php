@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\DataFixtures;
 
 use App\Entity\Answer;
@@ -7,21 +16,15 @@ use App\Entity\Question;
 use App\Entity\User;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-
 /**
  * Class AnswerFixtures.
- *
  */
-
 class AnswerFixtures extends AbstractBaseFixtures implements DependentFixtureInterface
 {
-
     /**
      * Loads data.
-     *
      */
-
-    protected function loadData(): void
+    public function loadData(): void
     {
         if (!$this->manager || !$this->faker) {
             return;
@@ -50,7 +53,6 @@ class AnswerFixtures extends AbstractBaseFixtures implements DependentFixtureInt
         });
     }
 
-
     /**
      * This method must return an array of fixtures classes
      * on which the implementing class depends on.
@@ -59,7 +61,6 @@ class AnswerFixtures extends AbstractBaseFixtures implements DependentFixtureInt
      *
      * @psalm-return array{0: QuestionFixtures::class}
      */
-
     public function getDependencies(): array
     {
         return [

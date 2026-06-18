@@ -1,63 +1,58 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Answer;
 use App\Contract\VoteServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * Class VoteController.
+ */
 final class VoteController extends AbstractController
 {
-
-    public function __construct(
-        private readonly VoteServiceInterface $voteService,
-        private readonly TranslatorInterface $translator,
-    ) {}
-
-
-
-    #[Route(
-        '/vote', name:
-        'app_vote'
-    )]
-    public function index(): Response
+    /**
+     * Constructor.
+     *
+     * @param VoteServiceInterface $voteService Vote service
+     */
+    public function __construct(private readonly VoteServiceInterface $voteService)
     {
-        return $this->render('vote/index.html.twig', [
-            'controller_name' => 'VoteController',
-        ]);
     }
 
-
-    #[Route(
-        '/answer/{id}/vote',
-        name: 'answer_vote'
-    )]
+    /**
+     * Handles the voting logic for a specific answer.
+     *
+     * @param Answer $answer Answer service
+     *
+     * @throws \LogicException if the user is not authenticated properly
+     */
+    #[Route('/answer/{id}/vote', name: 'answer_vote')]
     #[IsGranted('ROLE_USER')]
-
     public function vote(Answer $answer): Response
     {
         $user = $this->getUser();
-
-        // sprawdzenie obiektu i zawężenie typu, bo symfony się denerwuje
-        if (!$user instanceof \App\Entity\User) {
+        if (!$user instanceof User) {
             throw new \LogicException();
         }
 
         $this->voteService->vote($answer, $user);
 
-        /* niepotrzebne
-        $this->addFlash(
-            'success',
-            $this->translator->trans('message.voted_successfully')
-        );
-        */
-
         return $this->redirectToRoute('question_view', [
-            'id' => $answer->getQuestion()->getId()
+            'id' => $answer->getQuestion()->getId(),
         ]);
     }
 }

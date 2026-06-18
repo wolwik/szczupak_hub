@@ -1,10 +1,18 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\DataFixtures;
 
 use App\Entity\Category;
 use Doctrine\Persistence\ObjectManager;
-
 
 /**
  * Class CategoryFixtures.
@@ -13,14 +21,11 @@ use Doctrine\Persistence\ObjectManager;
  */
 class CategoryFixtures extends AbstractBaseFixtures
 {
-
     /**
      * Load data.
-     *
      */
-
-    protected function loadData(): void {
-
+    protected function loadData(): void
+    {
         if (!$this->manager instanceof ObjectManager || !$this->faker) {
             return;
         }

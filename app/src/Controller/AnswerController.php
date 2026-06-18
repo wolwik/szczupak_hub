@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Controller;
 
 use App\Contract\AnswerServiceInterface;
@@ -18,23 +27,18 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Class AnswerController.
  */
-#[Route(
-    '/answer'
-)]
-
+#[Route('/answer')]
 final class AnswerController extends AbstractController
 {
     /**
      * Constructor.
      *
-     * @param AnswerServiceInterface  $answerService Answer service
-     * @param TranslatorInterface     $translator    Translator
+     * @param AnswerServiceInterface $answerService Answer service
+     * @param TranslatorInterface    $translator    Translator
      */
-
-    public function __construct(
-        private readonly AnswerServiceInterface $answerService,
-        private readonly TranslatorInterface $translator
-    ) {}
+    public function __construct(private readonly AnswerServiceInterface $answerService, private readonly TranslatorInterface $translator)
+    {
+    }
 
     /**
      * Creates a new answer.
@@ -44,14 +48,8 @@ final class AnswerController extends AbstractController
      *
      * @return Response Redirect response to question view
      */
-
-    #[Route(
-        '/question/{id}/answer', // tworzone do pytania!!!
-        name: 'answer_create',
-        methods: ['POST']
-    )]
+    #[Route('/question/{id}/answer', name: 'answer_create', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
-
     public function create(Question $question, Request $request): Response
     {
         $answer = new Answer();
@@ -60,7 +58,6 @@ final class AnswerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $answer->setAuthor($this->getUser());
 
             $this->answerService->save($answer, $question);
@@ -69,37 +66,27 @@ final class AnswerController extends AbstractController
                 'success',
                 $this->translator->trans('message.answer_created_successfully')
             );
-
         }
 
-        // powrót do PYTANIA
         return $this->redirectToRoute('question_view', ['id' => $question->getId()]);
     }
-
-    // nie renderujemy twiga, bo to jest w twigu renderowanym przez Question
 
     /**
      * Edits an answer.
      *
      * @param Request $request HTTP request
-     * @param Answer   $answer  Answer entity to edit
+     * @param Answer  $answer  Answer entity to edit
      *
      * @return Response Rendered page or redirect response
      */
-
-    #[Route(
-        'answer/{id}/edit',
-        name: 'answer_edit',
-        requirements: ['id' => '[1-9]\d*'],
-        methods: ['GET', 'PUT']
-    )]
+    #[Route('answer/{id}/edit', name: 'answer_edit', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'PUT'])]
     #[IsGranted(AnswerVoter::EDIT, subject: 'answer')]
-
     public function edit(Request $request, Answer $answer): Response
     {
         $form = $this->createForm(
             AnswerType::class,
-            $answer, [
+            $answer,
+            [
                 'method' => 'PUT',
                 'action' => $this->generateUrl('answer_edit', ['id' => $answer->getId()]),
             ]
@@ -114,7 +101,7 @@ final class AnswerController extends AbstractController
                 $this->translator->trans('message.answer_edited_successfully')
             );
 
-            return $this->redirectToRoute('question_view', ['id' => $answer->getQuestion()->getId()]); // pobranie id pytania
+            return $this->redirectToRoute('question_view', ['id' => $answer->getQuestion()->getId()]);
         }
 
         return $this->render('answer/edit.html.twig', [
@@ -127,24 +114,17 @@ final class AnswerController extends AbstractController
      * Deletes an answer.
      *
      * @param Request $request HTTP request
-     * @param Answer   $answer  Answer entity to delete
+     * @param Answer  $answer  Answer entity to delete
      *
      * @return Response Redirect or rendered confirmation page
      */
-
-    #[Route(
-        'answer/{id}/delete',
-        name: 'answer_delete',
-        requirements: ['id' => '[1-9]\d*'],
-        methods: ['GET', 'POST', 'DELETE']
-    )]
+    #[Route('answer/{id}/delete', name: 'answer_delete', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST', 'DELETE'])]
     #[IsGranted(AnswerVoter::DELETE, subject: 'answer')]
-
     public function delete(Request $request, Answer $answer): Response
     {
         $form = $this->createForm(AnswerDeleteType::class, null, [
             'action' => $this->generateUrl('answer_delete', [
-                'id' => $answer->getId()
+                'id' => $answer->getId(),
             ]),
         ]);
 
@@ -170,19 +150,12 @@ final class AnswerController extends AbstractController
     /**
      * Marks an answer as the best one for a question.
      *
-     * @param Answer              $answer            Answer entity
+     * @param Answer $answer Answer entity
      *
      * @return Response Redirect response to question view
      */
-
-    #[Route(
-    '/{id}/best',
-    name: 'answer_best',
-    requirements: ['id' => '[1-9]\d*'],
-    methods: ['GET', 'POST']
-    )]
+    #[Route('/{id}/best', name: 'answer_best', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST'])]
     #[IsGranted(AnswerVoter::MARK_AS_BEST, subject: 'answer')]
-
     public function markAsBest(Answer $answer): Response
     {
         $this->answerService->markAsBest($answer);
@@ -192,8 +165,6 @@ final class AnswerController extends AbstractController
             $this->translator->trans('message.best_answer_selected')
         );
 
-        return $this->redirectToRoute('question_view', ['id'=>$answer->getQuestion()->getId()]);
-
+        return $this->redirectToRoute('question_view', ['id' => $answer->getQuestion()->getId()]);
     }
-
 }

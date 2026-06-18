@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Controller;
 
 use App\Entity\User;
@@ -11,28 +20,25 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-
 
 /**
  * Class SecurityController.
  */
-
 class SecurityController extends AbstractController
 {
     /**
      * Constructor.
      *
-     * @param TranslatorInterface  $translator  Translator
+     * @param TranslatorInterface $translator Translator
      */
-    public function __construct(
-        private readonly TranslatorInterface $translator,
-    ) {}
-
+    public function __construct(private readonly TranslatorInterface $translator)
+    {
+    }
 
     /**
      * Login action.
@@ -61,43 +67,30 @@ class SecurityController extends AbstractController
         ]);
     }
 
-
     /**
      * Logout action.
-     *
      */
-    #[Route(
-        path: '/logout',
-        name: 'app_logout'
-    )]
+    #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
-
     /**
      * Changes own password.
      *
-     * @param Request $request Question entity
-     * @param UserPasswordHasherInterface $hasher Question entity
-     * @param EntityManagerInterface $em Question entity
+     * @param Request                     $request HTTP request
+     * @param UserPasswordHasherInterface $hasher  Password hasher
+     * @param EntityManagerInterface      $em      Entity manager
      *
      * @return Response HTTP response
      *
      * @throws \LogicException When user is not authenticated
-     * @throws \Exception When current password is invalid
+     * @throws \Exception      When current password is invalid
      */
-    #[Route(
-        '/change-password',
-        name: 'change_password'
-    )]
-    public function changePassword(
-        Request $request,
-        UserPasswordHasherInterface $hasher,
-        EntityManagerInterface $em
-    ): Response {
-
+    #[Route('/change-password', name: 'change_password')]
+    public function changePassword(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $em): Response
+    {
         $user = $this->getUser();
 
         if (!$user instanceof PasswordAuthenticatedUserInterface) {
@@ -108,7 +101,6 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $data = $form->getData();
 
             if (!$hasher->isPasswordValid($user, $data['currentPassword'])) {
@@ -134,35 +126,24 @@ class SecurityController extends AbstractController
         ]);
     }
 
-
     /**
      * Changes anyone's password, action permitted only for admins.
      *
-     * @param User $user Question entity
-     * @param UserPasswordHasherInterface $hasher Question entity
-     * @param EntityManagerInterface $em Question entity
-     * @param Request $request Question entity
+     * @param User                        $user    User entity
+     * @param Request                     $request HTTP request
+     * @param UserPasswordHasherInterface $hasher  Password hasher
+     * @param EntityManagerInterface      $em      Entity manager
      *
      * @return Response HTTP response
      */
-    #[Route(
-        '/user/{id}/change-password',
-        name: 'user_change_password',
-    )]
+    #[Route('/user/{id}/change-password', name: 'user_change_password')]
     #[IsGranted('ROLE_ADMIN')]
-
-    public function adminChangePassword(
-        User $user,
-        Request $request,
-        UserPasswordHasherInterface $hasher,
-        EntityManagerInterface $em
-    ): Response
+    public function adminChangePassword(User $user, Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(AdminChangePasswordFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $newPassword = $form->get('newPassword')->getData();
 
             $user->setPassword(
@@ -184,5 +165,4 @@ class SecurityController extends AbstractController
             'user' => $user,
         ]);
     }
-
 }

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Repository;
 
 use App\Entity\Answer;
@@ -18,39 +27,38 @@ class AnswerRepository extends ServiceEntityRepository
      *
      * @param ManagerRegistry $registry Manager registry
      */
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Answer::class);
     }
-
 
     /**
      * Save entity.
      *
      * @param Answer $answer Answer entity
      */
-
     public function save(Answer $answer): void
     {
         $this->getEntityManager()->persist($answer);
         $this->getEntityManager()->flush();
     }
 
-
     /**
      * Delete entity.
      *
      * @param Answer $answer Answer entity
      */
-
     public function delete(Answer $answer): void
     {
         $this->getEntityManager()->remove($answer);
         $this->getEntityManager()->flush();
     }
 
-
+    /**
+     * Find the most liked answer.
+     *
+     * @param int $questionId Question ID
+     */
     public function findMostLikedAnswer(int $questionId): ?Answer
     {
         return $this->createQueryBuilder('a')
@@ -65,5 +73,4 @@ class AnswerRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-
 }

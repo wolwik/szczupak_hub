@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Controller;
 
 use App\Contract\CategoryServiceInterface;
@@ -14,42 +23,31 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-
 /**
  * Class CategoryController.
  */
-
-#[Route(
-    '/category'
-)]
+#[Route('/category')]
 #[IsGranted('ROLE_ADMIN')]
 final class CategoryController extends AbstractController
 {
     /**
      * Constructor.
      *
-     * @param CategoryServiceInterface   $categoryService     Category service
-     * @param TranslatorInterface        $translator          Translator
+     * @param CategoryServiceInterface $categoryService Category service
+     * @param TranslatorInterface      $translator      Translator
      */
-
-    public function __construct(
-        private readonly CategoryServiceInterface $categoryService,
-        private readonly TranslatorInterface $translator
-    ) {}
-
+    public function __construct(private readonly CategoryServiceInterface $categoryService, private readonly TranslatorInterface $translator)
+    {
+    }
 
     /**
      * Displays list of categories.
      *
+     * @param CategoryRepository $categoryRepository Category repository
+     *
      * @return Response HTTP response
      */
-
-    #[Route(
-        '/category_list',
-        name: 'category_list',
-        methods: ['GET']
-    )]
-
+    #[Route('/category_list', name: 'category_list', methods: ['GET'])]
     public function index(CategoryRepository $categoryRepository): Response
     {
         return $this->render('category/index.html.twig', [
@@ -64,13 +62,7 @@ final class CategoryController extends AbstractController
      *
      * @return Response Redirect response to question view
      */
-
-    #[Route(
-        '/create',
-        name: 'category_new',
-        methods: ['GET', 'POST']
-    )]
-
+    #[Route('/create', name: 'category_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $category = new Category();
@@ -78,7 +70,6 @@ final class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->categoryService->save($category);
 
             $this->addFlash(
@@ -95,7 +86,6 @@ final class CategoryController extends AbstractController
         ]);
     }
 
-
     /**
      * Edits a category.
      *
@@ -104,13 +94,7 @@ final class CategoryController extends AbstractController
      *
      * @return Response Rendered page or redirect response
      */
-
-    #[Route(
-        '/{id}/edit',
-        name: 'category_edit',
-        methods: ['GET', 'PUT']
-    )]
-
+    #[Route('/{id}/edit', name: 'category_edit', methods: ['GET', 'PUT'])]
     public function edit(Request $request, Category $category): Response
     {
         $form = $this->createForm(
@@ -124,7 +108,6 @@ final class CategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->categoryService->save($category);
 
             $this->addFlash(
@@ -137,34 +120,25 @@ final class CategoryController extends AbstractController
 
         return $this->render('category/edit.html.twig', [
             'form' => $form->createView(),
-            'category' => $category
+            'category' => $category,
         ]);
     }
-
 
     /**
      * Deletes a category.
      *
-     * @param Request   $request HTTP request
-     * @param Category  $category  Answer entity to delete
+     * @param Request  $request  HTTP request
+     * @param Category $category Answer entity to delete
      *
      * @return Response Redirect or rendered confirmation page
      */
-
-    #[Route(
-        '/{id}/delete',
-        name: 'category_delete',
-        requirements: ['id' => '[1-9]\d*'],
-        methods: ['GET', 'POST', 'DELETE']
-    )]
-
+    #[Route('/{id}/delete', name: 'category_delete', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST', 'DELETE'])]
     public function delete(Request $request, Category $category): Response
     {
         $form = $this->createForm(CategoryDeleteType::class);
         $form->handleRequest($request);
 
-        if (!$form->isSubmitted() || !$form->isValid()) {
-
+        if ($form->isSubmitted() && $form->isValid()) {
             $deleted = $this->categoryService->delete($category);
 
             if ($deleted) {
@@ -187,5 +161,4 @@ final class CategoryController extends AbstractController
             'category' => $category,
         ]);
     }
-
 }

@@ -1,6 +1,12 @@
 <?php
+
 /**
- * User service interface.
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace App\Contract;
@@ -22,7 +28,7 @@ interface UserServiceInterface
     /**
      * Register a new user.
      *
-     * @param User $user User entity
+     * @param User   $user          User entity
      * @param string $plainPassword Plain text password
      *
      * @throws \Exception If email or nickname already exists

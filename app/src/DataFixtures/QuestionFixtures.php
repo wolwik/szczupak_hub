@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\DataFixtures;
 
 use App\Entity\Enum\QuestionStatus;
@@ -10,22 +19,16 @@ use App\Entity\Tag;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-
 /**
  * Class QuestionFixtures.
- *
  */
-
 class QuestionFixtures extends AbstractBaseFixtures implements DependentFixtureInterface
 {
-
     /**
      * Loads data.
-     *
      */
-
-    public function loadData(): void {
-
+    public function loadData(): void
+    {
         if (!$this->manager instanceof ObjectManager || !$this->faker) {
             return;
         }
@@ -63,7 +66,7 @@ class QuestionFixtures extends AbstractBaseFixtures implements DependentFixtureI
             $question->setCategory($category);
 
             // tags (random 1-4)
-            for ($j = 0; $j < random_int(1,7); $j++) {
+            for ($j = 0; $j < random_int(1, 7); ++$j) {
                 $tag = $this->getRandomReference('tag', Tag::class);
                 $question->addTag($tag);
             }
@@ -73,8 +76,6 @@ class QuestionFixtures extends AbstractBaseFixtures implements DependentFixtureI
 
             return $question;
         });
-
-
     }
 
     /**
@@ -85,7 +86,6 @@ class QuestionFixtures extends AbstractBaseFixtures implements DependentFixtureI
      *
      * @psalm-return array{0: CategoryFixtures::class}
      */
-
     public function getDependencies(): array
     {
         return [

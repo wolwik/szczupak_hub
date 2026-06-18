@@ -1,7 +1,12 @@
 <?php
 
 /**
- * Tag entity.
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace App\Entity;
@@ -13,14 +18,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
+/**
+ * Class Tag.
+ */
 #[ORM\Entity(repositoryClass: TagRepository::class)]
 #[ORM\Table(name: 'tags')]
 #[UniqueEntity(
     fields: ['name'],
     message: 'Taki tag już istnieje.'
 )]
-
 class Tag
 {
     /**
@@ -63,16 +69,31 @@ class Tag
     #[Assert\Valid]
     private Collection $questions;
 
+    /**
+     * Constructor.
+     */
     public function __construct()
     {
         $this->questions = new ArrayCollection();
     }
 
+    /**
+     * Getter for ID.
+     *
+     * @return int|null Id
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * Setter for ID.
+     *
+     * @param int $id Id
+     *
+     * @return $this
+     */
     public function setId(int $id): static
     {
         $this->id = $id;
@@ -80,11 +101,23 @@ class Tag
         return $this;
     }
 
+    /**
+     * Getter for name.
+     *
+     * @return string|null Name
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * Setter for name.
+     *
+     * @param string $name Name
+     *
+     * @return $this
+     */
     public function setName(string $name): static
     {
         $this->name = $name;
@@ -92,11 +125,23 @@ class Tag
         return $this;
     }
 
+    /**
+     * Getter for slug.
+     *
+     * @return string|null Slug
+     */
     public function getSlug(): ?string
     {
         return $this->slug;
     }
 
+    /**
+     * Setter for slug.
+     *
+     * @param string $slug Slug
+     *
+     * @return $this
+     */
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
@@ -105,13 +150,22 @@ class Tag
     }
 
     /**
-     * @return Collection<int, Question>
+     * Getter for questions.
+     *
+     * @return Collection<int, Question> Questions collection
      */
     public function getQuestions(): Collection
     {
         return $this->questions;
     }
 
+    /**
+     * Adds a question to the tag.
+     *
+     * @param Question $question Question entity
+     *
+     * @return $this
+     */
     public function addQuestion(Question $question): static
     {
         if (!$this->questions->contains($question)) {
@@ -121,6 +175,13 @@ class Tag
         return $this;
     }
 
+    /**
+     * Removes a question from the tag.
+     *
+     * @param Question $question Question entity
+     *
+     * @return $this
+     */
     public function removeQuestion(Question $question): static
     {
         $this->questions->removeElement($question);

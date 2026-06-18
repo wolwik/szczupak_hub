@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Repository;
 
 use App\Entity\Enum\QuestionStatus;
@@ -21,26 +30,17 @@ class QuestionRepository extends ServiceEntityRepository
      *
      * @param ManagerRegistry $registry Manager registry
      */
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Question::class);
     }
 
-
     /**
      * Query all records.
      *
-     * @param int|null $categoryId
-     * @param int|null $tagId
-     *
      * @return QueryBuilder Query builder
      */
-
-    public function queryAll(
-        ?int $categoryId = null,
-        ?int $tagId = null,
-    ): QueryBuilder
+    public function queryAll(?int $categoryId = null, ?int $tagId = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('question')
             ->leftJoin('question.category', 'category')
@@ -62,7 +62,6 @@ class QuestionRepository extends ServiceEntityRepository
         return $qb;
     }
 
-
     /**
      * Displays user drafts.
      *
@@ -70,7 +69,6 @@ class QuestionRepository extends ServiceEntityRepository
      *
      * @return QueryBuilder QueryBuilder
      */
-
     public function queryUserDrafts(User $user): QueryBuilder
     {
         return $this->createQueryBuilder('question')
@@ -81,15 +79,13 @@ class QuestionRepository extends ServiceEntityRepository
             ->orderBy('question.createdAt', 'DESC');
     }
 
-
     /**
-     * Displays all user's questions (currently not used)
+     * Displays all user's questions (currently not used).
      *
      * @param User $user User entity
      *
      * @return QueryBuilder QueryBuilder
      */
-
     public function findByUser(User $user): QueryBuilder
     {
         return $this->createQueryBuilder('question')
@@ -97,13 +93,11 @@ class QuestionRepository extends ServiceEntityRepository
             ->setParameter('user', $user);
     }
 
-
     /**
      * Save entity.
      *
      * @param Question $question Question entity
      */
-
     public function save(Question $question): void
     {
         $this->getEntityManager()->persist($question);
@@ -116,7 +110,6 @@ class QuestionRepository extends ServiceEntityRepository
      * @param Question $question Question entity
      * @param bool     $flush    Bool for deleting entity
      */
-
     public function delete(Question $question, bool $flush = true): void
     {
         $this->getEntityManager()->remove($question);
@@ -125,5 +118,4 @@ class QuestionRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
 }

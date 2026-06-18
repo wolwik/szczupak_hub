@@ -1,7 +1,12 @@
 <?php
 
 /**
- * User service.
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace App\Service;
@@ -11,10 +16,9 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-/*
- * Class UserService
+/**
+ * Class UserService.
  */
-
 class UserService implements UserServiceInterface
 {
     /**
@@ -23,10 +27,9 @@ class UserService implements UserServiceInterface
      * @param UserRepository              $userRepository UserRepository
      * @param UserPasswordHasherInterface $passwordHasher PasswordHasher
      */
-    public function __construct(
-        private readonly UserRepository $userRepository,
-        private readonly UserPasswordHasherInterface $passwordHasher
-    ) {}
+    public function __construct(private readonly UserRepository $userRepository, private readonly UserPasswordHasherInterface $passwordHasher)
+    {
+    }
 
     /**
      * Save user.
@@ -64,11 +67,10 @@ class UserService implements UserServiceInterface
         $user->setPassword($hashedPassword);
 
         $user->setRoles([
-            'ROLE_USER'
+            'ROLE_USER',
         ]);
 
         $this->userRepository->save($user);
-
     }
 
     /**
@@ -80,5 +82,4 @@ class UserService implements UserServiceInterface
     {
         $this->userRepository->delete($user);
     }
-
 }

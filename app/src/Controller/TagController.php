@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the Symfony package.
+ *
+ * (c) Wolwik / UJ
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Controller;
 
 use App\Contract\TagServiceInterface;
@@ -14,46 +23,37 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-
 /**
  * Class TagController.
  */
-#[Route(
-    '/tag'
-)]
+#[Route('/tag')]
 #[IsGranted('ROLE_ADMIN')]
-
 final class TagController extends AbstractController
 {
     /**
      * Constructor.
      *
-     * @param TagServiceInterface  $tagService     Tag service
-     * @param TranslatorInterface  $translator     Translator
+     * @param TagServiceInterface $tagService Tag service
+     * @param TranslatorInterface $translator Translator
      */
-    public function __construct(
-        private readonly TagServiceInterface $tagService,
-        private readonly TranslatorInterface $translator
-    ) {}
-
+    public function __construct(private readonly TagServiceInterface $tagService, private readonly TranslatorInterface $translator)
+    {
+    }
 
     /**
      * Displays list of tags.
      *
+     * @param TagRepository $tagRepository Tag repository
+     *
      * @return Response HTTP response
      */
-    #[Route(
-        '/tag_list',
-        name: 'tag_list',
-        methods: ['GET'],
-    )]
+    #[Route('/tag_list', name: 'tag_list', methods: ['GET'])]
     public function index(TagRepository $tagRepository): Response
     {
         return $this->render('tag/index.html.twig', [
             'tags' => $tagRepository->findAll(),
         ]);
     }
-
 
     /**
      * Creates a new tag.
@@ -62,11 +62,7 @@ final class TagController extends AbstractController
      *
      * @return Response Redirect response to question view
      */
-    #[Route(
-        '/create',
-        name: 'tag_new',
-        methods: ['GET', 'POST']
-    )]
+    #[Route('/create', name: 'tag_new', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
         $tag = new Tag();
@@ -74,7 +70,6 @@ final class TagController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->tagService->save($tag);
 
             $this->addFlash(
@@ -90,7 +85,6 @@ final class TagController extends AbstractController
         ]);
     }
 
-
     /**
      * Edits a tag.
      *
@@ -99,12 +93,7 @@ final class TagController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route(
-        '/{id}/edit',
-        name: 'tag_edit',
-        requirements: ['id' => '[1-9]\d*'],
-        methods: ['GET', 'PUT']
-    )]
+    #[Route('/{id}/edit', name: 'tag_edit', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'PUT'])]
     public function edit(Request $request, Tag $tag): Response
     {
         $form = $this->createForm(
@@ -126,7 +115,6 @@ final class TagController extends AbstractController
             );
 
             return $this->redirectToRoute('tag_list');
-
         }
 
         return $this->render(
@@ -138,32 +126,26 @@ final class TagController extends AbstractController
         );
     }
 
-
     /**
      * Deletes a tag.
      *
-     * @param Request  $request  HTTP request
-     * @param Tag      $tag      Tag entity
+     * @param Request $request HTTP request
+     * @param Tag     $tag     Tag entity
      *
      * @return Response Redirect or rendered confirmation page
      */
-    #[Route(
-        '/{id}/delete',
-        name: 'tag_delete',
-        requirements: ['id' => '[1-9]\d*'],
-        methods: ['GET', 'POST', 'DELETE']
-    )]
+    #[Route('/{id}/delete', name: 'tag_delete', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST', 'DELETE'])]
     public function delete(Request $request, Tag $tag): Response
     {
         $form = $this->createForm(TagDeleteType::class, null, [
             'action' => $this->generateUrl('tag_delete', [
-                'id' => $tag->getId()
+                'id' => $tag->getId(),
             ]),
         ]);
 
         $form->handleRequest($request);
 
-        if (!$form->isSubmitted() || !$form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->tagService->delete($tag);
 
             $this->addFlash(
@@ -179,5 +161,4 @@ final class TagController extends AbstractController
             'tag' => $tag,
         ]);
     }
-
 }
