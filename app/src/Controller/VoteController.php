@@ -38,6 +38,8 @@ final class VoteController extends AbstractController
      *
      * @param Answer $answer Answer service
      *
+     * @return Response HTTP response
+     *
      * @throws \LogicException if the user is not authenticated properly
      */
     #[Route('/answer/{id}/vote', name: 'answer_vote')]

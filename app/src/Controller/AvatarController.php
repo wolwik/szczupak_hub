@@ -11,6 +11,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Routing\Attribute\Route;
 use App\Contract\AvatarServiceInterface;
 use App\Entity\Avatar;
 use App\Entity\User;
@@ -19,13 +20,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class AvatarController.
  */
-#[\Symfony\Component\Routing\Attribute\Route('/avatar')]
+#[Route('/avatar')]
 class AvatarController extends AbstractController
 {
     /**
@@ -45,7 +45,7 @@ class AvatarController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[\Symfony\Component\Routing\Attribute\Route('/create', name: 'avatar_create', methods: 'GET|POST')]
+    #[Route('/create', name: 'avatar_create', methods: 'GET|POST')]
     public function create(Request $request): Response
     {
         $user = $this->getUser();
@@ -95,7 +95,7 @@ class AvatarController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[\Symfony\Component\Routing\Attribute\Route('/edit', name: 'avatar_edit', methods: 'GET|PUT')]
+    #[Route('/edit', name: 'avatar_edit', methods: 'GET|PUT')]
     public function edit(Request $request): Response
     {
         $user = $this->getUser();
@@ -150,7 +150,7 @@ class AvatarController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[\Symfony\Component\Routing\Attribute\Route('/delete', name: 'avatar_delete', methods: 'GET|PUT|POST')]
+    #[Route('/delete', name: 'avatar_delete', methods: 'GET|PUT|POST')]
     public function delete(): Response
     {
         $user = $this->getUser();

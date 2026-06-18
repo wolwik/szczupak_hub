@@ -38,6 +38,9 @@ class QuestionRepository extends ServiceEntityRepository
     /**
      * Query all records.
      *
+     * @param int|null $categoryId Category ID filter
+     * @param int|null $tagId      Tag ID filter
+     *
      * @return QueryBuilder Query builder
      */
     public function queryAll(?int $categoryId = null, ?int $tagId = null): QueryBuilder

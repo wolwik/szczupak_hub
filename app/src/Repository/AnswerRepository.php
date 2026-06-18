@@ -58,6 +58,8 @@ class AnswerRepository extends ServiceEntityRepository
      * Find the most liked answer.
      *
      * @param int $questionId Question ID
+     *
+     * @return QueryBuilder Query builder
      */
     public function findMostLikedAnswer(int $questionId): ?Answer
     {

@@ -65,6 +65,7 @@ final class QuestionVoter extends Voter
      * @param string         $attribute Permission name
      * @param mixed          $subject   Object
      * @param TokenInterface $token     Security token
+     * @param Vote|null      $vote      Optional vote parameter
      *
      * @return bool Vote result
      */
