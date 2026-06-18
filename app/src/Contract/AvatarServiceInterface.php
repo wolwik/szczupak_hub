@@ -1,16 +1,17 @@
 <?php
+
 /**
  * Avatar service interface.
  */
 
-namespace App\Service;
+namespace App\Contract;
 
 use App\Entity\Avatar;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Entity\User;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * Class Avatar service.
+ * Interface AvatarServiceInterface.
  */
 interface AvatarServiceInterface
 {

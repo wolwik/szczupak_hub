@@ -6,26 +6,37 @@
 
 namespace App\Service;
 
+use App\Contract\VoteServiceInterface;
 use App\Entity\Answer;
-use App\Entity\Question;
 use App\Entity\User;
 use App\Entity\Vote;
 use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
 use App\Repository\VoteRepository;
-use App\Service\AnswerService;
+use App\Contract\AnswerServiceInterface;
 
-
-
-class VoteService
+/**
+ * Class VoteService.
+ */
+class VoteService implements VoteServiceInterface
 {
+    /**
+     * Constructor.
+     *
+     * @param VoteRepository         $voteRepository   Vote repository
+     * @param AnswerServiceInterface $answerService    Answer service interface
+     */
     public function __construct(
-        private VoteRepository $voteRepository,
-        private AnswerRepository $answerRepository,
-        private AnswerService $answerService
+        private readonly VoteRepository $voteRepository,
+        private readonly AnswerServiceInterface $answerService
     ) {}
 
-    // VOTING
+    /**
+     * Cast a vote for an answer.
+     *
+     * @param Answer $answer Answer entity
+     * @param User   $user   User entity
+     */
     public function vote(Answer $answer, User $user): void
     {
         // zabezpieczenie przed ponownym głosowaniem
@@ -49,6 +60,5 @@ class VoteService
         $question = $answer->getQuestion();
         $this->answerService->updateBestAnswer($question);
     }
-
 
 }

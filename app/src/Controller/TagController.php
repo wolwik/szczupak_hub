@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
+use App\Contract\TagServiceInterface;
 use App\Entity\Tag;
 use App\Form\TagDeleteType;
 use App\Form\TagType;
 use App\Repository\TagRepository;
-use App\Service\TagService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,11 +28,11 @@ final class TagController extends AbstractController
     /**
      * Constructor.
      *
-     * @param TagService           $tagService     Tag service
+     * @param TagServiceInterface  $tagService     Tag service
      * @param TranslatorInterface  $translator     Translator
      */
     public function __construct(
-        private readonly TagService $tagService,
+        private readonly TagServiceInterface $tagService,
         private readonly TranslatorInterface $translator
     ) {}
 

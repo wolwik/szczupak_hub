@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Answer;
-use App\Service\VoteService;
+use App\Contract\VoteServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,7 +14,7 @@ final class VoteController extends AbstractController
 {
 
     public function __construct(
-        private readonly VoteService $voteService,
+        private readonly VoteServiceInterface $voteService,
         private readonly TranslatorInterface $translator,
     ) {}
 

@@ -6,6 +6,8 @@
 
 namespace App\Service;
 
+use App\Contract\AvatarServiceInterface;
+use App\Contract\FileUploadServiceInterface;
 use App\Entity\Avatar;
 use App\Entity\User;
 use App\Repository\AvatarRepository;
@@ -18,26 +20,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class AvatarService implements AvatarServiceInterface
 {
     /**
-     * Target directory.
-     */
-    private string $targetDirectory;
-
-    /**
-     * Avatar repository.
-     */
-    private AvatarRepository $avatarRepository;
-
-    /**
-     * File upload service.
-     */
-    private FileUploadServiceInterface $fileUploadService;
-
-    /**
-     * File system service.
-     */
-    private Filesystem $filesystem;
-
-    /**
      * Constructor.
      *
      * @param string                     $targetDirectory   Target directory
@@ -45,13 +27,12 @@ class AvatarService implements AvatarServiceInterface
      * @param FileUploadServiceInterface $fileUploadService File upload service
      * @param Filesystem                 $filesystem        Filesystem component
      */
-    public function __construct(string $targetDirectory, AvatarRepository $avatarRepository, FileUploadServiceInterface $fileUploadService, Filesystem $filesystem)
-    {
-        $this->targetDirectory = $targetDirectory;
-        $this->avatarRepository = $avatarRepository;
-        $this->fileUploadService = $fileUploadService;
-        $this->filesystem = $filesystem;
-    }
+    public function __construct(
+        string $targetDirectory,
+        AvatarRepository $avatarRepository,
+        FileUploadServiceInterface $fileUploadService,
+        Filesystem $filesystem
+    ) {}
 
     /**
      * Update avatar.

@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
+use App\Contract\CategoryServiceInterface;
 use App\Entity\Category;
 use App\Form\CategoryDeleteType;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
-use App\Service\CategoryService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,14 +28,12 @@ final class CategoryController extends AbstractController
     /**
      * Constructor.
      *
-     * @param CategoryRepository   $categoryRepository  Category repository
-     * @param CategoryService      $categoryService     Category service
-     * @param TranslatorInterface  $translator          Translator
+     * @param CategoryServiceInterface   $categoryService     Category service
+     * @param TranslatorInterface        $translator          Translator
      */
 
     public function __construct(
-        private readonly CategoryRepository $categoryRepository,
-        private readonly CategoryService $categoryService,
+        private readonly CategoryServiceInterface $categoryService,
         private readonly TranslatorInterface $translator
     ) {}
 

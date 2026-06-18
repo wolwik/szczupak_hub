@@ -2,13 +2,12 @@
 
 namespace App\Controller;
 
+use App\Contract\AnswerServiceInterface;
 use App\Entity\Answer;
 use App\Entity\Question;
 use App\Form\AnswerDeleteType;
 use App\Form\AnswerType;
-use App\Repository\QuestionRepository;
 use App\Security\Voter\AnswerVoter;
-use App\Service\AnswerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,15 +27,14 @@ final class AnswerController extends AbstractController
     /**
      * Constructor.
      *
-     * @param AnswerService        $answerService Answer service
-     * @param TranslatorInterface  $translator    Translator
+     * @param AnswerServiceInterface  $answerService Answer service
+     * @param TranslatorInterface     $translator    Translator
      */
 
     public function __construct(
-        private readonly AnswerService $answerService,
+        private readonly AnswerServiceInterface $answerService,
         private readonly TranslatorInterface $translator
     ) {}
-
 
     /**
      * Creates a new answer.
@@ -79,7 +77,6 @@ final class AnswerController extends AbstractController
     }
 
     // nie renderujemy twiga, bo to jest w twigu renderowanym przez Question
-
 
     /**
      * Edits an answer.
@@ -126,7 +123,6 @@ final class AnswerController extends AbstractController
         ]);
     }
 
-
     /**
      * Deletes an answer.
      *
@@ -171,12 +167,10 @@ final class AnswerController extends AbstractController
         ]);
     }
 
-
     /**
      * Marks an answer as the best one for a question.
      *
      * @param Answer              $answer            Answer entity
-     * @param QuestionRepository  $questionRepository Repository used for question updates
      *
      * @return Response Redirect response to question view
      */
@@ -189,9 +183,9 @@ final class AnswerController extends AbstractController
     )]
     #[IsGranted(AnswerVoter::MARK_AS_BEST, subject: 'answer')]
 
-    public function markAsBest(Answer $answer, QuestionRepository $questionRepository): Response
+    public function markAsBest(Answer $answer): Response
     {
-        $this->answerService->markAsBest($answer, $questionRepository);
+        $this->answerService->markAsBest($answer);
 
         $this->addFlash(
             'success',

@@ -5,11 +5,10 @@
 
 namespace App\Controller;
 
+use App\Contract\AvatarServiceInterface;
 use App\Entity\Avatar;
 use App\Entity\User;
 use App\Form\AvatarType;
-use App\Service\AvatarService;
-use App\Service\AvatarServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,26 +23,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AvatarController extends AbstractController
 {
     /**
-     * Avatar service.
-     */
-    private AvatarServiceInterface $avatarService;
-
-    /**
-     * Translator.
-     */
-    private TranslatorInterface $translator;
-
-    /**
      * Constructor.
      *
      * @param AvatarServiceInterface $avatarService Avatar service
      * @param TranslatorInterface    $translator    Translator
      */
-    public function __construct(AvatarServiceInterface $avatarService, TranslatorInterface $translator)
-    {
-        $this->avatarService = $avatarService;
-        $this->translator = $translator;
-    }
+    public function __construct(
+        private readonly AvatarServiceInterface $avatarService,
+        private readonly TranslatorInterface $translator
+    ) {}
 
     /**
      * Create action.

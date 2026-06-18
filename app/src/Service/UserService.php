@@ -6,9 +6,8 @@
 
 namespace App\Service;
 
-use App\Entity\Category;
+use App\Contract\UserServiceInterface;
 use App\Entity\User;
-use App\Repository\QuestionRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -16,23 +15,38 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
  * Class UserService
  */
 
-class UserService {
-
+class UserService implements UserServiceInterface
+{
+    /**
+     * Constructor.
+     *
+     * @param UserRepository              $userRepository UserRepository
+     * @param UserPasswordHasherInterface $passwordHasher PasswordHasher
+     */
     public function __construct(
-        private UserRepository $userRepository,
-        private UserPasswordHasherInterface $passwordHasher
+        private readonly UserRepository $userRepository,
+        private readonly UserPasswordHasherInterface $passwordHasher
     ) {}
 
+    /**
+     * Save user.
+     *
+     * @param User $user User entity
+     */
     public function save(User $user): void
     {
         $this->userRepository->save($user);
     }
 
-
-    public function register(
-        User $user,
-        string $plainPassword
-    ): void
+    /**
+     * Register a new user.
+     *
+     * @param User   $user          User entity
+     * @param string $plainPassword Plain text password
+     *
+     * @throws \Exception If email or nickname already exists
+     */
+    public function register(User $user, string $plainPassword): void
     {
         if ($this->userRepository->findByEmail($user->getEmail())) {
             throw new \Exception('Email already exists');
@@ -57,6 +71,11 @@ class UserService {
 
     }
 
+    /**
+     * Delete user.
+     *
+     * @param User $user User entity
+     */
     public function delete(User $user): void
     {
         $this->userRepository->delete($user);

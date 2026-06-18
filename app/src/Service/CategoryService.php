@@ -6,6 +6,7 @@
 
 namespace App\Service;
 
+use App\Contract\CategoryServiceInterface;
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -14,7 +15,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
  * Class CategoryService
  */
 
-class CategoryService {
+class CategoryService implements CategoryServiceInterface{
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
         private readonly SluggerInterface $slugger

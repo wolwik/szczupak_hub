@@ -6,6 +6,7 @@
 
 namespace App\Service;
 
+use App\Contract\QuestionServiceInterface;
 use App\Entity\Question;
 use App\Entity\User;
 use App\Repository\QuestionRepository;
@@ -16,7 +17,7 @@ use Knp\Component\Pager\PaginatorInterface;
  * Class QuestionService
  */
 
-class QuestionService {
+class QuestionService implements QuestionServiceInterface{
     private const PAGINATOR_ITEMS_PER_PAGE = 10;
     public function __construct(
         private readonly QuestionRepository $questionRepository,

@@ -6,12 +6,13 @@
 
 namespace App\Service;
 
+use App\Contract\AnswerServiceInterface;
 use App\Entity\Answer;
-use App\Repository\AnswerRepository;
 use App\Entity\Question;
+use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
 
-class AnswerService
+class AnswerService implements AnswerServiceInterface
 {
 
     public function __construct(
@@ -36,7 +37,13 @@ class AnswerService
 
     public function delete(Answer $answer): void
     {
+        $question = $answer->getQuestion();
+
         $this->answerRepository->delete($answer);
+
+        if ($question) {
+            $this->updateBestAnswer($question);
+        }
     }
 
 

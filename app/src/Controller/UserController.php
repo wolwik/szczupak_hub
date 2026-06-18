@@ -8,8 +8,8 @@ use App\Form\EditAccountType;
 use App\Form\RegistrationType;
 use App\Form\UserDeleteType;
 use App\Repository\UserRepository;
-use App\Service\UserService;
-use App\Service\QuestionService;
+use App\Contract\UserServiceInterface;
+use App\Contract\QuestionServiceInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,16 +34,16 @@ final class UserController extends AbstractController
     /**
      * Constructor.
      *
-     * @param UserService          $userService      User service
-     * @param TranslatorInterface  $translator       Translator
-     * @param UserRepository       $userRepository   User repository
-     * @param QuestionService      $questionService  Question service
+     * @param UserServiceInterface     $userService      User service
+     * @param TranslatorInterface      $translator       Translator
+     * @param UserRepository           $userRepository   User repository
+     * @param QuestionServiceInterface $questionService  Question service
      */
     public function __construct(
-        private readonly UserService $userService,
-        private readonly TranslatorInterface $translator,
-        private readonly UserRepository $userRepository,
-        private readonly QuestionService $questionService,
+        private readonly UserServiceInterface     $userService,
+        private readonly TranslatorInterface      $translator,
+        private readonly UserRepository           $userRepository,
+        private readonly QuestionServiceInterface $questionService,
     ) {}
 
 

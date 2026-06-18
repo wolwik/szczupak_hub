@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Contract\QuestionServiceInterface;
 use App\Entity\Enum\QuestionStatus;
 use App\Entity\Question;
 use App\Form\AnswerType;
@@ -9,8 +10,7 @@ use App\Form\QuestionDeleteType;
 use App\Form\QuestionType;
 use App\Repository\CategoryRepository;
 use App\Security\Voter\QuestionVoter;
-use App\Service\QuestionService;
-use App\Service\TagService;
+use App\Contract\TagServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Class QuestionController.
  */
-
 #[Route(
     '/question'
 )]
@@ -33,19 +32,15 @@ final class QuestionController extends AbstractController
     /**
      * Constructor.
      *
-     * @param QuestionService      $questionService     Question service
-     * @param TranslatorInterface  $translator          Translator
-     * @param CategoryRepository   $categoryRepository  Category repository
-     * @param TagService           $tagService          Tag service
+     * @param QuestionServiceInterface   $questionService     Question service
+     * @param TranslatorInterface        $translator          Translator
+     * @param CategoryRepository         $categoryRepository  Category repository
      */
-
     public function __construct(
-        private readonly QuestionService $questionService,
+        private readonly QuestionServiceInterface $questionService,
         private readonly TranslatorInterface $translator,
         private readonly CategoryRepository $categoryRepository,
-        private readonly TagService $tagService,
     ) {}
-
 
     /**
      * Displays paginated list of questions with optional filters.
@@ -56,7 +51,6 @@ final class QuestionController extends AbstractController
      *
      * @return Response Rendered questions list page
      */
-
     #[Route(
         '/question_list',
         name: 'question_list',
@@ -79,7 +73,6 @@ final class QuestionController extends AbstractController
         ]);
     }
 
-
     /**
      * Single question's view.
      *
@@ -87,7 +80,6 @@ final class QuestionController extends AbstractController
      *
      * @return Response HTTP response
      */
-
     #[Route(
         '/{id}/show',
         name: 'question_view',
@@ -109,7 +101,6 @@ final class QuestionController extends AbstractController
         ]);
     }
 
-
     /**
      * Creates a new question.
      *
@@ -117,7 +108,6 @@ final class QuestionController extends AbstractController
      *
      * @return Response HTTP response
      */
-
     #[Route(
         '/create',
         name: 'question_create',
@@ -125,7 +115,7 @@ final class QuestionController extends AbstractController
     )]
     #[IsGranted('ROLE_USER')] // kazdy z rola "user" LUB WYZSZA
 
-    public function create(Request $request): Response
+    public function create(Request $request, TagServiceInterface $tagService): Response
     {
         $question = new Question();
 
@@ -138,7 +128,7 @@ final class QuestionController extends AbstractController
 
             // creating tags
             $tagsString = $form->get('tags')->getData();
-            $tags = $this->tagService->createFromString($tagsString);
+            $tags = $tagService->createFromString($tagsString);
 
             foreach ($tags as $tag) {
                 $question->addTag($tag);
@@ -161,7 +151,6 @@ final class QuestionController extends AbstractController
         ]);
     }
 
-
     /**
      * Publishes question.
      *
@@ -169,7 +158,6 @@ final class QuestionController extends AbstractController
      *
      * @return Response Redirect response to question view
      */
-
     #[Route(
         '/{id}/publish',
         name: 'question_publish',
@@ -192,7 +180,6 @@ final class QuestionController extends AbstractController
         return $this->redirectToRoute('question_view', ['id' => $question->getId()]);
     }
 
-
     /**
      * Edits question.
      *
@@ -201,7 +188,6 @@ final class QuestionController extends AbstractController
      *
      * @return Response HTTP response
      */
-
     #[Route(
         '/{id}/edit',
         name: 'question_edit',
@@ -210,7 +196,7 @@ final class QuestionController extends AbstractController
     )]
     #[IsGranted(QuestionVoter::EDIT, subject: 'question')]
 
-    public function edit(Request $request, Question $question): Response
+    public function edit(Request $request, Question $question, TagServiceInterface $tagService): Response
     {
         // dodajemy obecne tagi do formularza
         $existingTags = implode(', ', array_map(
@@ -242,7 +228,7 @@ final class QuestionController extends AbstractController
             $tagsString = $form->get('tags')->getData();
 
             // Stwórz / pobierz tagi
-            $tags = $this->tagService->createFromString($tagsString);
+            $tags = $tagService->createFromString($tagsString);
 
             // Dodaj nowe tagi
             foreach ($tags as $tag) {
@@ -269,7 +255,6 @@ final class QuestionController extends AbstractController
         );
     }
 
-
     /**
      * Deletes a question.
      *
@@ -278,7 +263,6 @@ final class QuestionController extends AbstractController
      *
      * @return Response HTTP response
      */
-
     #[Route(
         '/{id}/delete',
         name: 'question_delete',
