@@ -32,11 +32,8 @@ class AnswerType extends AbstractType
     {
         $builder
             ->add('content', TextareaType::class, [
-                'label' => 'Twoja odpowiedź',
+                'label' => 'label.content',
                 'label_attr' => ['class' => 'visually-hidden'],
-                'attr' => [
-                    'placeholder' => 'Napisz odpowiedź...',
-                ],
             ]);
     }
 

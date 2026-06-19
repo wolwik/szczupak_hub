@@ -77,7 +77,7 @@
 
                 <div class="d-flex gap-2">
                     <a href="{{ url('question_list') }}" class="btn btn-outline-secondary btn-sm">
-                        Back
+                        {{ 'label.back'|trans }}
                     </a>
 
                     {% if is_granted('QUESTION_EDIT', question) %}

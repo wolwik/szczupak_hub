@@ -137,7 +137,7 @@ class QuestionRepository extends ServiceEntityRepository
      *
      * @return int Number of questions
      */
-    public function countByCategory(\App\Entity\Category $category): int
+    public function countByCategory(Category $category): int
     {
         return (int) $this->createQueryBuilder('question')
             ->select('count(question.id)')

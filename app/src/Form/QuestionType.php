@@ -40,7 +40,6 @@ class QuestionType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'max_length' => 64,
-                    // 'placeholder' => 'Tytuł pytania',
                     'class' => 'form-control',
                 ],
             ])

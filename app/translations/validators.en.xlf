@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" target-language="en" datatype="plaintext" original="file.ext">
+    <body>
+      <trans-unit id="Answer content cannot be empty.">
+        <source>Answer content cannot be empty.</source>
+        <target>Answer content cannot be empty.</target>
+      </trans-unit>
+      <trans-unit id="Answer is too short.">
+        <source>Answer is too short.</source>
+        <target>Answer is too short.</target>
+      </trans-unit>
+      <trans-unit id="Email is already taken">
+        <source>Email is already taken</source>
+        <target>Email is already taken</target>
+      </trans-unit>
+      <trans-unit id="Nickname is already taken">
+        <source>Nickname is already taken</source>
+        <target>Nickname is already taken</target>
+      </trans-unit>
+      <trans-unit id="Już oddałeś głos na tę odpowiedź.">
+        <source>Już oddałeś głos na tę odpowiedź.</source>
+        <target>You have already voted for this answer.</target>
+      </trans-unit>
+      <trans-unit id="Taki tag już istnieje.">
+        <source>Taki tag już istnieje.</source>
+        <target>This tag already exists.</target>
+      </trans-unit>
+      <trans-unit id="Nazwa tagu nie może być pusta.">
+        <source>Nazwa tagu nie może być pusta.</source>
+        <target>Tag name cannot be empty.</target>
+      </trans-unit>
+      <trans-unit id="Nazwa tagu jest za krótka.">
+        <source>Nazwa tagu jest za krótka.</source>
+        <target>Tag name is too short.</target>
+      </trans-unit>
+      <trans-unit id="Nazwa tagu nie może być dłuższa niż {{ limit }} znaków.">
+        <source>Nazwa tagu nie może być dłuższa niż {{ limit }} znaków.</source>
+        <target>Tag name cannot be longer than {{ limit }} characters.</target>
+      </trans-unit>
+      <trans-unit id="Tytuł pytania nie może być pusty.">
+        <source>Tytuł pytania nie może być pusty.</source>
+        <target>Question title cannot be empty.</target>
+      </trans-unit>
+      <trans-unit id="Tytuł jest za krótki (minimum {{ limit }} znaków).">
+        <source>Tytuł jest za krótki (minimum {{ limit }} znaków).</source>
+        <target>Title is too short (minimum {{ limit }} characters).</target>
+      </trans-unit>
+      <trans-unit id="Tytuł nie może być dłuższy niż {{ limit }} znaków.">
+        <source>Tytuł nie może być dłuższy niż {{ limit }} znaków.</source>
+        <target>Title cannot be longer than {{ limit }} characters.</target>
+      </trans-unit>
+      <trans-unit id="Treść pytania nie może być pusta.">
+        <source>Treść pytania nie może być pusta.</source>
+        <target>Question content cannot be empty.</target>
+      </trans-unit>
+      <trans-unit id="Opisz swój problem nieco dokładniej (minimum {{ limit }} znaków).">
+        <source>Opisz swój problem nieco dokładniej (minimum {{ limit }} znaków).</source>
+        <target>Describe your problem in more detail (minimum {{ limit }} characters).</target>
+      </trans-unit>
+      <trans-unit id="Wybierz kategorię dla pytania.">
+        <source>Wybierz kategorię dla pytania.</source>
+        <target>Select a category for the question.</target>
+      </trans-unit>
+      <trans-unit id="Taka kategoria już istnieje.">
+        <source>Taka kategoria już istnieje.</source>
+        <target>This category already exists.</target>
+      </trans-unit>
+      <trans-unit id="Nazwa kategorii nie może być pusta.">
+        <source>Nazwa kategorii nie może być pusta.</source>
+        <target>Category name cannot be empty.</target>
+      </trans-unit>
+      <trans-unit id="Nazwa kategorii jest za krótka.">
+        <source>Nazwa kategorii jest za krótka.</source>
+        <target>Category name is too short.</target>
+      </trans-unit>
+      <trans-unit id="Nazwa kategorii nie może być dłuższa niż {{ limit }} znaków.">
+        <source>Nazwa kategorii nie może być dłuższa niż {{ limit }} znaków.</source>
+        <target>Category name cannot be longer than {{ limit }} characters.</target>
+      </trans-unit>
+      <trans-unit id="This filename is already in use.">
+        <source>This filename is already in use.</source>
+        <target>This filename is already in use.</target>
+      </trans-unit>
+      <trans-unit id="This user already has an avatar.">
+        <source>This user already has an avatar.</source>
+        <target>This user already has an avatar.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
