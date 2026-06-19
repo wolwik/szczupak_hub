@@ -11,6 +11,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Answer;
 use App\Entity\Vote;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -41,5 +42,22 @@ class VoteRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->persist($vote);
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * Count votes for a single answer.
+     *
+     * @param Answer $answer Answer entity
+     *
+     * @return int Number of votes for the answer
+     */
+    public function countVotesForAnswer(Answer $answer): int
+    {
+        return (int) $this->createQueryBuilder('v')
+            ->select('COUNT(v.id)')
+            ->where('v.answer = :answer')
+            ->setParameter('answer', $answer)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

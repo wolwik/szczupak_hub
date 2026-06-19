@@ -59,6 +59,7 @@ class AvatarRepository extends ServiceEntityRepository
      * Find user's avatar.
      *
      * @param User $user User entity
+     *
      * @return Avatar|null Avatar entity or null
      */
     public function findOneByUser(User $user): ?Avatar

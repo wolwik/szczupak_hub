@@ -12,8 +12,6 @@
 namespace App\Entity;
 
 use App\Repository\AnswerRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -73,31 +71,9 @@ class Answer
     /**
      * Author of answer.
      */
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'answers')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?User $author = null;
-
-    /**
-     * Votes collection.
-     *
-     * @var Collection<int, Vote>
-     */
-    #[ORM\OneToMany(
-        targetEntity: Vote::class,
-        mappedBy: 'answer',
-        cascade: ['remove'],
-        orphanRemoval: true
-    )]
-    #[Assert\Valid]
-    private Collection $votes;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->votes = new ArrayCollection();
-    }
 
     /**
      * Getter for ID.
@@ -241,61 +217,5 @@ class Answer
         $this->author = $author;
 
         return $this;
-    }
-
-    /**
-     * Getter for votes collection.
-     *
-     * @return Collection<int, Vote> Votes collection
-     */
-    public function getVotes(): Collection
-    {
-        return $this->votes;
-    }
-
-    /**
-     * Adds a vote to the answer.
-     *
-     * @param Vote $vote Vote entity
-     *
-     * @return $this
-     */
-    public function addVote(Vote $vote): static
-    {
-        if (!$this->votes->contains($vote)) {
-            $this->votes->add($vote);
-            $vote->setAnswer($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Removes a vote from the answer.
-     *
-     * @param Vote $vote Vote entity
-     *
-     * @return $this
-     */
-    public function removeVote(Vote $vote): static
-    {
-        if ($this->votes->removeElement($vote)) {
-            // set the owning side to null (unless already changed)
-            if ($vote->getAnswer() === $this) {
-                $vote->setAnswer(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Gets the total count of votes.
-     *
-     * @return int Votes count
-     */
-    public function getVotesCount(): int
-    {
-        return count($this->votes);
     }
 }

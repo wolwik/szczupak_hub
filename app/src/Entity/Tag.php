@@ -93,7 +93,6 @@ class Tag
      *
      * @return $this
      */
-
     public function setId(int $id): static
     {
         $this->id = $id;

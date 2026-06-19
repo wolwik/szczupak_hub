@@ -47,4 +47,13 @@ interface AnswerServiceInterface
      * @param Question $question Question entity
      */
     public function updateBestAnswer(Question $question): void;
+
+    /**
+     * Get single answer votes count.
+     *
+     * Triggered automatically after vote modifications.
+     *
+     * @param Answer $answer Answer entity
+     */
+    public function getVotesCount(Answer $answer): int;
 }

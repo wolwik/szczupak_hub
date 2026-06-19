@@ -102,31 +102,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private bool $isBlocked = false;
 
     /**
-     * User avatar.
-     */
-    /*
-    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Avatar::class)]
-    private ?Avatar $avatar = null;
-    */
-
-    /**
-     * Votes collection.
-     *
-     * @var Collection<int, Vote>
-     */
-    /*
-    #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'user')]
-    private Collection $votes;
-    */
-
-    /**
      * Constructor.
      */
     public function __construct()
     {
         $this->questions = new ArrayCollection();
         $this->answers = new ArrayCollection();
-        //$this->votes = new ArrayCollection();
+        // $this->votes = new ArrayCollection();
     }
 
     /**
@@ -435,83 +417,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
-    /**
-     * Getter for avatar.
-     *
-     * @return Avatar|null Avatar entity
-     */
-    /*
-    public function getAvatar(): ?Avatar
-    {
-        return $this->avatar;
-    }
-    */
-
-    /**
-     * Setter for avatar.
-     *
-     * @param Avatar|null $avatar Avatar entity
-     *
-     * @return $this
-     */
-    /*
-    public function setAvatar(?Avatar $avatar): self
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
-    */
-
-    /**
-     * Getter for votes.
-     *
-     * @return Collection<int, Vote> Votes collection
-     */
-    /*
-    public function getVotes(): Collection
-    {
-        return $this->votes;
-    }
-    */
-
-    /**
-     * Adds a vote.
-     *
-     * @param Vote $vote Vote entity
-     *
-     * @return $this
-     */
-    /*
-    public function addVote(Vote $vote): static
-    {
-        if (!$this->votes->contains($vote)) {
-            $this->votes->add($vote);
-            $vote->setUser($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Removes a vote.
-     *
-     * @param Vote $vote Vote entity
-     *
-     * @return $this
-     */
-    /*
-    public function removeVote(Vote $vote): static
-    {
-        if ($this->votes->removeElement($vote)) {
-            // set the owning side to null (unless already changed)
-            if ($vote->getUser() === $this) {
-                $vote->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-    */
 }

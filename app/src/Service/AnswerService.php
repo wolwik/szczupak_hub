@@ -16,6 +16,7 @@ use App\Entity\Answer;
 use App\Entity\Question;
 use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
+use App\Repository\VoteRepository;
 
 /**
  * Class AnswerService.
@@ -27,8 +28,9 @@ class AnswerService implements AnswerServiceInterface
      *
      * @param AnswerRepository   $answerRepository   Answer repository
      * @param QuestionRepository $questionRepository Question repository
+     * @param VoteRepository     $voteRepository     Vote repository
      */
-    public function __construct(private readonly AnswerRepository $answerRepository, private readonly QuestionRepository $questionRepository)
+    public function __construct(private readonly AnswerRepository $answerRepository, private readonly QuestionRepository $questionRepository, private readonly VoteRepository $voteRepository)
     {
     }
 
@@ -94,5 +96,19 @@ class AnswerService implements AnswerServiceInterface
         $question->setBestAnswer($bestAnswer);
 
         $this->questionRepository->save($question);
+    }
+
+    /**
+     * Get single answer votes count.
+     *
+     * Triggered automatically after vote modifications.
+     *
+     * @param Answer $answer Answer entity
+     *
+     * @return int Votes count for answer
+     */
+    public function getVotesCount(Answer $answer): int
+    {
+        return $this->voteRepository->countVotesForAnswer($answer);
     }
 }

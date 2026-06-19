@@ -11,6 +11,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Vote;
 use App\Entity\Answer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -59,12 +60,12 @@ class AnswerRepository extends ServiceEntityRepository
      *
      * @param int $questionId Question ID
      *
-     * @return QueryBuilder Query builder
+     * @return Answer|null Most liked answer or null
      */
     public function findMostLikedAnswer(int $questionId): ?Answer
     {
         return $this->createQueryBuilder('a')
-            ->join('a.votes', 'v')
+            ->join(Vote::class, 'v', 'WITH', 'v.answer = a.id')
             ->where('a.question = :qid')
             ->setParameter('qid', $questionId)
             ->groupBy('a.id')
