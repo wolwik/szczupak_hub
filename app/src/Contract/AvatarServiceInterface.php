@@ -21,6 +21,15 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 interface AvatarServiceInterface
 {
     /**
+     * Find avatar for user.
+     *
+     * @param User $user User entity
+     *
+     * @return Avatar|null Avatar entity
+     */
+    public function findOneByUser(User $user): ?Avatar;
+
+    /**
      * Create avatar.
      *
      * @param UploadedFile $uploadedFile Uploaded file

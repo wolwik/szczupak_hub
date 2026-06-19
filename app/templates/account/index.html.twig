@@ -15,9 +15,11 @@
                 <div class="d-flex align-items-center gap-3 mb-4">
 
                     <div class="avatar-wrapper avatar-lg">
-                        {% if app.user.avatar and app.user.avatar.filename %}
+                        {% set avatar_filename = get_user_avatar(app.user) %}
+
+                        {% if avatar_filename %}
                             <img
-                                src="{{ asset('uploads/avatars/' ~ app.user.avatar.filename) }}"
+                                src="{{ asset('uploads/avatars/' ~ avatar_filename) }}"
                                 class="avatar-img"
                                 alt="avatar"
                             >
@@ -31,7 +33,7 @@
                     </div>
 
                     <a href="{{ url('avatar_create') }}" class="btn btn-sm btn-outline-primary">
-                        {{ app.user.avatar ? 'label.change_avatar'|trans : 'label.add_avatar'|trans }}
+                        {{ avatar_filename ? 'label.change_avatar'|trans : 'label.add_avatar'|trans }}
                     </a>
 
                     <form method="post" action="{{ path('avatar_delete') }}">

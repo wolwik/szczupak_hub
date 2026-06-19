@@ -37,6 +37,18 @@ class AvatarService implements AvatarServiceInterface
     }
 
     /**
+     * Find avatar for user.
+     *
+     * @param User $user User entity
+     *
+     * @return Avatar|null Avatar entity
+     */
+    public function findOneByUser(User $user): ?Avatar
+    {
+        return $this->avatarRepository->findOneByUser($user);
+    }
+
+    /**
      * Update avatar.
      *
      * @param UploadedFile $uploadedFile Uploaded file
@@ -84,7 +96,7 @@ class AvatarService implements AvatarServiceInterface
      */
     public function delete(User $user): void
     {
-        $avatar = $user->getAvatar();
+        $avatar = $this->findOneByUser($user);
 
         if (!$avatar) {
             return;
@@ -97,8 +109,6 @@ class AvatarService implements AvatarServiceInterface
                 $this->targetDirectory.'/'.$filename
             );
         }
-
-        $user->setAvatar(null);
 
         $this->avatarRepository->delete($avatar);
     }

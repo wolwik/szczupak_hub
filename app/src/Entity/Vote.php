@@ -46,7 +46,7 @@ class Vote
     /**
      * User who voted.
      */
-    #[ORM\ManyToOne(inversedBy: 'votes')]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     #[Assert\NotBlank]
     private ?User $user = null;

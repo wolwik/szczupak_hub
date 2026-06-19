@@ -51,7 +51,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      *
      * @param string $email Email string
      *
-     * @return User User entity
+     * @return User|null User entity
      */
     public function findByEmail(string $email): ?User
     {
@@ -67,7 +67,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      *
      * @param string $nickname Nickname string
      *
-     * @return User User entity
+     * @return User|null User entity
      */
     public function findByNickname(string $nickname): ?User
     {

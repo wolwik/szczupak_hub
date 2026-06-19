@@ -12,6 +12,7 @@
 namespace App\Repository;
 
 use App\Entity\Avatar;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -52,5 +53,16 @@ class AvatarRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->remove($avatar);
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * Find user's avatar.
+     *
+     * @param User $user User entity
+     * @return Avatar|null Avatar entity or null
+     */
+    public function findOneByUser(User $user): ?Avatar
+    {
+        return $this->findOneBy(['user' => $user]);
     }
 }

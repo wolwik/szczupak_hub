@@ -70,7 +70,9 @@
                                         <div class="d-flex align-items-center gap-3 ">
 
                                             <div class="avatar-wrapper avatar-md">
-                                                {% if question.author and question.author.avatar and question.author.avatar.filename %}
+                                                {% set avatar_filename = get_user_avatar(question.author) %}
+
+                                                {% if avatar_filename %}
                                                     <img
                                                         src="{{ asset('uploads/avatars/' ~ question.author.avatar.filename) }}"
                                                         class="avatar-img"

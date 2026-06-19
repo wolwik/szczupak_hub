@@ -53,7 +53,7 @@ class AvatarController extends AbstractController
             throw new \LogicException();
         }
 
-        if ($user->getAvatar()) {
+        if ($this->avatarService->findOneByUser($user)) {
             return $this->redirectToRoute('avatar_edit');
         }
 
@@ -103,7 +103,7 @@ class AvatarController extends AbstractController
             throw new \LogicException();
         }
 
-        $avatar = $user->getAvatar();
+        $avatar = $this->avatarService->findOneByUser($user);
 
         if (!$avatar) {
             return $this->redirectToRoute('avatar_create');
