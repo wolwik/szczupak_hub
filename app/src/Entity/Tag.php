@@ -12,8 +12,6 @@
 namespace App\Entity;
 
 use App\Repository\TagRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -59,22 +57,6 @@ class Tag
     #[ORM\Column(length: 255)]
     #[Assert\Type('string')]
     private ?string $slug = null;
-
-    /**
-     * Questions associated with this tag.
-     *
-     * @var Collection<int, Question>
-     */
-    #[ORM\ManyToMany(targetEntity: Question::class, mappedBy: 'tags')]
-    private Collection $questions;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->questions = new ArrayCollection();
-    }
 
     /**
      * Getter for ID.
@@ -144,46 +126,6 @@ class Tag
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Getter for questions.
-     *
-     * @return Collection<int, Question> Questions collection
-     */
-    public function getQuestions(): Collection
-    {
-        return $this->questions;
-    }
-
-    /**
-     * Adds a question to the tag.
-     *
-     * @param Question $question Question entity
-     *
-     * @return $this
-     */
-    public function addQuestion(Question $question): static
-    {
-        if (!$this->questions->contains($question)) {
-            $this->questions->add($question);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Removes a question from the tag.
-     *
-     * @param Question $question Question entity
-     *
-     * @return $this
-     */
-    public function removeQuestion(Question $question): static
-    {
-        $this->questions->removeElement($question);
 
         return $this;
     }

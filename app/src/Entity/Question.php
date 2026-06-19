@@ -100,7 +100,7 @@ class Question
      *
      * @var Collection<int, Tag>
      */
-    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'questions')]
+    #[ORM\ManyToMany(targetEntity: Tag::class)]
     #[ORM\JoinTable(name: 'questions_tags')]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -330,7 +330,6 @@ class Question
     {
         if (!$this->tags->contains($tag)) {
             $this->tags->add($tag);
-            $tag->addQuestion($this);
         }
 
         return $this;
@@ -345,9 +344,7 @@ class Question
      */
     public function removeTag(Tag $tag): static
     {
-        if ($this->tags->removeElement($tag)) {
-            $tag->removeQuestion($this);
-        }
+        $this->tags->removeElement($tag);
 
         return $this;
     }
