@@ -31,7 +31,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Class QuestionController.
  */
-#[Route('/question')]
 final class QuestionController extends AbstractController
 {
     /**
@@ -54,7 +53,7 @@ final class QuestionController extends AbstractController
      *
      * @return Response Rendered questions list page
      */
-    #[Route('/question_list', name: 'question_list', methods: ['GET'])]
+    #[Route('/', name: 'question_list', methods: ['GET'])]
     public function index(#[MapQueryParameter] int $page = 1, #[MapQueryParameter] ?int $categoryId = null, #[MapQueryParameter] ?int $tag = null): Response
     {
         $pagination = $this->questionService->getPaginatedList($page, $categoryId, $tag);
@@ -75,7 +74,7 @@ final class QuestionController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/{id}/show', name: 'question_view', requirements: ['id' => '[1-9]\d*'], methods: ['GET'])]
+    #[Route('/question/show', name: 'question_view', requirements: ['id' => '[1-9]\d*'], methods: ['GET'])]
     public function view(Question $question): Response
     {
         // zabezpieczenie przed podglądaniem szkiców
@@ -98,7 +97,7 @@ final class QuestionController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/create', name: 'question_create', methods: ['GET', 'POST'])]
+    #[Route('/question/create', name: 'question_create', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
     public function create(Request $request, TagServiceInterface $tagService): Response
     {
@@ -140,7 +139,7 @@ final class QuestionController extends AbstractController
      *
      * @return Response Redirect response to question view
      */
-    #[Route('/{id}/publish', name: 'question_publish', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST'])]
+    #[Route('/question/{id}/publish', name: 'question_publish', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
     public function publish(Question $question): Response
     {
@@ -165,7 +164,7 @@ final class QuestionController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/{id}/edit', name: 'question_edit', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'PUT'])]
+    #[Route('/question/{id}/edit', name: 'question_edit', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'PUT'])]
     #[IsGranted(QuestionVoter::EDIT, subject: 'question')]
     public function edit(Request $request, Question $question, TagServiceInterface $tagService): Response
     {
@@ -232,7 +231,7 @@ final class QuestionController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/{id}/delete', name: 'question_delete', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST', 'DELETE'])]
+    #[Route('/question/{id}/delete', name: 'question_delete', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST', 'DELETE'])]
     #[IsGranted(QuestionVoter::DELETE, subject: 'question')]
     public function delete(Request $request, Question $question): Response
     {
