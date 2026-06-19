@@ -38,7 +38,7 @@ class Vote
     /**
      * Answer associated with this vote.
      */
-    #[ORM\ManyToOne(inversedBy: 'votes')]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'answer_id', referencedColumnName: 'id', nullable: true)]
     #[Assert\NotBlank]
     private ?Answer $answer = null;

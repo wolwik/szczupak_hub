@@ -150,6 +150,12 @@
       <target>Edit category</target>
     </trans-unit>
 
+   <trans-unit id="label.category_delete">
+      <source>label.category_delete</source>
+      <target>Delete category</target>
+    </trans-unit>
+
+
     <trans-unit id="label.category_add">
       <source>label.category_add</source>
       <target>Add category</target>
@@ -597,6 +603,11 @@
       <trans-unit id="title.category_create">
           <source>title.category_create</source>
           <target>Create category</target>
+        </trans-unit>
+
+        <trans-unit id="title.category_delete">
+          <source>title.category_delete</source>
+          <target>Delete category</target>
         </trans-unit>
 
         <trans-unit id="title.change_password">

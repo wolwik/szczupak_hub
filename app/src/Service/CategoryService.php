@@ -14,6 +14,7 @@ namespace App\Service;
 use App\Contract\CategoryServiceInterface;
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
+use App\Repository\QuestionRepository;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
@@ -25,9 +26,10 @@ class CategoryService implements CategoryServiceInterface
      * Constructor.
      *
      * @param CategoryRepository $categoryRepository Category repository
+     * @param QuestionRepository $questionRepository Question repository
      * @param SluggerInterface   $slugger            Slugger interface
      */
-    public function __construct(private readonly CategoryRepository $categoryRepository, private readonly SluggerInterface $slugger)
+    public function __construct(private readonly CategoryRepository $categoryRepository, private readonly QuestionRepository $questionRepository, private readonly SluggerInterface $slugger)
     {
     }
 
@@ -56,7 +58,7 @@ class CategoryService implements CategoryServiceInterface
      */
     public function delete(Category $category): bool
     {
-        if (!$category->getQuestions()->isEmpty()) {
+        if ($this->questionRepository->countByCategory($category) > 0) {
             return false;
         }
 

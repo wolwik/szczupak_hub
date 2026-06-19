@@ -13,8 +13,6 @@ namespace App\Entity;
 
 use App\Entity\Enum\UserRole;
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -74,14 +72,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $plainPassword = null;
 
     /**
-     * Questions collection.
-     *
-     * @var Collection<int, Question>
-     */
-    #[ORM\OneToMany(targetEntity: Question::class, mappedBy: 'author')]
-    private Collection $questions;
-
-    /**
      * Nickname.
      */
     #[ORM\Column(length: 50, nullable: true, unique: true)]
@@ -92,14 +82,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column(type: 'boolean')]
     private bool $isBlocked = false;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->questions = new ArrayCollection();
-    }
 
     /**
      * Getter for id.
@@ -212,52 +194,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    /**
-     * Getter for questions.
-     *
-     * @return Collection<int, Question> Questions collection
-     */
-    public function getQuestions(): Collection
-    {
-        return $this->questions;
-    }
-
-    /**
-     * Adds a question.
-     *
-     * @param Question $question Question entity
-     *
-     * @return $this
-     */
-    public function addQuestion(Question $question): static
-    {
-        if (!$this->questions->contains($question)) {
-            $this->questions->add($question);
-            $question->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Removes a question.
-     *
-     * @param Question $question Question entity
-     *
-     * @return $this
-     */
-    public function removeQuestion(Question $question): static
-    {
-        if ($this->questions->removeElement($question)) {
-            // set the owning side to null (unless already changed)
-            if ($question->getAuthor() === $this) {
-                $question->setAuthor(null);
-            }
-        }
-
-        return $this;
     }
 
     /**

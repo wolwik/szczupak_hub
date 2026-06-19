@@ -89,7 +89,7 @@ class Question
     /**
      * Question category.
      */
-    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'questions')]
+    #[ORM\ManyToOne(targetEntity: Category::class)]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
     #[Assert\NotNull(message: 'Wybierz kategorię dla pytania.')]
     #[Assert\Type(Category::class)]
@@ -109,7 +109,7 @@ class Question
     /**
      * Question author.
      */
-    #[ORM\ManyToOne(inversedBy: 'questions')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     #[Assert\Type(User::class)]
     private ?User $author = null;

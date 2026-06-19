@@ -11,6 +11,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\Enum\QuestionStatus;
 use App\Entity\Question;
 use App\Entity\User;
@@ -48,6 +49,10 @@ class QuestionRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('question')
             ->leftJoin('question.category', 'category')
             ->addSelect('category')
+            ->leftJoin('question.author', 'author')
+            ->addSelect('author')
+            ->leftJoin('question.tags', 'tags')
+            ->addSelect('tags')
             ->where('question.status = :status')
             ->setParameter('status', QuestionStatus::PUBLISHED);
 
@@ -57,8 +62,7 @@ class QuestionRepository extends ServiceEntityRepository
         }
 
         if ($tagId) {
-            $qb->join('question.tags', 'tag')
-                ->andWhere('tag.id = :tagId')
+            $qb->andWhere('tags.id = :tagId')
                 ->setParameter('tagId', $tagId);
         }
 
@@ -75,6 +79,10 @@ class QuestionRepository extends ServiceEntityRepository
     public function queryUserDrafts(User $user): QueryBuilder
     {
         return $this->createQueryBuilder('question')
+            ->leftJoin('question.category', 'category')
+            ->addSelect('category')
+            ->leftJoin('question.tags', 'tags')
+            ->addSelect('tags')
             ->where('question.author = :user')
             ->andWhere('question.status = :status')
             ->setParameter('user', $user)
@@ -120,5 +128,22 @@ class QuestionRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * Count questions by category.
+     *
+     * @param Category $category Category entity
+     *
+     * @return int Number of questions
+     */
+    public function countByCategory(\App\Entity\Category $category): int
+    {
+        return (int) $this->createQueryBuilder('question')
+            ->select('count(question.id)')
+            ->where('question.category = :category')
+            ->setParameter('category', $category)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

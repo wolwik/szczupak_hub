@@ -39,7 +39,7 @@ class Avatar
     /**
      * User.
      */
-    #[ORM\OneToOne(targetEntity: User::class)]
+    #[ORM\OneToOne(targetEntity: User::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[Assert\Type(User::class)]
     private ?User $user = null;

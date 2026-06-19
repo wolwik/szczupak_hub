@@ -153,6 +153,11 @@
       <target>Dodaj kategorię</target>
     </trans-unit>
 
+    <trans-unit id="label.category_delete">
+      <source>label.category_delete</source>
+      <target>Usuń kategorię</target>
+    </trans-unit>
+
       <trans-unit id="label.question_list">
         <source>label.question_list</source>
         <target>Lista pytań</target>
@@ -595,6 +600,11 @@
         <trans-unit id="title.category_create">
           <source>title.category_create</source>
           <target>Dodaj kategorię</target>
+        </trans-unit>
+
+        <trans-unit id="title.category_delete">
+          <source>title.category_delete</source>
+          <target>Usuń kategorię</target>
         </trans-unit>
 
         <trans-unit id="title.change_password">

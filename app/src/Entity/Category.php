@@ -62,23 +62,6 @@ class Category
     private ?string $slug = null;
 
     /**
-     * Questions in this category.
-     *
-     * @var Collection<int, Question>
-     */
-    #[ORM\OneToMany(targetEntity: Question::class, mappedBy: 'category')]
-    #[Assert\Valid] // symfony walidując tą encję powinien też wejsc do tych obiektów i sprawdzić ich reguły walidacji
-    private Collection $questions;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->questions = new ArrayCollection();
-    }
-
-    /**
      * Getter for ID.
      *
      * @return int|null Id
