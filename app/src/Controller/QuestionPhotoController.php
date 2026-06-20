@@ -46,7 +46,7 @@ class QuestionPhotoController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/create', name: 'question_photo_create', methods: 'GET|POST')]
+    #[Route('/create', name: 'question_photo_create', methods: ['GET', 'POST'])]
     public function create(Request $request, Question $question): Response
     {
         if ($this->photoService->findOneByQuestion($question)) {
@@ -86,7 +86,7 @@ class QuestionPhotoController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/edit', name: 'question_photo_edit', methods: 'GET|PUT')]
+    #[Route('/edit', name: 'question_photo_edit', methods: ['GET', 'PUT'])]
     public function edit(Request $request, Question $question): Response
     {
         $photo = $this->photoService->findOneByQuestion($question);
@@ -130,7 +130,7 @@ class QuestionPhotoController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/delete', name: 'question_photo_delete', methods: 'GET|PUT|POST')]
+    #[Route('/delete', name: 'question_photo_delete', methods: ['GET', 'PUT', 'POST'])]
     public function delete(Question $question): Response
     {
         $this->photoService->delete($question);

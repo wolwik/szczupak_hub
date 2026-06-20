@@ -45,7 +45,7 @@ class AvatarController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/create', name: 'avatar_create', methods: 'GET|POST')]
+    #[Route('/create', name: 'avatar_create', methods: ['GET', 'POST'])]
     public function create(Request $request): Response
     {
         $user = $this->getUser();
@@ -95,7 +95,7 @@ class AvatarController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/edit', name: 'avatar_edit', methods: 'GET|PUT')]
+    #[Route('/edit', name: 'avatar_edit', methods: ['GET', 'PUT'])]
     public function edit(Request $request): Response
     {
         $user = $this->getUser();
@@ -150,7 +150,7 @@ class AvatarController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/delete', name: 'avatar_delete', methods: 'GET|PUT|POST')]
+    #[Route('/delete', name: 'avatar_delete', methods: ['GET', 'PUT', 'POST'])]
     public function delete(): Response
     {
         $user = $this->getUser();
