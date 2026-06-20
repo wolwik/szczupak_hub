@@ -47,7 +47,13 @@ class VoteService implements VoteServiceInterface
             'user' => $user,
         ]);
 
+        // jesli zaglosowane to usun glos + wybierz nową najlepsza odpowiedz
         if ($isVoted) {
+            $this->voteRepository->delete($isVoted);
+
+            $question = $answer->getQuestion();
+            $this->answerService->updateBestAnswer($question);
+
             return;
         }
 

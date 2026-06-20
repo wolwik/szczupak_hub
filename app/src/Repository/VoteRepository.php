@@ -45,6 +45,17 @@ class VoteRepository extends ServiceEntityRepository
     }
 
     /**
+     * Delete entity.
+     *
+     * @param Vote $vote Vote entity
+     */
+    public function delete(Vote $vote): void
+    {
+        $this->getEntityManager()->remove($vote);
+        $this->getEntityManager()->flush();
+    }
+
+    /**
      * Count votes for a single answer.
      *
      * @param Answer $answer Answer entity

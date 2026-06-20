@@ -23,7 +23,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'votes')]
 #[UniqueEntity(
     fields: ['user', 'answer'],
-    message: 'Już oddałeś głos na tę odpowiedź.'
 )]
 class Vote
 {
