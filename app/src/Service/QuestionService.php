@@ -39,7 +39,7 @@ class QuestionService implements QuestionServiceInterface
     }
 
     /**
-     * Get paginated list of questions.
+     * Get paginated list of question-photos.
      *
      * @param int      $page       Page number
      * @param int|null $categoryId Category ID filter

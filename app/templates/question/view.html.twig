@@ -75,15 +75,29 @@
                     {{ question.content|markdown_to_html|replace({'<h1>':'<h3>', '</h1>':'</h3>', '<h2>':'<h3>', '</h2>':'</h3>'})|raw }}
                 </p>
 
+                <!-- PHOTO -->
+
+                {% set photo_filename = get_question_photo(question) %}
+                {% if photo_filename %}
+                    <div class="mb-4 text-center text-lg-start">
+                        <img src="{{ asset('uploads/question-photos/' ~ photo_filename) }}"
+                             class="img-fluid rounded shadow-sm"
+                             alt="Question photo"
+                             style="max-height: 400px; object-fit: cover;">
+                    </div>
+                {% endif %}
+
                 <div class="d-flex gap-2">
                     <a href="{{ url('question_list') }}" class="btn btn-outline-secondary btn-sm">
                         {{ 'label.back'|trans }}
                     </a>
 
                     {% if is_granted('QUESTION_EDIT', question) %}
+
                         <a href="{{ url('question_edit', {id: question.id}) }}" class="btn btn-outline-primary btn-sm">
                             {{ 'label.edit'|trans }}
                         </a>
+
                     {% endif %}
 
                     {% if is_granted('QUESTION_DELETE', question) %}
@@ -98,7 +112,6 @@
 
 
         {% if question.status.value == 'published' %}
-
 
             <!-- ANSWERS -->
             <div class="card mb-4 shadow-sm">

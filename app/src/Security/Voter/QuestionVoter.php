@@ -73,8 +73,11 @@ final class QuestionVoter extends Voter
     {
         $user = $token->getUser();
 
-        if (!$user instanceof UserInterface) {
-            return false;
+        // user musi byc zalogowany do edycji i usuwania
+        if (in_array($attribute, [self::EDIT, self::DELETE], true)) {
+            if (!$user instanceof UserInterface) {
+                return false;
+            }
         }
 
         if (!$subject instanceof Question) {
@@ -130,19 +133,24 @@ final class QuestionVoter extends Voter
     /**
      * Checks if user can view question draft.
      *
-     * @param Question      $question Question entity
-     * @param UserInterface $user     User
+     * @param Question           $question Question entity
+     * @param UserInterface|null $user     User
      *
      * @return bool Result
      */
-    private function canView(Question $question, UserInterface $user): bool
+    private function canView(Question $question, ?UserInterface $user): bool
     {
-        // opublikowane pytania są publiczne
+        // opublikowane pytania są dostepne dla KAZDEGO
         if (QuestionStatus::PUBLISHED === $question->getStatus()) {
             return true;
         }
 
-        // tylko owner ma dostęp
+        // jesli pytanie to szkic, user MUSI być zalogowany, zeby sprawdzić czy to jego autorstwa
+        if (!$user instanceof UserInterface) {
+            return false;
+        }
+
+        // tylko owner ma dostęp do szkicu
         return $question->getAuthor() === $user;
     }
 }

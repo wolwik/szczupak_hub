@@ -11,10 +11,12 @@
 
 namespace App\Controller;
 
+use App\Contract\QuestionPhotoServiceInterface;
 use App\Contract\QuestionServiceInterface;
 use App\Contract\TagServiceInterface;
 use App\Entity\Enum\QuestionStatus;
 use App\Entity\Question;
+use App\Entity\QuestionPhoto;
 use App\Form\AnswerType;
 use App\Form\QuestionDeleteType;
 use App\Form\QuestionType;
@@ -45,13 +47,13 @@ final class QuestionController extends AbstractController
     }
 
     /**
-     * Displays paginated list of questions with optional filters.
+     * Displays paginated list of question-photos with optional filters.
      *
      * @param int      $page       Current page number (default: 1)
      * @param int|null $categoryId Optional category filter
      * @param int|null $tag        Optional tag filter
      *
-     * @return Response Rendered questions list page
+     * @return Response Rendered question-photos list page
      */
     #[Route('/', name: 'question_list', methods: ['GET'])]
     public function index(#[MapQueryParameter] int $page = 1, #[MapQueryParameter] ?int $categoryId = null, #[MapQueryParameter] ?int $tag = null): Response
@@ -74,7 +76,7 @@ final class QuestionController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/question/show', name: 'question_view', requirements: ['id' => '[1-9]\d*'], methods: ['GET'])]
+    #[Route('/question/{id}/show', name: 'question_view', requirements: ['id' => '[1-9]\d*'], methods: ['GET'])]
     public function view(Question $question): Response
     {
         // zabezpieczenie przed podglądaniem szkiców
@@ -92,14 +94,15 @@ final class QuestionController extends AbstractController
     /**
      * Creates a new question.
      *
-     * @param Request             $request    HTTP request
-     * @param TagServiceInterface $tagService Tag service
+     * @param Request                       $request      HTTP request
+     * @param TagServiceInterface           $tagService   Tag service
+     * @param QuestionPhotoServiceInterface $photoService QuestionPhoto service
      *
      * @return Response HTTP response
      */
     #[Route('/question/create', name: 'question_create', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function create(Request $request, TagServiceInterface $tagService): Response
+    public function create(Request $request, TagServiceInterface $tagService, QuestionPhotoServiceInterface $photoService): Response
     {
         $question = new Question();
 
@@ -112,12 +115,18 @@ final class QuestionController extends AbstractController
             // creating tags
             $tagsString = $form->get('tags')->getData();
             $tags = $tagService->createFromString($tagsString);
-
             foreach ($tags as $tag) {
                 $question->addTag($tag);
             }
 
             $this->questionService->save($question);
+
+            // adding photo
+            $photoFile = $form->get('photo')->getData();
+            if ($photoFile) {
+                $questionPhoto = new QuestionPhoto();
+                $photoService->create($photoFile, $questionPhoto, $question);
+            }
 
             $this->addFlash(
                 'success',
@@ -158,15 +167,16 @@ final class QuestionController extends AbstractController
     /**
      * Edits question.
      *
-     * @param Request             $request    HTTP request
-     * @param Question            $question   Question entity
-     * @param TagServiceInterface $tagService Tag service
+     * @param Request                       $request      HTTP request
+     * @param Question                      $question     Question entity
+     * @param TagServiceInterface           $tagService   Tag service
+     * @param QuestionPhotoServiceInterface $photoService QuestionPhoto service
      *
      * @return Response HTTP response
      */
     #[Route('/question/{id}/edit', name: 'question_edit', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'PUT'])]
     #[IsGranted(QuestionVoter::EDIT, subject: 'question')]
-    public function edit(Request $request, Question $question, TagServiceInterface $tagService): Response
+    public function edit(Request $request, Question $question, TagServiceInterface $tagService, QuestionPhotoServiceInterface $photoService): Response
     {
         // dodajemy obecne tagi do formularza
         $existingTags = implode(', ', array_map(
@@ -205,6 +215,23 @@ final class QuestionController extends AbstractController
             }
 
             $this->questionService->save($question);
+
+            // editing photo
+            $photoFile = $form->get('photo')->getData();
+
+            if ($photoFile) {
+                // sprawdzamy czy pytanie mialo wczesniej zdj
+                $existingPhoto = $photoService->findOneByQuestion($question);
+
+                if ($existingPhoto) {
+                    // jeśli tak, podmieniamy plik
+                    $photoService->update($photoFile, $existingPhoto, $question);
+                } else {
+                    // jeśli nie, tworzymy nowy zapis
+                    $questionPhoto = new QuestionPhoto();
+                    $photoService->create($photoFile, $questionPhoto, $question);
+                }
+            }
 
             $this->addFlash(
                 'success',

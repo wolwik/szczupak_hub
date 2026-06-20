@@ -15,10 +15,12 @@ use App\Entity\Category;
 use App\Entity\Question;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 /**
  * Class QuestionType.
@@ -50,7 +52,6 @@ class QuestionType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'rows' => 6,
-                    // 'placeholder' => 'Zadaj pytanie, opowiedz historię...',
                     'class' => 'form-control',
                 ],
             ])
@@ -61,7 +62,6 @@ class QuestionType extends AbstractType
                 'choice_label' => 'name',
                 'label' => 'label.category',
                 'required' => true,
-                // 'placeholder' => 'Wybierz kategorię',
                 'attr' => [
                     'class' => 'form-select',
                 ],
@@ -73,8 +73,24 @@ class QuestionType extends AbstractType
                 'required' => true,
                 'label' => 'label.tags',
                 'attr' => [
-                    // 'placeholder' => 'karp, spinning, jezioro...',
                     'class' => 'form-control',
+                ],
+            ])
+
+            // PHOTO (unmapped field)
+            ->add('photo', FileType::class, [
+                'label' => 'label.photo',
+                'mapped' => false,
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'constraints' => [
+                    new File(maxSize: '2M', mimeTypes: [
+                        'image/jpeg',
+                        'image/png',
+                        'image/webp',
+                    ], mimeTypesMessage: 'Proszę przesłać poprawny plik graficzny (JPEG, PNG, WebP).'),
                 ],
             ]);
     }

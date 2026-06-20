@@ -19,7 +19,7 @@ use App\Entity\Enum\QuestionStatus;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
-#[ORM\Table(name: 'questions')]
+#[ORM\Table(name: 'question')]
 
 /**
  * Class Question.

@@ -54,7 +54,7 @@ class CategoryService implements CategoryServiceInterface
      *
      * @param Category $category Category entity
      *
-     * @return bool True if deleted, false if category has assigned questions
+     * @return bool True if deleted, false if category has assigned question-photos
      */
     public function delete(Category $category): bool
     {

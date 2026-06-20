@@ -91,7 +91,7 @@ class QuestionRepository extends ServiceEntityRepository
     }
 
     /**
-     * Displays all user's questions (currently not used).
+     * Displays all user's question-photos (currently not used).
      *
      * @param User $user User entity
      *
@@ -131,11 +131,11 @@ class QuestionRepository extends ServiceEntityRepository
     }
 
     /**
-     * Count questions by category.
+     * Count question-photos by category.
      *
      * @param Category $category Category entity
      *
-     * @return int Number of questions
+     * @return int Number of question-photos
      */
     public function countByCategory(Category $category): int
     {

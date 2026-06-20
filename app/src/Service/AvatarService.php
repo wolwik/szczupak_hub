@@ -65,7 +65,7 @@ class AvatarService implements AvatarServiceInterface
             );
         }
 
-        $newFilename = $this->fileUploadService->upload($uploadedFile);
+        $newFilename = $this->fileUploadService->upload($uploadedFile, $this->targetDirectory);
 
         $avatar->setFilename($newFilename);
         $avatar->setUser($user);
@@ -82,7 +82,7 @@ class AvatarService implements AvatarServiceInterface
      */
     public function create(UploadedFile $uploadedFile, Avatar $avatar, User $user): void
     {
-        $avatarFilename = $this->fileUploadService->upload($uploadedFile);
+        $avatarFilename = $this->fileUploadService->upload($uploadedFile, $this->targetDirectory);
 
         $avatar->setUser($user);
         $avatar->setFilename($avatarFilename);

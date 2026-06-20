@@ -49,7 +49,7 @@ final class UserController extends AbstractController
     /**
      * Displays list of users.
      *
-     * @return Response Rendered questions list page
+     * @return Response Rendered question-photos list page
      */
     #[Route('/user_list', name: 'user_list')]
     #[IsGranted('ROLE_ADMIN')]

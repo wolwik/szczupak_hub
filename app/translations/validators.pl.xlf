@@ -86,6 +86,18 @@
         <source>This user already has an avatar.</source>
         <target>Ten użytkownik ma już ustawiony awatar.</target>
       </trans-unit>
+      <trans-unit id="Please upload a valid JPG or PNG image">
+        <source>Please upload a valid JPG or PNG image</source>
+        <target>Proszę przesłać poprawny plik graficzny (JPG lub PNG).</target>
+      </trans-unit>
+      <trans-unit id="Proszę przesłać poprawny plik graficzny (JPEG, PNG, WebP).">
+        <source>Proszę przesłać poprawny plik graficzny (JPEG, PNG, WebP).</source>
+        <target>Proszę przesłać poprawny plik graficzny (JPEG, PNG, WebP).</target>
+      </trans-unit>
+      <trans-unit id="This question already has a photo.">
+        <source>This question already has a photo.</source>
+        <target>To pytanie ma już przypisane zdjęcie.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

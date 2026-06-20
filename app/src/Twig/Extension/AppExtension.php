@@ -11,6 +11,8 @@
 
 namespace App\Twig\Extension;
 
+use App\Entity\Question;
+use App\Repository\QuestionPhotoRepository;
 use Twig\Attribute\AsTwigFunction;
 use App\Contract\AnswerServiceInterface;
 use App\Entity\Answer;
@@ -25,10 +27,11 @@ class AppExtension
     /**
      * Constructor.
      *
-     * @param AvatarRepository       $avatarRepository Avatar repository
-     * @param AnswerServiceInterface $answerService    Answer service interface
+     * @param AvatarRepository        $avatarRepository        Avatar repository
+     * @param AnswerServiceInterface  $answerService           Answer service interface
+     * @param QuestionPhotoRepository $questionPhotoRepository Question photo repository
      */
-    public function __construct(private readonly AvatarRepository $avatarRepository, private readonly AnswerServiceInterface $answerService)
+    public function __construct(private readonly AvatarRepository $avatarRepository, private readonly AnswerServiceInterface $answerService, private readonly QuestionPhotoRepository $questionPhotoRepository)
     {
     }
 
@@ -62,5 +65,24 @@ class AppExtension
     public function getAnswerVotes(Answer $answer): int
     {
         return $this->answerService->getVotesCount($answer);
+    }
+
+    /**
+     * Get question photo filename.
+     *
+     * @param Question|null $question Question entity
+     *
+     * @return string|null Photo filename or null
+     */
+    #[AsTwigFunction(name: 'get_question_photo')]
+    public function getQuestionPhoto(?Question $question): ?string
+    {
+        if (!$question) {
+            return null;
+        }
+
+        $photo = $this->questionPhotoRepository->findOneByQuestion($question);
+
+        return $photo?->getFilename();
     }
 }

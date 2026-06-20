@@ -24,23 +24,23 @@ class FileUploadService implements FileUploadServiceInterface
     /**
      * Constructor.
      *
-     * @param string           $targetDirectory Target directory for uploads
-     * @param SluggerInterface $slugger         Slugger instance
+     * @param SluggerInterface $slugger Slugger instance
      */
-    public function __construct(private readonly string $targetDirectory, private readonly SluggerInterface $slugger)
+    public function __construct(private readonly SluggerInterface $slugger)
     {
     }
 
     /**
      * Uploads a file and returns its generated unique name.
      *
-     * @param UploadedFile $file The uploaded file
+     * @param UploadedFile $file            The uploaded file
+     * @param string       $targetDirectory Target directory
      *
      * @return string The generated file name
      *
      * @throws FileException If the file cannot be moved to the target directory
      */
-    public function upload(UploadedFile $file): string
+    public function upload(UploadedFile $file, string $targetDirectory): string
     {
         $originalFilename = pathinfo(
             $file->getClientOriginalName(),
@@ -54,7 +54,7 @@ class FileUploadService implements FileUploadServiceInterface
 
         try {
             $file->move(
-                $this->getTargetDirectory(),
+                $targetDirectory,
                 $fileName
             );
         } catch (FileException) {
@@ -62,15 +62,5 @@ class FileUploadService implements FileUploadServiceInterface
         }
 
         return $fileName;
-    }
-
-    /**
-     * Gets the target directory for uploads.
-     *
-     * @return string Target directory path
-     */
-    public function getTargetDirectory(): string
-    {
-        return $this->targetDirectory;
     }
 }

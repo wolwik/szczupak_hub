@@ -38,6 +38,23 @@
                             {{ form_row(form.tags) }}
                         </div>
 
+                        {% set current_photo = get_question_photo(question) %}
+                        {% if current_photo %}
+                            <div class="mb-2">
+                                <p class="small text-muted mb-1">{{ 'label.current_photo'|trans }}:</p>
+                                <img src="{{ asset('uploads/question-photos/' ~ current_photo) }}" class="img-thumbnail" style="max-height: 120px;" alt="{{ 'label.current_photo'|trans }}">
+                            </div>
+                            <a href="{{ url('question_photo_delete', {id: question.id}) }}" class="btn btn-outline-danger btn-sm">
+                                {{ 'label.photo_delete'|trans }}
+                            </a>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            {{ form_row(form.photo) }}
+                        </div>
+
+
+
                         <div class="d-flex justify-content-between align-items-center mt-4">
 
                             <a href="{{ url('question_view', {id: question.id}) }}"

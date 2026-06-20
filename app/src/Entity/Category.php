@@ -133,7 +133,7 @@ class Category
     }
 
     /**
-     * Getter for questions.
+     * Getter for question-photos.
      *
      * @return Collection<int, Question> Questions collection
      */

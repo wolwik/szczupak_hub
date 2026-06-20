@@ -21,16 +21,10 @@ interface FileUploadServiceInterface
     /**
      * Uploads a file.
      *
-     * @param UploadedFile $file The uploaded file instance
+     * @param UploadedFile $file            The uploaded file instance
+     * @param string       $targetDirectory Target directory
      *
      * @return string The filename of the uploaded file
      */
-    public function upload(UploadedFile $file): string;
-
-    /**
-     * Gets the target directory where files are uploaded.
-     *
-     * @return string The target directory path
-     */
-    public function getTargetDirectory(): string;
+    public function upload(UploadedFile $file, string $targetDirectory): string;
 }

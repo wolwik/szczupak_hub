@@ -546,6 +546,34 @@
         <source>title.category_edit</source>
         <target>Edycja kategorii</target>
       </trans-unit>
+      <trans-unit id="message.photo_created_successfully">
+        <source>message.photo_created_successfully</source>
+        <target>Pomyślnie dodano zdjęcie.</target>
+      </trans-unit>
+      <trans-unit id="message.photo_edited_successfully">
+        <source>message.photo_edited_successfully</source>
+        <target>Zmieniono zdjęcie.</target>
+      </trans-unit>
+      <trans-unit id="message.photo_deleted_successfully">
+        <source>message.photo_deleted_successfully</source>
+        <target>Usunięto zdjęcie.</target>
+      </trans-unit>
+      <trans-unit id="label.question-photos">
+        <source>label.question-photos</source>
+        <target>Zdjęcia do pytania</target>
+      </trans-unit>
+      <trans-unit id="label.photo_delete">
+        <source>label.photo_delete</source>
+        <target>Usuń zdjęcie</target>
+      </trans-unit>
+       <trans-unit id="label.photo">
+         <source>label.photo</source>
+         <target>Zdjęcie</target>
+       </trans-unit>
+       <trans-unit id="label.current_photo">
+         <source>label.current_photo</source>
+         <target>Aktualne zdjęcie</target>
+       </trans-unit>
     </body>
   </file>
 </xliff>
