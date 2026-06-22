@@ -24,3 +24,5 @@
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
+
+app/check_code.result.cache

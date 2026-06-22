@@ -33,9 +33,9 @@
         "doctrine/doctrine-fixtures-bundle": "^4.3",
         "escapestudios/symfony2-coding-standard": "^3.18",
         "fakerphp/faker": "^1.24",
-        "friendsofphp/php-cs-fixer": "^3.95.1",
+        "friendsofphp/php-cs-fixer": "^3.95",
         "rector/rector": "^2.4.2",
-        "squizlabs/php_codesniffer": "^4.0.1",
+        "squizlabs/php_codesniffer": "^4.0",
         "symfony/maker-bundle": "^1.67",
         "symfony/stopwatch": "7.4.*",
         "symfony/web-profiler-bundle": "7.4.*"
