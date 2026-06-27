@@ -20,7 +20,9 @@ use App\Entity\QuestionPhoto;
 use App\Form\AnswerType;
 use App\Form\QuestionDeleteType;
 use App\Form\QuestionType;
+use App\Repository\AvatarRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\QuestionPhotoRepository;
 use App\Security\Voter\QuestionVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,23 +51,65 @@ final class QuestionController extends AbstractController
     /**
      * Displays paginated list of question-photos with optional filters.
      *
-     * @param int      $page       Current page number (default: 1)
-     * @param int|null $categoryId Optional category filter
-     * @param int|null $tag        Optional tag filter
+     * @param AvatarRepository              $avatarRepository        Avatar repository
+     * @param QuestionPhotoRepository       $questionPhotoRepository Question photo repository
+     * @param QuestionPhotoServiceInterface $photoService            Question photo service
+     * @param int                           $page                    Current page number (default: 1)
+     * @param int|null                      $categoryId              Optional category filter
+     * @param int|null                      $tag                     Optional tag filter
      *
      * @return Response Rendered question-photos list page
      */
     #[Route('/', name: 'question_list', methods: ['GET'])]
-    public function index(#[MapQueryParameter] int $page = 1, #[MapQueryParameter] ?int $categoryId = null, #[MapQueryParameter] ?int $tag = null): Response
+    public function index(AvatarRepository $avatarRepository, QuestionPhotoRepository $questionPhotoRepository, QuestionPhotoServiceInterface $photoService, #[MapQueryParameter] int $page = 1, #[MapQueryParameter] ?int $categoryId = null, #[MapQueryParameter] ?int $tag = null): Response
     {
         $pagination = $this->questionService->getPaginatedList($page, $categoryId, $tag);
-
         $categories = $this->categoryRepository->findAll();
+
+        // optymalizacja zapytan
+        $avatars = [];
+        $photos = [];
+        $normalizedQuestions = [];
+
+        $questionIds = [];
+        $authorIds = [];
+
+        foreach ($pagination->getItems() as $item) {
+            $question = is_array($item) ? ($item[0] ?? null) : $item;
+
+            if ($question instanceof \App\Entity\Question) {
+                $normalizedQuestions[] = $question;
+                $questionIds[] = $question->getId();
+
+                if ($question->getAuthor()) {
+                    $authorIds[] = $question->getAuthor()->getId();
+                }
+            }
+        }
+
+        if (!empty($authorIds)) {
+            $authorIds = array_unique($authorIds);
+
+            $rawAvatars = $avatarRepository->findBy(['user' => $authorIds]);
+            foreach ($rawAvatars as $avatar) {
+                $avatars[$avatar->getUser()->getId()] = $avatar->getFilename();
+            }
+        }
+
+        if (!empty($questionIds)) {
+            $rawPhotos = $questionPhotoRepository->findBy(['question' => $questionIds]);
+            foreach ($rawPhotos as $photo) {
+                $photos[$photo->getQuestion()->getId()] = $photo->getFilename();
+            }
+        }
 
         return $this->render('question/index.html.twig', [
             'pagination' => $pagination,
+            'questions' => $normalizedQuestions,
             'categories' => $categories,
             'categoryId' => $categoryId,
+            'avatars' => $avatars,
+            'photos' => $photos,
         ]);
     }
 

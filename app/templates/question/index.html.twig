@@ -7,14 +7,12 @@
     <div class="container py-4">
         <div class="row g-4">
 
-            <!-- LEFT: FEED -->
             <div class="col-lg-9">
 
                 <h1 class="mb-4">{{ 'label.question_list'|trans }}</h1>
 
                 {% if pagination is defined and pagination.items|length %}
 
-                    <!-- ACTION BAR -->
                     <div class="d-flex">
 
                         {% if app.user %}
@@ -37,26 +35,22 @@
                         {% endif %}
                     </div>
 
-                    <!-- PAGINATION -->
                     <div class="text-center mb-3">
                         {{ knp_pagination_render(pagination) }}
                     </div>
 
-                    <!-- QUESTIONS -->
                     <div class="d-flex flex-column gap-3">
 
-                        {% for question in pagination.items %}
+                        {% for question in questions %}
 
                             <div class="card shadow-sm">
 
                                 <div class="card-body">
 
-                                    <!-- CATEGORY -->
                                     <p class="mb-1 small text-muted">
                                         {{ question.category.name }}
                                     </p>
 
-                                    <!-- TITLE -->
                                     <h5 class="mb-1">
                                         <a href="{{ url('question_view', {id: question.id}) }}"
                                            class="text-decoration-none">
@@ -64,13 +58,14 @@
                                         </a>
                                     </h5>
 
-                                    <!-- META -->
                                     <div class="text-muted small mb-2 d-flex flex-wrap gap-2">
 
                                         <div class="d-flex align-items-center gap-3 ">
 
                                             <div class="avatar-wrapper avatar-md">
-                                                {% set avatar_filename = get_user_avatar(question.author) %}
+
+                                                {% set author_id = question.author ? question.author.id : null %}
+                                                {% set avatar_filename = (author_id and avatars[author_id] is defined) ? avatars[author_id] : null %}
 
                                                 {% if avatar_filename %}
                                                     <img
@@ -88,21 +83,21 @@
                                             </div>
 
                                             <div>
-                                            <p class="mb-1">
-                                                {% if question.author %}
-                                                    <span class="text-primary fw-bold">{{ question.author.nickname }}</span>
-                                                {% else %}
-                                                    <span class="text-muted">{{ 'label.deleted_user'|trans }}</span>
+                                                <p class="mb-1">
+                                                    {% if question.author %}
+                                                        <span class="text-primary fw-bold">{{ question.author.nickname }}</span>
+                                                    {% else %}
+                                                        <span class="text-muted">{{ 'label.deleted_user'|trans }}</span>
+                                                    {% endif %}
+                                                </p>
+
+                                                <p class="mb-1">{{ question.createdAt|date('Y-m-d H:i') }}</p>
+
+                                                {% if question.updatedAt %}
+                                                    <p class="text-muted small">
+                                                        ({{ 'label.updated'|trans }} {{ question.updatedAt|date('Y-m-d H:i') }})
+                                                    </p>
                                                 {% endif %}
-                                            </p>
-
-                                            <p class="mb-1">{{ question.createdAt|date('Y-m-d H:i') }}</p>
-
-                                            {% if question.updatedAt %}
-                                                <p class="text-muted small">
-                                                ({{ 'label.updated'|trans }} {{ question.updatedAt|date('Y-m-d H:i') }})
-                                            </p>
-                                            {% endif %}
 
                                             </div>
                                         </div>
@@ -110,13 +105,11 @@
 
                                     </div>
 
-                                    <!-- CONTENT PREVIEW -->
                                     <p class="mb-2 text-muted">
                                         {{ question.content|markdown_to_html|replace({'<h1>':'<h3>', '</h1>':'</h3>', '<h2>':'<h3>', '</h2>':'</h3>'})|raw }}
                                     </p>
 
-                                    <!-- PHOTO MINIATURE -->
-                                    {% set photo_filename = get_question_photo(question) %}
+                                    {% set photo_filename = (photos[question.id] is defined) ? photos[question.id] : null %}
                                     {% if photo_filename %}
                                         <div class="mb-2">
                                             <img src="{{ asset('uploads/question-photos/' ~ photo_filename) }}"
@@ -126,7 +119,6 @@
                                         </div>
                                     {% endif %}
 
-                                    <!-- TAGS -->
                                     <div class="d-flex flex-wrap gap-1">
 
                                         {% for tag in question.tags %}
@@ -147,7 +139,6 @@
 
                     </div>
 
-                    <!-- PAGINATION BOTTOM -->
                     <div class="text-center mt-4">
                         {{ knp_pagination_render(pagination) }}
                     </div>
@@ -160,7 +151,6 @@
 
             </div>
 
-            <!-- RIGHT: SIDEBAR -->
             <div class="col-lg-3">
 
                 <div class="card shadow-sm">
