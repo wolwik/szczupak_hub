@@ -24,7 +24,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'categories')]
 #[UniqueEntity(
     fields: ['name'],
-    message: 'Taka kategoria już istnieje.'
 )]
 
 class Category
@@ -42,12 +41,10 @@ class Category
      */
     #[ORM\Column(length: 255)]
     #[Assert\Type('string')]
-    #[Assert\NotBlank(message: 'Nazwa kategorii nie może być pusta.')]
+    #[Assert\NotBlank]
     #[Assert\Length(
         min: 1,
         max: 255,
-        minMessage: 'Nazwa kategorii jest za krótka.',
-        maxMessage: 'Nazwa kategorii nie może być dłuższa niż {{ limit }} znaków.'
     )]
     private ?string $name = null;
 

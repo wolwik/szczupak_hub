@@ -23,7 +23,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'tags')]
 #[UniqueEntity(
     fields: ['name'],
-    message: 'Taki tag już istnieje.'
 )]
 class Tag
 {
@@ -40,12 +39,10 @@ class Tag
      */
     #[ORM\Column(length: 255)]
     #[Assert\Type('string')]
-    #[Assert\NotBlank(message: 'Nazwa tagu nie może być pusta.')]
+    #[Assert\NotBlank]
     #[Assert\Length(
         min: 1,
-        max: 255,
-        minMessage: 'Nazwa tagu jest za krótka.',
-        maxMessage: 'Nazwa tagu nie może być dłuższa niż {{ limit }} znaków.'
+        max: 255
     )]
     private ?string $name = null;
 

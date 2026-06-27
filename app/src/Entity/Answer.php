@@ -37,10 +37,9 @@ class Answer
      */
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\Type('string')]
-    #[Assert\NotBlank(message: 'Answer content cannot be empty.')]
+    #[Assert\NotBlank]
     #[Assert\Length(
         min: 1,
-        minMessage: 'Answer is too short.',
     )]
     private ?string $content = null;
 

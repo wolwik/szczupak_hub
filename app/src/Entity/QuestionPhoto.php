@@ -22,8 +22,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: QuestionPhotoRepository::class)]
 #[ORM\Table(name: 'question_photos')]
 #[ORM\UniqueConstraint(name: 'uq_question_photos_filename', columns: ['filename'])]
-#[UniqueEntity(fields: ['filename'], message: 'This filename is already in use.')]
-#[UniqueEntity(fields: ['question'], message: 'This question already has a photo.')]
+#[UniqueEntity(fields: ['filename'])]
+#[UniqueEntity(fields: ['question'])]
 class QuestionPhoto
 {
     /**

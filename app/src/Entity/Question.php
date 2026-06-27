@@ -39,12 +39,10 @@ class Question
      */
     #[ORM\Column(length: 255)]
     #[Assert\Type('string')]
-    #[Assert\NotBlank(message: 'Tytuł pytania nie może być pusty.')]
+    #[Assert\NotBlank]
     #[Assert\Length(
         min: 1,
         max: 255,
-        minMessage: 'Tytuł jest za krótki (minimum {{ limit }} znaków).',
-        maxMessage: 'Tytuł nie może być dłuższy niż {{ limit }} znaków.'
     )]
     private ?string $title = null;
 
@@ -53,8 +51,8 @@ class Question
      */
     #[ORM\Column(type: 'text')]
     #[Assert\Type('string')]
-    #[Assert\NotBlank(message: 'Treść pytania nie może być pusta.')]
-    #[Assert\Length(min: 5, minMessage: 'Opisz swój problem nieco dokładniej (minimum {{ limit }} znaków).')]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 5)]
     private string $content;
 
     /**
@@ -83,7 +81,7 @@ class Question
      */
     #[ORM\ManyToOne(targetEntity: Category::class)]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
-    #[Assert\NotNull(message: 'Wybierz kategorię dla pytania.')]
+    #[Assert\NotNull]
     #[Assert\Type(Category::class)]
     private ?Category $category = null;
 
