@@ -111,4 +111,18 @@ class AnswerService implements AnswerServiceInterface
     {
         return $this->voteRepository->countVotesForAnswer($answer);
     }
+
+    /**
+     * Get votes count map for multiple answers.
+     *
+     * @param array $answers Array of Answer entities
+     *
+     * @return array<int, int> Map of [answerId => voteCount]
+     */
+    public function getVotesMapForAnswers(array $answers): array
+    {
+        $answerIds = array_map(fn ($answer) => $answer->getId(), $answers);
+
+        return $this->voteRepository->countVotesForAnswers($answerIds);
+    }
 }

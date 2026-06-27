@@ -11,6 +11,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Avatar;
+use App\Entity\QuestionPhoto;
 use App\Entity\Category;
 use App\Entity\Enum\QuestionStatus;
 use App\Entity\Question;
@@ -51,9 +53,9 @@ class QuestionRepository extends ServiceEntityRepository
             ->addSelect('category')
             ->leftJoin('question.author', 'author')
             ->addSelect('author')
-            ->leftJoin('App\Entity\Avatar', 'avatar', 'WITH', 'avatar.user = author.id')
+            ->leftJoin(Avatar::class, 'avatar', 'WITH', 'avatar.user = author.id')
             ->addSelect('avatar')
-            ->leftJoin('App\Entity\QuestionPhoto', 'questionPhoto', 'WITH', 'questionPhoto.question = question.id')
+            ->leftJoin(QuestionPhoto::class, 'questionPhoto', 'WITH', 'questionPhoto.question = question.id')
             ->addSelect('questionPhoto')
             ->leftJoin('question.tags', 'tags')
             ->addSelect('tags')

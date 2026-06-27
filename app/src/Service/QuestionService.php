@@ -36,11 +36,8 @@ class QuestionService implements QuestionServiceInterface
      * @param AnswerRepository   $answerRepository   Answer repository
      * @param PaginatorInterface $paginator          Paginator interface
      */
-    public function __construct(
-        private readonly QuestionRepository $questionRepository,
-        private readonly AnswerRepository $answerRepository,
-        private readonly PaginatorInterface $paginator
-    ) {
+    public function __construct(private readonly QuestionRepository $questionRepository, private readonly AnswerRepository $answerRepository, private readonly PaginatorInterface $paginator)
+    {
     }
 
     /**

@@ -56,4 +56,13 @@ interface AnswerServiceInterface
      * @param Answer $answer Answer entity
      */
     public function getVotesCount(Answer $answer): int;
+
+    /**
+     * Get votes count map for multiple answers.
+     *
+     * @param array $answers Array of Answer entities or collection
+     *
+     * @return array<int, int> Map of [answerId => voteCount]
+     */
+    public function getVotesMapForAnswers(array $answers): array;
 }

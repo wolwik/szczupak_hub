@@ -21,7 +21,8 @@
                 <div class="d-flex gap-2">
 
                     <div class="avatar-wrapper avatar-md">
-                        {% set question_author_avatar = get_user_avatar(question.author) %}
+                        {% set author_id = question.author ? question.author.id : null %}
+                        {% set question_author_avatar = (author_id and avatars[author_id] is defined) ? avatars[author_id] : null %}
 
                         {% if question_author_avatar %}
                             <img
@@ -77,7 +78,7 @@
 
                 <!-- PHOTO -->
 
-                {% set photo_filename = get_question_photo(question) %}
+                {% set photo_filename = photoFilename %}
                 {% if photo_filename %}
                     <div class="mb-4 text-center text-lg-start">
                         <img src="{{ asset('uploads/question-photos/' ~ photo_filename) }}"
@@ -136,7 +137,8 @@
                                     <div class="d-flex gap-2">
 
                                         <div class="avatar-wrapper avatar-sm ">
-                                            {% set answer_author_avatar = get_user_avatar(answer.author) %}
+                                            {% set answer_author_id = answer.author ? answer.author.id : null %}
+                                            {% set answer_author_avatar = (answer_author_id and avatars[answer_author_id] is defined) ? avatars[answer_author_id] : null %}
 
                                             {% if answer_author_avatar %}
                                                 <img
@@ -205,7 +207,7 @@
 
                                     <!-- VOTING -->
                                     <a href="{{ path('answer_vote', {id: answer.id}) }}">
-                                        👍 {{ get_answer_votes(answer) }}
+                                        👍 {{ votesMap[answer.id] is defined ? votesMap[answer.id] : 0 }}
                                     </a>
 
 

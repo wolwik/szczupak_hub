@@ -11,6 +11,7 @@
 
 namespace App\Controller;
 
+use App\Contract\AnswerServiceInterface;
 use App\Contract\QuestionPhotoServiceInterface;
 use App\Contract\QuestionServiceInterface;
 use App\Contract\TagServiceInterface;
@@ -51,17 +52,16 @@ final class QuestionController extends AbstractController
     /**
      * Displays paginated list of question-photos with optional filters.
      *
-     * @param AvatarRepository              $avatarRepository        Avatar repository
-     * @param QuestionPhotoRepository       $questionPhotoRepository Question photo repository
-     * @param QuestionPhotoServiceInterface $photoService            Question photo service
-     * @param int                           $page                    Current page number (default: 1)
-     * @param int|null                      $categoryId              Optional category filter
-     * @param int|null                      $tag                     Optional tag filter
+     * @param AvatarRepository        $avatarRepository        Avatar repository
+     * @param QuestionPhotoRepository $questionPhotoRepository Question photo repository
+     * @param int                     $page                    Current page number (default: 1)
+     * @param int|null                $categoryId              Optional category filter
+     * @param int|null                $tag                     Optional tag filter
      *
      * @return Response Rendered question-photos list page
      */
     #[Route('/', name: 'question_list', methods: ['GET'])]
-    public function index(AvatarRepository $avatarRepository, QuestionPhotoRepository $questionPhotoRepository, QuestionPhotoServiceInterface $photoService, #[MapQueryParameter] int $page = 1, #[MapQueryParameter] ?int $categoryId = null, #[MapQueryParameter] ?int $tag = null): Response
+    public function index(AvatarRepository $avatarRepository, QuestionPhotoRepository $questionPhotoRepository, #[MapQueryParameter] int $page = 1, #[MapQueryParameter] ?int $categoryId = null, #[MapQueryParameter] ?int $tag = null): Response
     {
         $pagination = $this->questionService->getPaginatedList($page, $categoryId, $tag);
         $categories = $this->categoryRepository->findAll();
@@ -77,7 +77,7 @@ final class QuestionController extends AbstractController
         foreach ($pagination->getItems() as $item) {
             $question = is_array($item) ? ($item[0] ?? null) : $item;
 
-            if ($question instanceof \App\Entity\Question) {
+            if ($question instanceof Question) {
                 $normalizedQuestions[] = $question;
                 $questionIds[] = $question->getId();
 
@@ -116,26 +116,48 @@ final class QuestionController extends AbstractController
     /**
      * Single question's view.
      *
-     * @param Question $question Question entity
+     * @param Question                $question                Question entity
+     * @param AvatarRepository        $avatarRepository        Avatar repository
+     * @param QuestionPhotoRepository $questionPhotoRepository Question photo repository
+     * @param AnswerServiceInterface  $answerService           Answer service
      *
      * @return Response HTTP response
      */
     #[Route('/question/{id}/show', name: 'question_view', requirements: ['id' => '[1-9]\d*'], methods: ['GET'])]
-    public function view(Question $question): Response
+    public function view(Question $question, AvatarRepository $avatarRepository, QuestionPhotoRepository $questionPhotoRepository, AnswerServiceInterface $answerService): Response
     {
-        // zabezpieczenie przed podglądaniem szkiców
         $this->denyAccessUnlessGranted(QuestionVoter::VIEW, $question);
 
-        // pobieranie odpowiedzi
         $answers = $this->questionService->getAnswersForQuestion($question);
 
-        // tworzymy zmienną z formularza dla Answer
+        $avatars = [];
+        $authorIds = $question->getAuthor() ? [$question->getAuthor()->getId()] : [];
+        foreach ($answers as $answer) {
+            if ($answer->getAuthor()) {
+                $authorIds[] = $answer->getAuthor()->getId();
+            }
+        }
+        if (!empty($authorIds)) {
+            $rawAvatars = $avatarRepository->findBy(['user' => array_unique($authorIds)]);
+            foreach ($rawAvatars as $avatar) {
+                $avatars[$avatar->getUser()->getId()] = $avatar->getFilename();
+            }
+        }
+
+        $questionPhoto = $questionPhotoRepository->findOneBy(['question' => $question]);
+        $photoFilename = $questionPhoto ? $questionPhoto->getFilename() : null;
+
+        $votesMap = $answerService->getVotesMapForAnswers($answers);
+
         $form = $this->createForm(AnswerType::class);
 
         return $this->render('question/view.html.twig', [
             'question' => $question,
             'answers' => $answers,
             'answerForm' => $form->createView(),
+            'avatars' => $avatars,
+            'photoFilename' => $photoFilename,
+            'votesMap' => $votesMap,
         ]);
     }
 

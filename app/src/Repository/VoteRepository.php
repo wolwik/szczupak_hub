@@ -71,4 +71,33 @@ class VoteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    /**
+     * Get votes count for multiple answers at once.
+     *
+     * @param array<int> $answerIds Array of answer IDs
+     *
+     * @return array<int, int> Map of [answerId => voteCount]
+     */
+    public function countVotesForAnswers(array $answerIds): array
+    {
+        if (empty($answerIds)) {
+            return [];
+        }
+
+        $rawVotes = $this->createQueryBuilder('v')
+            ->select('IDENTITY(v.answer) as answerId, COUNT(v.id) as voteCount')
+            ->where('v.answer IN (:answerIds)')
+            ->setParameter('answerIds', $answerIds)
+            ->groupBy('answerId')
+            ->getQuery()
+            ->getResult();
+
+        $votesMap = [];
+        foreach ($rawVotes as $row) {
+            $votesMap[(int) $row['answerId']] = (int) $row['voteCount'];
+        }
+
+        return $votesMap;
+    }
 }
