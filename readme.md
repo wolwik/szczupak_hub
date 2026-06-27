@@ -1,84 +1,100 @@
-# Docker Symfony Starter Kit
+# 🐟 SzczupakHub – forum internetowe
 
-Starter kit is based on [The perfect kit starter for a Symfony 4 project with Docker and PHP 7.2](https://medium.com/@romaricp/the-perfect-kit-starter-for-a-symfony-4-project-with-docker-and-php-7-2-fda447b6bca1).
+Aplikacja webowa forum wędkarskiego stworzona we frameworku Symfony.
+Projekt umożliwia użytkownikom tworzenie pytań, dodawanie odpowiedzi, ocenianie treści oraz zarządzanie swoim kontem.
+System posiada mechanizm autoryzacji, role użytkowników oraz kontrolę uprawnień.
 
-## What is inside?
+## Technologie
 
-* Apache 2.4.66 (Debian)
-* PHP 8.5 FPM
-* MySQL 8.3
-* NodeJS LTS (latest)
-* Composer
-* Symfony CLI 
-* xdebug
-* djfarrelly/maildev
+- PHP 8.5
+- Symfony
+- Doctrine ORM
+- MySQL
+- Twig
+- Bootstrap
+- Symfony Security
+- Docker & Docker Compose
+- Composer
 
-## Requirements
+## Funkcjonalności
 
-* Install [Docker](https://www.docker.com/products/docker-desktop) and [Docker Compose](https://docs.docker.com/compose/install) on your machine 
+### Użytkownicy
 
-## Installation
+- Rejestracja nowego konta
+- Logowanie i wylogowanie
+- Zmiana danych profilowych użytkownika
+- Dodawanie i edycja awataru
+- Zmiana hasła
 
-* (optional) Add 
+### Forum
 
-```bash
-127.0.0.1   symfony.local
-```
-in your `host` file.
+- Tworzenie nowych pytań i dodawanie odpowiedzi
+- Dodawanie zdjęć do pytań
+- Edycja i usuwanie własnych pytań i odpowiedzi
+- Oznaczanie najlepszej odpowiedzi w drodze głosowania
+- Przeglądanie listy tematów z filtrowaniem i stronicowaniem
 
-* Run `build-env.sh` (or `build-env.ps1` on Windows box)
+### Bezpieczeństwo
 
-* Enter the PHP container:
+- System ról użytkowników
+- Kontrola dostępu do ścieżek (URL) przez Symfony Security
+- Zabezpieczenie operacji przy pomocy Voterów (np. edycja tylko własnych postów)
 
-```bash
-docker-compose exec php bash
-```
+### Dostępne role:
 
-* To install Symfony LTS inside container execute:
+| Rola | Uprawnienia |
+|---|---|
+| `ROLE_USER` | Przeglądanie forum, tworzenie pytań, odpowiadanie, głosowanie, edycja własnych treści |
+| `ROLE_ADMIN` | Pełny dostęp do panelu administracyjnego, zarządzanie użytkownikami, moderacja i usuwanie dowolnych treści |
 
-```bash
-cd app
-rm .gitkeep
-git config --global --add safe.directory /home/wwwroot/app
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
-symfony new ../app --version=lts --webapp
-chown -R dev.dev *
-```
+---
 
-## Container URLs and ports
+## Instalacja i Uruchomienie
 
-* Project URL
+### Wymagania
 
-```bash
-http://localhost:8000
-```
+Przed uruchomieniem projektu upewnij się, że masz zainstalowane:
+- Docker Desktop (wraz z wtyczką docker-compose) – wymagany do uruchomienia środowiska i bazy danych.
+- Git – wymagany do sklonowania repozytorium.
+- Dowolne IDE (rekomendowany PhpStorm z wtyczką Symfony Support) – do wygodnego przeglądania kodu i zarządzania projektem.
 
-or 
+### Instalacja i uruchomienie
 
-```bash
-http://symfony.local:8000
-```
+1.	Sklonuj repozytorium:
+      `git clone https://github.com/IcySilhouette/SI-projekt.git`
+2.	Wejdź do pobranego folderu w konsoli:
+      `cd szczupak_hub`
+3.	Uruchom środowisko Docker w tle:
+      `docker-compose up -d`
+4.	Wejdź do powłoki kontenera PHP: (Jeśli Twój kontener ma inną nazwę, np. php-fpm, app lub www, podmień poniższe słowo php)
+      `docker-compose exec php bash`
+5.	Przejdź do folderu z aplikacją Symfony:
+      `cd app`
+6.	Przygotuj plik środowiskowy i uzupełnij zmienne konfiguracyjne:
+      `cp .env.dev .env`
+      `echo "DEFAULT_URI=http://localhost:8000" >> .env`
+      `echo 'DATABASE_URL="mysql://symfony:symfony@mysql:3306/symfony?serverVersion=8.3&charset=utf8mb4"' >> .env`
+7.	Będąc wewnątrz kontenera, zainstaluj zależności:
+      `composer install`
+8.	Uruchom migracje bazy danych:
+      `bin/console doctrine:migrations:migrate --no-interaction`
+9.	Załaduj dane testowe (fixtures):
+      `bin/console doctrine:fixtures:load --no-interaction`
+10.	Gotowa aplikacja jest dostępna w przeglądarce pod adresem: http://localhost:8000
 
-* MySQL
+### Dane do logowania
 
-    * inside container: host is `mysql`, port: `3306`
-    * outside container: host is `localhost`, port: `3307`
-    * passwords, db name are in `docker-compose.yml`
-    
-* djfarrelly/maildev i available from the browser on port `8001`
+#### Administratorzy:
+- *Admin0:* admin0@example.com    *Hasło:* admin1234
+- *Admin1:* admin1@example.com    *Hasło:* admin1234
 
-* xdebug i available remotely on port `9000`
+#### Użytkownicy
+- *User1:* user1@example.com    *Hasło:* user1234
+- *User2:* user2@example.com    *Hasło:* user1234
+- *User3:* user3@example.com    *Hasło:* user1234
+- *User4:* user4@example.com    *Hasło:* user1234
+- *User5:* user5@example.com    *Hasło:* user1234 **użytkownik zablokowany**
+- *User6:* user6@example.com    *Hasło:* user1234
+- *User8:* user8@example.com    *Hasło:* user1234
 
-* Database connection in Symfony `.env` file:
-```yaml
-DATABASE_URL=mysql://symfony:symfony@mysql:3306/symfony?serverVersion=5.7
-```
 
-## Useful commands
-
-* `docker compose up -d` - start containers
-* `docker compose down` - stop containers
-* `docker compose exec php bash` - enter into PHP container
-* `docker compose exec mysql bash` - enter into MySQL container
-* `docker compose exec apache bash` - enter into Apache2 container
