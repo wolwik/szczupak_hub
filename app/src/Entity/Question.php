@@ -79,14 +79,6 @@ class Question
     private ?\DateTime $updatedAt = null;
 
     /**
-     * Answers collection.
-     */
-    #[ORM\OneToMany(mappedBy: 'question', targetEntity: Answer::class, fetch: 'EXTRA_LAZY', cascade: ['remove'], orphanRemoval: true)]
-    #[ORM\OrderBy(['createdAt' => 'DESC'])]
-    #[Assert\Valid]
-    private Collection $answers;
-
-    /**
      * Question category.
      */
     #[ORM\ManyToOne(targetEntity: Category::class)]
@@ -127,7 +119,6 @@ class Question
      */
     public function __construct()
     {
-        $this->answers = new ArrayCollection();
         $this->tags = new ArrayCollection();
     }
 
@@ -297,16 +288,6 @@ class Question
         $this->category = $category;
 
         return $this;
-    }
-
-    /**
-     * Getter for answers.
-     *
-     * @return Collection<int, Answer> Answers collection
-     */
-    public function getAnswers(): Collection
-    {
-        return $this->answers;
     }
 
     /**

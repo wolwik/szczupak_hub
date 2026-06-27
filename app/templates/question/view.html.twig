@@ -119,11 +119,11 @@
 
                     <h4 class="mb-4">{{ 'label.answers'|trans }}</h4>
 
-                    {% if question.answers is empty %}
+                    {% if answers is empty %}
                         <p class="text-muted">{{ 'label.no_answers'|trans }}</p>
                     {% else %}
 
-                        {% for answer in question.answers %}
+                        {% for answer in answers %}
 
                             {% set isBest = question.bestAnswer == answer %}
 

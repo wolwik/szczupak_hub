@@ -82,11 +82,15 @@ final class QuestionController extends AbstractController
         // zabezpieczenie przed podglądaniem szkiców
         $this->denyAccessUnlessGranted(QuestionVoter::VIEW, $question);
 
+        // pobieranie odpowiedzi
+        $answers = $this->questionService->getAnswersForQuestion($question);
+
         // tworzymy zmienną z formularza dla Answer
         $form = $this->createForm(AnswerType::class);
 
         return $this->render('question/view.html.twig', [
             'question' => $question,
+            'answers' => $answers,
             'answerForm' => $form->createView(),
         ]);
     }

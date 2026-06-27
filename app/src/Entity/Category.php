@@ -131,14 +131,4 @@ class Category
 
         return $this;
     }
-
-    /**
-     * Getter for question-photos.
-     *
-     * @return Collection<int, Question> Questions collection
-     */
-    public function getQuestions(): Collection
-    {
-        return $this->questions;
-    }
 }

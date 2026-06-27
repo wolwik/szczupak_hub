@@ -32,6 +32,15 @@ interface QuestionServiceInterface
     public function getPaginatedList(int $page, ?int $categoryId = null, ?int $tagId = null): PaginationInterface;
 
     /**
+     * Get answers for a specific question.
+     *
+     * @param Question $question Question entity
+     *
+     * @return array List of answers
+     */
+    public function getAnswersForQuestion(Question $question): array;
+
+    /**
      * Get user drafts.
      *
      * @param User $user User entity

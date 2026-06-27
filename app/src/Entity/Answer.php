@@ -63,8 +63,8 @@ class Answer
     /**
      * Related question.
      */
-    #[ORM\ManyToOne(targetEntity: Question::class, inversedBy: 'answers')]
-    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Question::class)]
+    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[Assert\Type(type: Question::class)]
     private ?Question $question = null;
 

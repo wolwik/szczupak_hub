@@ -14,6 +14,7 @@ namespace App\Service;
 use App\Contract\QuestionServiceInterface;
 use App\Entity\Question;
 use App\Entity\User;
+use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -32,10 +33,14 @@ class QuestionService implements QuestionServiceInterface
      * Constructor.
      *
      * @param QuestionRepository $questionRepository Question repository
+     * @param AnswerRepository   $answerRepository   Answer repository
      * @param PaginatorInterface $paginator          Paginator interface
      */
-    public function __construct(private readonly QuestionRepository $questionRepository, private readonly PaginatorInterface $paginator)
-    {
+    public function __construct(
+        private readonly QuestionRepository $questionRepository,
+        private readonly AnswerRepository $answerRepository,
+        private readonly PaginatorInterface $paginator
+    ) {
     }
 
     /**
@@ -54,11 +59,25 @@ class QuestionService implements QuestionServiceInterface
             $page,
             self::PAGINATOR_ITEMS_PER_PAGE,
             [
-                'sortFieldAllowList' => ['question.createdAt', 'question.title'], // lista rzeczy,
-                // po ktorych bedzie mozna sortowac
-                'defaultSortFieldName' => 'question.createdAt', // domyslne sortowanie
-                'defaultSortDirection' => 'desc', // kierunek sortowania, descending
+                'sortFieldAllowList' => ['question.createdAt', 'question.title'],
+                'defaultSortFieldName' => 'question.createdAt',
+                'defaultSortDirection' => 'desc',
             ]
+        );
+    }
+
+    /**
+     * Get answers for a specific question.
+     *
+     * @param Question $question Question entity
+     *
+     * @return array List of answers
+     */
+    public function getAnswersForQuestion(Question $question): array
+    {
+        return $this->answerRepository->findBy(
+            ['question' => $question],
+            ['createdAt' => 'DESC']
         );
     }
 
