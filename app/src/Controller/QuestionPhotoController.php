@@ -21,6 +21,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Security\Voter\QuestionVoter;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Class QuestionPhotoController.
@@ -47,6 +49,7 @@ class QuestionPhotoController extends AbstractController
      * @return Response HTTP response
      */
     #[Route('/create', name: 'question_photo_create', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function create(Request $request, Question $question): Response
     {
         if ($this->photoService->findOneByQuestion($question)) {
@@ -87,6 +90,7 @@ class QuestionPhotoController extends AbstractController
      * @return Response HTTP response
      */
     #[Route('/edit', name: 'question_photo_edit', methods: ['GET', 'PUT'])]
+    #[IsGranted(QuestionVoter::EDIT, subject: 'question')]
     public function edit(Request $request, Question $question): Response
     {
         $photo = $this->photoService->findOneByQuestion($question);
@@ -130,7 +134,8 @@ class QuestionPhotoController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/delete', name: 'question_photo_delete', methods: ['GET', 'PUT', 'POST'])]
+    #[Route('/delete', name: 'question_photo_delete', methods: ['POST'])]
+    #[IsGranted(QuestionVoter::DELETE, subject: 'question')]
     public function delete(Question $question): Response
     {
         $this->photoService->delete($question);
