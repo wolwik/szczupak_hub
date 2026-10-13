@@ -37,13 +37,6 @@ final class AnswerVoter extends Voter
     public const DELETE = 'ANSWER_DELETE';
 
     /**
-     * Mark-as-best permission.
-     *
-     * @var string
-     */
-    public const MARK_AS_BEST = 'ANSWER_MARK_AS_BEST';
-
-    /**
      * Determines if this voter supports the attribute and subject.
      *
      * @param string $attribute An attribute
@@ -53,7 +46,7 @@ final class AnswerVoter extends Voter
      */
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::EDIT, self::DELETE, self::MARK_AS_BEST])
+        return in_array($attribute, [self::EDIT, self::DELETE])
             && $subject instanceof Answer;
     }
 
@@ -83,7 +76,6 @@ final class AnswerVoter extends Voter
         return match ($attribute) {
             self::EDIT => $this->canEdit($subject, $user),
             self::DELETE => $this->canDelete($subject, $user),
-            self::MARK_AS_BEST => $this->canMarkAsBest($subject, $user),
             default => false,
         };
     }
@@ -124,20 +116,5 @@ final class AnswerVoter extends Voter
 
         // owner ma dostęp
         return $answer->getAuthor() === $user;
-    }
-
-    /**
-     * Checks if user can mark answer as the best one.
-     *
-     * @param Answer        $answer Answer entity
-     * @param UserInterface $user   User
-     *
-     * @return bool Result
-     */
-    private function canMarkAsBest(Answer $answer, UserInterface $user): bool
-    {
-        return $answer
-                ->getQuestion()
-                ->getAuthor() === $user;
     }
 }

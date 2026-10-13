@@ -71,18 +71,6 @@ class AnswerService implements AnswerServiceInterface
     }
 
     /**
-     * Mark an answer as the best answer.
-     *
-     * @param Answer $answer Answer entity
-     */
-    public function markAsBest(Answer $answer): void
-    {
-        $question = $answer->getQuestion();
-        $question->setBestAnswer($answer);
-        $this->questionRepository->save($question);
-    }
-
-    /**
      * Update the best answer for a given question based on votes.
      *
      * Triggered automatically after vote modifications.

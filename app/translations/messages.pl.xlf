@@ -338,10 +338,6 @@
         <source>message.answer_deleted_successfully</source>
         <target>Usunięto odpowiedź.</target>
       </trans-unit>
-      <trans-unit id="message.best_answer_selected">
-        <source>message.best_answer_selected</source>
-        <target>Wybrano najlepszą odpowiedź.</target>
-      </trans-unit>
       <trans-unit id="message.avatar_created_successfully">
         <source>message.avatar_created_successfully</source>
         <target>Pomyślnie dodano awatar.</target>

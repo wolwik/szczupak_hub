@@ -334,10 +334,6 @@
         <source>message.answer_deleted_successfully</source>
         <target>Answer deleted successfully.</target>
       </trans-unit>
-      <trans-unit id="message.best_answer_selected">
-        <source>message.best_answer_selected</source>
-        <target>The best answer was selected.</target>
-      </trans-unit>
       <trans-unit id="message.avatar_created_successfully">
         <source>message.avatar_created_successfully</source>
         <target>Avatar added successfully.</target>

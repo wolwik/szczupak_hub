@@ -35,13 +35,6 @@ interface AnswerServiceInterface
     public function delete(Answer $answer): void;
 
     /**
-     * Mark answer as the best one.
-     *
-     * @param Answer $answer Answer entity
-     */
-    public function markAsBest(Answer $answer): void;
-
-    /**
      * Update best answer for a question.
      *
      * @param Question $question Question entity

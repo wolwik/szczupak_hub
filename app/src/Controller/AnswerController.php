@@ -79,7 +79,7 @@ final class AnswerController extends AbstractController
      *
      * @return Response Rendered page or redirect response
      */
-    #[Route('answer/{id}/edit', name: 'answer_edit', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'PUT'])]
+    #[Route('/{id}/edit', name: 'answer_edit', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'PUT'])]
     #[IsGranted(AnswerVoter::EDIT, subject: 'answer')]
     public function edit(Request $request, Answer $answer): Response
     {
@@ -118,7 +118,7 @@ final class AnswerController extends AbstractController
      *
      * @return Response Redirect or rendered confirmation page
      */
-    #[Route('answer/{id}/delete', name: 'answer_delete', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST', 'DELETE'])]
+    #[Route('/{id}/delete', name: 'answer_delete', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST', 'DELETE'])]
     #[IsGranted(AnswerVoter::DELETE, subject: 'answer')]
     public function delete(Request $request, Answer $answer): Response
     {
@@ -145,26 +145,5 @@ final class AnswerController extends AbstractController
             'form' => $form->createView(),
             'question' => $answer,
         ]);
-    }
-
-    /**
-     * Marks an answer as the best one for a question.
-     *
-     * @param Answer $answer Answer entity
-     *
-     * @return Response Redirect response to question view
-     */
-    #[Route('/{id}/best', name: 'answer_best', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST'])]
-    #[IsGranted(AnswerVoter::MARK_AS_BEST, subject: 'answer')]
-    public function markAsBest(Answer $answer): Response
-    {
-        $this->answerService->markAsBest($answer);
-
-        $this->addFlash(
-            'success',
-            $this->translator->trans('message.best_answer_selected')
-        );
-
-        return $this->redirectToRoute('question_view', ['id' => $answer->getQuestion()->getId()]);
     }
 }
