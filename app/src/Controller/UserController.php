@@ -247,7 +247,7 @@ final class UserController extends AbstractController
      *
      * @throws AccessDeniedException When admin tries to delete their own account
      */
-    #[Route('/user/{id}/delete', name: 'user_delete', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST'])]
+    #[Route('/user/{id}/delete', name: 'user_delete', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST', 'DELETE'])]
     #[IsGranted('ROLE_ADMIN')]
     public function deleteAsAdmin(Request $request, User $user): Response
     {
@@ -283,7 +283,7 @@ final class UserController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/user/{id}/make-admin', name: 'user_make_admin', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST'])]
+    #[Route('/user/{id}/make-admin', name: 'user_make_admin', requirements: ['id' => '[1-9]\d*'], methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function makeAdmin(User $user): Response
     {
@@ -306,7 +306,7 @@ final class UserController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/user/{id}/remove-admin', name: 'user_remove_admin', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST'])]
+    #[Route('/user/{id}/remove-admin', name: 'user_remove_admin', requirements: ['id' => '[1-9]\d*'], methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function removeAdmin(User $user): Response
     {
@@ -336,7 +336,7 @@ final class UserController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/user/{id}/block', name: 'user_block_admin', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST'])]
+    #[Route('/user/{id}/block', name: 'user_block_admin', requirements: ['id' => '[1-9]\d*'], methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function block(Request $request, User $user): Response
     {
@@ -358,7 +358,7 @@ final class UserController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/user/{id}/unblock', name: 'user_unblock_admin', requirements: ['id' => '[1-9]\d*'], methods: ['GET', 'POST'])]
+    #[Route('/user/{id}/unblock', name: 'user_unblock_admin', requirements: ['id' => '[1-9]\d*'], methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function unblock(User $user): Response
     {

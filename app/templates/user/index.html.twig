@@ -34,15 +34,23 @@
                     <a href="{{ path('user_change_password', {'id': user.id}) }}" class="btn btn-sm btn-warning">{{ 'label.change_password'|trans }}</a>
 
                     {% if user.isAdmin %}
-                        <a href="{{ path('user_remove_admin', {'id': user.id}) }}" class="btn btn-sm btn-info">{{ 'label.remove_admin'|trans }}</a>
+                        <form method="post" action="{{ path('user_remove_admin', {'id': user.id}) }}" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-info">{{ 'label.remove_admin'|trans }}</button>
+                        </form>
                     {% else %}
-                        <a href="{{ path('user_make_admin', {'id': user.id}) }}" class="btn btn-sm btn-success">{{ 'label.make_admin'|trans }}</a>
+                        <form method="post" action="{{ path('user_make_admin', {'id': user.id}) }}" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-success">{{ 'label.make_admin'|trans }}</button>
+                        </form>
                     {% endif %}
 
                     {% if user.isBlocked %}
-                        <a href="{{ path('user_unblock_admin', {'id': user.id}) }}" class="btn btn-sm btn-success">{{ 'label.unblock'|trans }}</a>
+                        <form method="post" action="{{ path('user_unblock_admin', {'id': user.id}) }}" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-success">{{ 'label.unblock'|trans }}</button>
+                        </form>
                     {% else %}
-                        <a href="{{ path('user_block_admin', {'id': user.id}) }}" class="btn btn-sm btn-dark">{{ 'label.block'|trans }}</a>
+                        <form method="post" action="{{ path('user_block_admin', {'id': user.id}) }}" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-dark">{{ 'label.block'|trans }}</button>
+                        </form>
                     {% endif %}
 
                 </td>
