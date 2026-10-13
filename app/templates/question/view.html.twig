@@ -73,7 +73,7 @@
                 </div>
 
                 <p class="mb-4">
-                    {{ question.content|markdown_to_html|replace({'<h1>':'<h3>', '</h1>':'</h3>', '<h2>':'<h3>', '</h2>':'</h3>'})|raw }}
+                    {{ question.content|markdown_to_html|sanitize_html|replace({'<h1>':'<h3>', '</h1>':'</h3>', '<h2>':'<h3>', '</h2>':'</h3>'})|raw }}
                 </p>
 
                 <!-- PHOTO -->
@@ -198,7 +198,7 @@
 
                                 <!-- CONTENT -->
                                 <p class="mb-3">
-                                    {{ answer.content|markdown_to_html|replace({'<h1>':'<h3>', '</h1>':'</h3>', '<h2>':'<h3>', '</h2>':'</h3>'})|raw }}
+                                    {{ answer.content|markdown_to_html|sanitize_html|replace({'<h1>':'<h3>', '</h1>':'</h3>', '<h2>':'<h3>', '</h2>':'</h3>'})|raw }}
                                 </p>
 
                                 <!-- ACTIONS -->

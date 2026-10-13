@@ -106,7 +106,7 @@
                                     </div>
 
                                     <p class="mb-2 text-muted">
-                                        {{ question.content|markdown_to_html|replace({'<h1>':'<h3>', '</h1>':'</h3>', '<h2>':'<h3>', '</h2>':'</h3>'})|raw }}
+                                        {{ question.content|markdown_to_html|sanitize_html|replace({'<h1>':'<h3>', '</h1>':'</h3>', '<h2>':'<h3>', '</h2>':'</h3>'})|raw }}
                                     </p>
 
                                     {% set photo_filename = (photos[question.id] is defined) ? photos[question.id] : null %}
